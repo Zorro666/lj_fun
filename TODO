@@ -1,0 +1,28 @@
+To be done:
+
+** Building Process
+* make process (makefiles + source file list) for each library
+* convert current lib* dir(s) into object libraries
+* make app link against the object libraries
+* support config versions for output dirs
+* have a BUILDROOT directory
+
+** Code Intentions
+* task based system manager
+* write new features as tasks (microthrreads)
+* explore AI ideas using broadcasting control nodes and queues
+* dynamic avoidance using repulsion forces
+* static route finding - nav meshes (my favourite)
+* GUI system - widgets/windows all in raw code
+* 2D editor layout and editing system for AI fun
+* 2D editor layout system - visual scripting style
+* 2D visual debugging tools for AI fun
+* mroe debug features in libdebug - real-time host<->app connection
+* implement core engine libs as required: libcommon (file, types, maths, memory)
+* tool to make a mega header file as the public header for each library -> a public (auto-generated .h) and a .a file
+* keep strong independence between libs - only 1 way dependency e.g. libdebug depends on libcommon BUT libcommon cannot depend on libdebug
+
+** Contentious Issues
+* don't use any native types have all types pre type def'ed e.g. LJint32, LJuint32, LJint, LJuint, LJfloat etc.
+* prefix all functions/classes/types/enums etc. with LJ
+
