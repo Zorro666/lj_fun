@@ -1,0 +1,12 @@
+#! /bin/bash
+
+mkdir -p Build/RenderSortDebug
+pushd Build/RenderSortDebug
+#if [ ! -f Makefile ]; then
+#	cmake ../.. $*
+#fi
+cmake ../.. $*
+make $*
+cp -u RenderSort/renderSort ../../renderSort
+popd
+

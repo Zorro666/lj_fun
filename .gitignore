@@ -1,5 +1,3 @@
-CMakeCache.txt
-CMakeFiles/*
-*/CMakeFiles/*
-*/cmake_install.cmake
 *.swp
+Build
+renderSort

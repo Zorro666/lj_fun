@@ -5,7 +5,7 @@
 #include <GL/glu.h>
 #include <GL/glut.h>
 
-#include "../libdebug/debugVar/debugVar.h"
+#include "debugVar/debugVar.h"
 #include "renderSort.h"
 
 #include <stdlib.h>
