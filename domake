@@ -1,12 +1,31 @@
 #! /bin/bash
 
-mkdir -p Build/RenderSortDebug
-pushd Build/RenderSortDebug
+set -x
+
+CONFIG=$1
+shift
+if [ "$CONFIG" = "" ]; then
+	CONFIG=DEBUG
+fi
+if [ "$CONFIG" = "debug" ]; then
+	CONFIG=DEBUG
+fi
+if [ "$CONFIG" = "gold" ]; then
+	CONFIG=RELEASE
+fi
+if [ "$CONFIG" = "release" ]; then
+	CONFIG=RELWITHDEBINFO
+fi
+
+BASE_DIR=`pwd`
+ROOT_DIR=Build/RenderSort_${CONFIG}
+mkdir -p ${ROOT_DIR}
+pushd ${ROOT_DIR}
 #if [ ! -f Makefile ]; then
 #	cmake ../.. $*
 #fi
-cmake ../.. $*
+cmake -DCMAKE_BUILD_TYPE=${CONFIG} ../.. $*
 make $*
-cp -u RenderSort/renderSort ../../renderSort
+cp -v -u RenderSort/renderSort ${BASE_DIR}
 popd
 

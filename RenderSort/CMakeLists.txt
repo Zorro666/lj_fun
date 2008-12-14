@@ -1,11 +1,11 @@
 #if you don't want the full compiler output, remove the following line
-SET(CMAKE_VERBOSE_MAKEFILE OFF)
+SET(CMAKE_VERBOSE_MAKEFILE ON)
 
 #add definitions, compiler switches, etc.
 ADD_DEFINITIONS(${GLOBAL_DEFINITIONS})
 
-INCLUDE_DIRECTORIES(${TEST_SOURCE_DIR}/libdebug)
-LINK_DIRECTORIES(${TEST_BINARY_DIR}/libdebug)
+INCLUDE_DIRECTORIES(${GLOBAL_INCLUDE_DIRECTORIES})
+LINK_DIRECTORIES(${GLOBAL_LINK_DIRECTORIES})
 
 #list all source files here
 ADD_EXECUTABLE(renderSort main.c renderSort.c)

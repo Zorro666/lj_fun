@@ -1,11 +1,16 @@
-cmake_minimum_required(VERSION 2.6)
+CMAKE_MINIMUM_REQUIRED(VERSION 2.6)
 
 PROJECT(TEST)
 
-#add definitions, compiler switches, etc.
-SET(GLOBAL_DEFINITIONS -Wall -g -Werror -Wdeclaration-after-statement)
+#Global definitions
+SET(GLOBAL_CFLAGS -Wall -Werror -Wdeclaration-after-statement)
+SET(GLOBAL_DEFINITIONS ${GLOBAL_CFLAGS} ${CONFIG_CFLAGS})
+SET(GLOBAL_INCLUDE_DIRECTORIES ${TEST_SOURCE_DIR}/libdebug)
+SET(GLOBAL_LINK_DIRECTORIES ${TEST_BINARY_DIR}/libdebug)
 
-SET(CMAKE_VERBOSE_MAKEFILE OFF)
+
+#if you don't want the full compiler output, remove the following line
+SET(CMAKE_VERBOSE_MAKEFILE ON)
 
 ADD_SUBDIRECTORY(libdebug)
 ADD_SUBDIRECTORY(RenderSort)
