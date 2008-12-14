@@ -3,6 +3,7 @@
 #set -x
 
 TRYCONFIG=$1
+MAKEARGS=$*
 if [ "$TRYCONFIG" = "debug" ]; then
 	CONFIG=DEBUG
 	shift
@@ -13,6 +14,9 @@ if [ "$TRYCONFIG" = "gold" ]; then
 fi
 if [ "$TRYCONFIG" = "release" ]; then
 	CONFIG=RELWITHDEBINFO
+	shift
+fi
+if [ "$TRYCONFIG" = "clean" ]; then
 	shift
 fi
 if [ "$CONFIG" = "" ]; then
@@ -30,8 +34,10 @@ cp ${PROJECT}.cmake CMakeLists.txt
 mkdir -p ${BUILD_DIR}
 pushd ${BUILD_DIR}
 cmake -DCMAKE_BUILD_TYPE=${CONFIG} ${BASE_DIR} $*
-make $*
-cp -v ${PROJECT}/a.out ${BASE_DIR}/${EXE_NAME}
+make ${MAKEARGS}
+if [ -e ${PROJECT}/a.out ]; then
+	cp -v ${PROJECT}/a.out ${BASE_DIR}/${EXE_NAME}
+fi
 popd
 ls -lh ${EXE_NAME}
 
