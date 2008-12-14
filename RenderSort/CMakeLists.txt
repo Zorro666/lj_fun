@@ -8,8 +8,8 @@ INCLUDE_DIRECTORIES(${GLOBAL_INCLUDE_DIRECTORIES})
 LINK_DIRECTORIES(${GLOBAL_LINK_DIRECTORIES})
 
 #list all source files here
-ADD_EXECUTABLE(renderSort main.c renderSort.c)
+ADD_EXECUTABLE(a.out main.c renderSort.c)
 
 #need to link to some other libraries ? just add them here
-TARGET_LINK_LIBRARIES (renderSort libdebug GL glut)
+TARGET_LINK_LIBRARIES (a.out libdebug GL glut)
 

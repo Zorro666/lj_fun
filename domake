@@ -1,31 +1,37 @@
 #! /bin/bash
 
-set -x
+#set -x
 
-CONFIG=$1
-shift
+TRYCONFIG=$1
+if [ "$TRYCONFIG" = "debug" ]; then
+	CONFIG=DEBUG
+	shift
+fi
+if [ "$TRYCONFIG" = "gold" ]; then
+	CONFIG=RELEASE
+	shift
+fi
+if [ "$TRYCONFIG" = "release" ]; then
+	CONFIG=RELWITHDEBINFO
+	shift
+fi
 if [ "$CONFIG" = "" ]; then
 	CONFIG=DEBUG
 fi
-if [ "$CONFIG" = "debug" ]; then
-	CONFIG=DEBUG
-fi
-if [ "$CONFIG" = "gold" ]; then
-	CONFIG=RELEASE
-fi
-if [ "$CONFIG" = "release" ]; then
-	CONFIG=RELWITHDEBINFO
-fi
 
+PROJECT=RenderSort
+BUILDROOT=Build
 BASE_DIR=`pwd`
-ROOT_DIR=Build/RenderSort_${CONFIG}
-mkdir -p ${ROOT_DIR}
-pushd ${ROOT_DIR}
-#if [ ! -f Makefile ]; then
-#	cmake ../.. $*
-#fi
-cmake -DCMAKE_BUILD_TYPE=${CONFIG} ../.. $*
+BUILD_DIR=${BUILDROOT}/${PROJECT}_${CONFIG}
+EXE_NAME=renderSort
+
+cp ${PROJECT}.cmake CMakeLists.txt
+
+mkdir -p ${BUILD_DIR}
+pushd ${BUILD_DIR}
+cmake -DCMAKE_BUILD_TYPE=${CONFIG} ${BASE_DIR} $*
 make $*
-cp -v -u RenderSort/renderSort ${BASE_DIR}
+cp -v ${PROJECT}/a.out ${BASE_DIR}/${EXE_NAME}
 popd
+ls -lh ${EXE_NAME}
 
