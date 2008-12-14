@@ -1,5 +1,6 @@
 #include "renderSort.h"
-#include "../libdebug/debugVar/debugVar.h"
+
+#include "debugVar/debugVar.h"
 
 #include <stdlib.h>
 #include <stdio.h>

@@ -5,5 +5,5 @@ INCLUDE_DIRECTORIES(${GLOBAL_INCLUDE_DIRECTORIES})
 SET(CMAKE_VERBOSE_MAKEFILE ON)
 
 #list all source files here
-ADD_LIBRARY(libdebug debugVar/debugVar.c)
+ADD_LIBRARY(LJ_LibDebug debugVar/debugVar.c)
 
