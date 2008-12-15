@@ -84,7 +84,7 @@ void addBatch( const int type, const int instStartIndex, const int numInstInBatc
 		tail->nextBatchItemIndex = -1;
 		tail->instanceDataStart = instStartIndex;
 		tail->instanceDataEnd = instStartIndex + numInstInBatch;
-		printf( "addBatch type[%d] start %d num %d current %d started from head\n", type, instStartIndex, numInstInBatch, s_numBatchItems );
+		//printf( "addBatch type[%d] start %d num %d current %d started from head\n", type, instStartIndex, numInstInBatch, s_numBatchItems );
 		return;
 	}
 
@@ -93,7 +93,7 @@ void addBatch( const int type, const int instStartIndex, const int numInstInBatc
 	if ( tailEndInstance == instStartIndex )
 	{
 		tail->instanceDataEnd += numInstInBatch;
-		printf( "addBatch type[%d] start %d num %d current %d made tail longer\n", type, instStartIndex, numInstInBatch, s_numBatchItems );
+		//printf( "addBatch type[%d] start %d num %d current %d made tail longer\n", type, instStartIndex, numInstInBatch, s_numBatchItems );
 		return;
 	}
 
@@ -108,7 +108,7 @@ void addBatch( const int type, const int instStartIndex, const int numInstInBatc
 	// We are now the new tail
 	s_batchTails[type] = s_currentBatchItem;
 	
-	printf( "addBatch type[%d] start %d num %d current %d\n", type, instStartIndex, numInstInBatch, s_numBatchItems );
+	//printf( "addBatch type[%d] start %d num %d current %d\n", type, instStartIndex, numInstInBatch, s_numBatchItems );
 	// One more batch in the list
 	s_currentBatchItem++;
 	s_numBatchItems++;
@@ -242,9 +242,9 @@ void renderBatches( void )
 			s_numBatchItems++;
 		}
 		numTotalInstances += numInstancesInType;
-		printf( "Type[%d] numBatches[%d] numInstances[%d]\n", type, numBatchesInType, numInstancesInType );
+		//printf( "Type[%d] numBatches[%d] numInstances[%d]\n", type, numBatchesInType, numInstancesInType );
 	}
-	printf( "%d vs %d\n", numBatches, s_numBatchItems );
+	//printf( "%d vs %d\n", numBatches, s_numBatchItems );
 }
 
 void renderSortInit( void )

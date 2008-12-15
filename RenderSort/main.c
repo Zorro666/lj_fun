@@ -1,9 +1,12 @@
-// main.cpp : defines the entry point for the console application.
+// main.c : defines the entry point for the console application.
 //
 
 #include <GL/gl.h>
 #include <GL/glu.h>
 #include <GL/glut.h>
+
+#include <SDL/SDL.h>
+#include <SDL/SDL_opengl.h>
 
 #include "debugVar/debugVar.h"
 #include "renderSort.h"
@@ -27,6 +30,8 @@ float s_cameraY = 0.0f;
 float s_cameraZ = -10.0f;
 
 int s_sleepTime = 100;
+int s_quit = 0;
+int s_minimized = 0;
 
 void renderBitmapString( float x, float y, float z, void *font, const char* const string );
 
@@ -34,6 +39,10 @@ enum
 {
 	KEY_ESCAPE = 27,
 	KEY_BACKSPACE = 8,
+	KEY_UP = 273,
+	KEY_DOWN = 274,
+	KEY_RIGHT = 275,
+	KEY_LEFT = 276,
 };
 
 // Return the width of the text rendered
@@ -160,7 +169,7 @@ void display()
     debugVarRender();
 
     glFlush(); // Flush the buffer
-    glutSwapBuffers();
+    SDL_GL_SwapBuffers();
 }
 
 void tick() 
@@ -207,30 +216,6 @@ void specialKeyPressed(int key, int x, int y)
 	}
 	switch ( key )
    	{
-		case GLUT_KEY_UP:
-		{
-            debugVarInput( DEBUG_VAR_INPUT_UP | fastKey );
-            debugVarRender();
-   			break;
-		}
-		case GLUT_KEY_DOWN:
-		{
-            debugVarInput( DEBUG_VAR_INPUT_DOWN | fastKey );
-            debugVarRender();
-   			break;
-		}
-		case GLUT_KEY_LEFT:
-		{
-            debugVarInput( DEBUG_VAR_INPUT_LEFT | fastKey );
-            debugVarRender();
-   			break;
-		}
-		case GLUT_KEY_RIGHT:
-		{
-            debugVarInput( DEBUG_VAR_INPUT_RIGHT | fastKey );
-            debugVarRender();
-			break;
-		}
 		default:
 		{
 			printf( "Unhandled key %d 0x%X\n", key, key );
@@ -239,15 +224,16 @@ void specialKeyPressed(int key, int x, int y)
 	}
 }
 
-void keyboard(unsigned char key, int x, int y)
+void keyboard( SDL_KeyboardEvent* const keyEvent )
 {
-	const int modKey = glutGetModifiers(); 
+	const SDLMod modifier = keyEvent->keysym.mod;
 	int fastKey = 0;
-	if ( modKey == GLUT_ACTIVE_CTRL )
+	if ( ( modifier & KMOD_LCTRL ) || ( modifier & KMOD_RCTRL ) )
 	{
 		fastKey = DEBUG_VAR_INPUT_FAST;
 	}
-    switch (key) {
+    switch ( keyEvent->keysym.sym ) 
+	{
         case KEY_ESCAPE:  // The escape key
         case 'Q':
         case 'q':
@@ -301,17 +287,182 @@ void keyboard(unsigned char key, int x, int y)
             debugVarRender();
             break;
 		}
+		case KEY_UP:
+		{
+            debugVarInput( DEBUG_VAR_INPUT_UP | fastKey );
+            debugVarRender();
+   			break;
+		}
+		case KEY_DOWN:
+		{
+            debugVarInput( DEBUG_VAR_INPUT_DOWN | fastKey );
+            debugVarRender();
+   			break;
+		}
+		case KEY_LEFT:
+		{
+            debugVarInput( DEBUG_VAR_INPUT_LEFT | fastKey );
+            debugVarRender();
+   			break;
+		}
+		case KEY_RIGHT:
+		{
+            debugVarInput( DEBUG_VAR_INPUT_RIGHT | fastKey );
+            debugVarRender();
+			break;
+		}
 		default:
 		{	
-			printf( "Unhandled key %d 0x%X '%c'\n", key, key, key );
+			int symKey = keyEvent->keysym.sym;
+			printf( "Unhandled key %d 0x%X '%c' '%s'\n", symKey, symKey, symKey, SDL_GetKeyName( symKey ) );
 			break;
 		}
     }
 }
 
+void WindowActive( void )
+{
+}
+
+void WindowInactive( void )
+{
+}
+ 
+void KeyUp( SDL_KeyboardEvent* const keyEvent )
+{
+}
+ 
+void KeyDown( SDL_KeyboardEvent* const keyEvent )
+{
+	keyboard( keyEvent );
+}
+ 
+void MouseMoved( const int x, const int y, const int relX, const int relY )
+{
+}
+ 
+void MouseButtonUp( const int button, const int x, const int y, const int relX, const int relY )
+{
+}
+
+void MouseButtonDown( const int button, const int x, const int y, const int relX, const int relY )
+{
+}
+ 
+void HandleInput( void )
+{
+	// Poll for events, and handle the ones we care about.
+	SDL_Event event;
+	while ( SDL_PollEvent( &event ) ) 
+	{
+		switch ( event.type ) 
+		{
+			case SDL_KEYDOWN:
+			{
+				// If escape is pressed set the Quit-flag
+				if ( event.key.keysym.sym == SDLK_ESCAPE )
+				{
+					s_quit = 1;
+					break;
+				}
+ 
+				KeyDown( &event.key );
+				break;
+			}
+ 
+			case SDL_KEYUP:
+			{
+				KeyUp( &event.key );
+				break;
+			}
+ 
+			case SDL_QUIT:
+			{
+				s_quit = 1;
+				break;
+			}
+ 
+			case SDL_MOUSEMOTION:
+			{
+				MouseMoved(
+							event.motion.x, 
+							event.motion.y, 
+							event.motion.xrel, 
+							event.motion.yrel );
+				break;
+			}
+ 
+			case SDL_MOUSEBUTTONUP:
+			{
+				MouseButtonUp(
+						event.button.button, 
+						event.motion.x, 
+						event.motion.y, 
+						event.motion.xrel, 
+						event.motion.yrel);
+				break;
+			}
+
+			case SDL_MOUSEBUTTONDOWN:
+			{
+				MouseButtonDown(
+						event.button.button, 
+						event.motion.x, 
+						event.motion.y, 
+						event.motion.xrel, 
+						event.motion.yrel);
+				break;
+			}
+
+			case SDL_ACTIVEEVENT:
+			{
+				if ( event.active.state & SDL_APPACTIVE ) 
+				{
+					if ( event.active.gain ) 
+					{
+						s_minimized = 0;
+						WindowActive();
+					} 
+					else 
+					{
+						s_minimized = 1;
+						WindowInactive();
+					}
+				}
+				break;
+			}
+		}
+	} 
+}
+
+void mainLoop()
+{
+//	long lastTick = SDL_GetTicks();
+ 
+	// Main loop: loop forever.
+	while ( !s_quit )
+	{
+		// Handle mouse and keyboard input
+		HandleInput();
+ 
+//		if ( s_minimized ) 
+//		{
+//			// Release some system resources if the app. is minimized.
+//			WaitMessage(); // pause the application until focus in regained
+//		} 
+//		else 
+		{
+			// tick
+			tick();
+		}
+	}
+}
+
 
 int main(int argc, char* argv[])
 {
+ 	SDL_Surface *screen;
+
     debugVarInitialise( 64 );
     debugVarRegister( "Camera:x", DEBUG_VAR_FLOAT, &s_cameraX, 0 );
     debugVarRegister( "Camera:y", DEBUG_VAR_FLOAT, &s_cameraY, 0 );
@@ -321,34 +472,22 @@ int main(int argc, char* argv[])
 
 	renderSortInit();
 
-    //
-    // Initialize the GLUT environment
+	// Initialize SDL
+	SDL_Init( SDL_INIT_EVERYTHING );
+ 
+	SDL_GL_SetAttribute( SDL_GL_DOUBLEBUFFER, 1 );
+    // Initialize the GLUT environment - needed for font rendering
     glutInit(&argc, argv);
 
-    // Single-buffered, using RGB
-    glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA);
-    glutInitWindowSize(winWidth,winHeight);
-    glutInitWindowPosition(100,100);
-
-    // Create window, returns a unique window identifier
-    // places "Hello World!" in title bar
-    glutCreateWindow("Hello World!");
-
-    // Called to indicate window needs to be drawn or redrawn (CallBack)
-    glutDisplayFunc(display);
-    glutIdleFunc(tick);
-
-    // Set up a function to listen to the keyboard
-    glutKeyboardFunc( keyboard );
-    glutSpecialFunc( specialKeyPressed );
+	screen = SDL_SetVideoMode( winWidth, winHeight, 32, SDL_OPENGL );
 
     // Initialize OpenGL features
     init();
 
-    // Actually display the window (last thing to do)
     //   Enters event-driven (infinite) loop
-    glutMainLoop();
+	mainLoop();
 
+	SDL_Quit();
     debugVarDeInitialise();
 
     return 0;
