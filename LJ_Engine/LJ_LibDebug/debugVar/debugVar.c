@@ -275,10 +275,10 @@ int debugVarGetScope( const char* const name, const int depth, char* const scope
 			if ( fullScope == 1 )
 			{
 				delimCount++;
+			}
 			if ( delimCount > depth )
 			{
             	break;
-			}
 			}
         }
         scope[index] = inputChar;
