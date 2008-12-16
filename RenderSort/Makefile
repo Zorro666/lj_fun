@@ -5,9 +5,11 @@
 PROJECT:=RenderSort
 EXE_NAME:=renderSort
 
+BASE_DIR:=$(BASEROOT)
 BUILDROOT:=Build
-BASE_DIR:=$(shell pwd)
+BUILDROOT:=$(BASE_DIR)/$(BUILDROOT)
 BUILD_DIR=$(BUILDROOT)/$(PROJECT)_$(CONFIG)
+PROJECT_DIR:=$(BASE_DIR)/$(PROJECT)
 CLEAN=
 
 debug: CONFIG:=DEBUG
@@ -32,14 +34,14 @@ cleangold: CLEAN=clean
 cleangold: build
 
 build:
-	@cp Makefile Makefile.save
-	@cp $(PROJECT).cmake CMakeLists.txt
+	@cp $(PROJECT_DIR)/Makefile $(PROJECT_DIR)/Makefile.save
+	@cp $(PROJECT_DIR)/$(PROJECT).cmake $(BASE_DIR)/CMakeLists.txt
 	@mkdir -p $(BUILD_DIR)
 	@cd $(BUILD_DIR) && cmake -DCMAKE_BUILD_TYPE=$(CONFIG) $(BASE_DIR) $* && $(MAKE) -s $(CLEAN)
 
 updateexe:
-	@cp -v --preserve=all $(BUILD_DIR)/$(PROJECT)/a.out $(BASE_DIR)/$(EXE_NAME)
-	@ls -lh $(EXE_NAME)
+	@cp -v --preserve=all $(BUILD_DIR)/$(PROJECT)/a.out $(PROJECT_DIR)/$(EXE_NAME)
+	@ls -lh $(PROJECT_DIR)/$(EXE_NAME)
 
 all: debug 
 
@@ -49,4 +51,5 @@ test:
 	@echo "BASE_DIR=$(BASE_DIR)"
 	@echo "BUILD_DIR=$(BUILD_DIR)"
 	@echo "EXE_NAME=$(EXE_NAME)"
+	@echo "RPOJECT_DIR=$(PROJECT_DIR)"
 
