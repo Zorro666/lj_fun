@@ -1,0 +1,10 @@
+To compile the project type:
+
+domake <config> <option>
+
+where:
+
+<config> = {debug,release,gold} : DEFAULT=debug
+<option> = {clean} : DEFAULT=
+
+gold doesn't compile at the moment because of some mad -O3 error

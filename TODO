@@ -2,12 +2,10 @@ To be done:
 
 ** Building Process
 * make process (makefiles + source file list) for each library
-* convert current lib* dir(s) into object libraries
-* make app link against the object libraries
-* support config versions for output dirs
-* have a BUILDROOT directory
+* replace domake script wiht a makefile in project dir which drives the cmake/make process 
 
 ** Code Intentions
+* use SDL as base engine functionality but encapsulate it away so it doesn't appear in any game code and only in root low-level engine files
 * task based system manager
 * write new features as tasks (microthrreads)
 * explore AI ideas using broadcasting control nodes and queues
@@ -26,3 +24,7 @@ To be done:
 * don't use any native types have all types pre type def'ed e.g. LJint32, LJuint32, LJint, LJuint, LJfloat etc.
 * prefix all functions/classes/types/enums etc. with LJ
 
+** Long Term Plans
+* get a toolchain up and running support 3D engine
+* get exporting from Maya going if possible
+* shaders even in 2D
