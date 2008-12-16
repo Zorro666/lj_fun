@@ -1,3 +1,7 @@
+Need to set an environment variable:
+
+BASEROOT to the root directory where these source files are
+
 To compile the project type:
 
 make <target> 
