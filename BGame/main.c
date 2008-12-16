@@ -1,5 +1,6 @@
 // main.c : defines the entry point for the console application.
 //
+// Test commit for RSS feed into Thunderbird
 
 #include <GL/gl.h>
 #include <GL/glu.h>
