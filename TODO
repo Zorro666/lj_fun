@@ -1,8 +1,6 @@
 To be done:
 
 ** Building Process
-* make process (makefiles + source file list) for each library
-* replace domake script wiht a makefile in project dir which drives the cmake/make process 
 
 ** Code Intentions
 * use SDL as base engine functionality but encapsulate it away so it doesn't appear in any game code and only in root low-level engine files
