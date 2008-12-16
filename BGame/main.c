@@ -9,7 +9,7 @@
 #include <SDL/SDL.h>
 #include <SDL/SDL_opengl.h>
 
-#include "debugVar/debugVar.h"
+#include "DebugVar/debugVar.h"
 
 #include <stdlib.h>
 #include <stdio.h>
