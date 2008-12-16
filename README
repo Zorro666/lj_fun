@@ -10,4 +10,3 @@ where:
 
 <target> = {debug,release,gold,clean,cleanrelease,cleangold} : DEFAULT=debug
 
-gold doesn't compile at the moment because of some mad -O3 error
