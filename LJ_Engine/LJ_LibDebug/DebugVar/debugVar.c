@@ -275,10 +275,14 @@ int debugVarGetScope( const char* const name, const int depth, char* const scope
 			if ( fullScope == 1 )
 			{
 				delimCount++;
+				if ( delimCount > depth )
+				{
+					break;
+				}
 			}
-			if ( delimCount > depth )
+			else
 			{
-            	break;
+				break;
 			}
         }
         scope[index] = inputChar;
@@ -528,6 +532,8 @@ int debugVarRegister( const char* const name, const int type, void* dataPtr, con
     return 1;
 }
 
+#define DEBUGVAR_RENDER_DEBUG 0
+
 void debugVarRender( void )
 {
     int depth = 0;
@@ -543,12 +549,12 @@ void debugVarRender( void )
 	const unsigned int bgColour = 0x000000FF; 
 	const unsigned int infoTextColour = 0xFFFFFFFF; 
 	const int maxDepth = debugVarCountDepth( g_selectedItem->name );
+	float xLen = 0.0f;
 #if DEBUGVAR_RENDER_DEBUG
     printf( "-------------------------------\n" );
     printf( "SelectedIndex: %d SelectedDepth %d/%d\n", ( g_selectedItem - g_debugVarArray ), g_selectedDepth, maxDepth );
 #endif // #if DEBUGVAR_RENDER_DEBUG
 
-	float xLen = 0.0f;
 	tempString[0] = '\0';
 	// Nice BG box to put info text in
 	y1 += 1.5f;
@@ -650,6 +656,7 @@ void debugVarRender( void )
 						{
 							unsigned int colour = 0x909090FF;
 							char outputString[256];
+							char finalOutputString[256];
 							int selected = 0;
 							int selected_colour = 0xFFFF00FF;
 							const int varMaxDepth = debugVarCountDepth( debugVar->name );
@@ -677,13 +684,17 @@ void debugVarRender( void )
 							{
 								sprintf( outputString, "%s", varScope );
 							}
+#if DEBUGVAR_RENDER_DEBUG
+			printf( "Var Scope: %s\n", varScope);
+			printf( "OutputString: %s\n", outputString );
+#endif // #if DEBUGVAR_RENDER_DEBUG
 							if ( depth == varMaxDepth )
 							{
 								char outputValue[DEBUG_VAR_MAX_NAME_LENGTH];
 								debugVarValue tempValue;
 								debugVarGetValue( debugVar, &tempValue );
 								debugVarPrintValue( debugVar->flags, &tempValue, outputValue );
-								sprintf( outputString, "%s: %s", outputString, outputValue );
+								sprintf( finalOutputString, "%s: %s", outputString, outputValue );
 								if ( selected == 1 )
 								{
 									if ( g_editingMode == 1 )
@@ -700,6 +711,10 @@ void debugVarRender( void )
 									colour = 0xFF0000FF;
 								}
 							}
+							else
+							{
+								strcpy(finalOutputString,outputString);
+							}
 							if ( selected == 1 )
 							{
 								colour = selected_colour;
@@ -710,7 +725,10 @@ void debugVarRender( void )
 							}
 							if ( yCount >= yMenuStart )
 							{
-								endX = debugVarRenderText( p, x0+0.8f, y, colour, outputString ) + 2.9f;
+#if DEBUGVAR_RENDER_DEBUG
+			printf( "finalOutputString: %d %s\n", p, finalOutputString );
+#endif // #if DEBUGVAR_RENDER_DEBUG
+								endX = debugVarRenderText( p, x0+0.8f, y, colour, finalOutputString ) + 2.9f;
 								if ( endX > maxX )
 								{
 									maxX = endX;
