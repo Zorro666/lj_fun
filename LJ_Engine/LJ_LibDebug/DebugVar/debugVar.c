@@ -477,7 +477,7 @@ debugVarDef* debugVarFindVarAtScope( const debugVarDef* const currentVar, const 
 }
 
 // Public functions
-void debugVarInitialise( const int maxNumVars )
+void debugVarInit( const int maxNumVars )
 {
 	g_debugVarMenuScrollStart = NULL;
 	g_debugVarArray = NULL;
@@ -511,7 +511,7 @@ void debugVarReset( void )
 	g_menuSelectedPlace = 0.0f;
 }
 
-void debugVarDeInitialise( void )
+void debugVarShutdown( void )
 {
 	debugVarReset();
 	g_debugVarNum = 0;

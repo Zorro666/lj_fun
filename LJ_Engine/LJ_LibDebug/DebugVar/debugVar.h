@@ -27,9 +27,9 @@ extern "C"
 {
 #endif // #ifdef __cplusplus
 
-void debugVarInitialise( const int maxNumVars );
+void debugVarInit( const int maxNumVars );
 void debugVarReset( void );
-void debugVarDeInitialise( void );
+void debugVarShutdown( void );
 
 int debugVarRegister( const char* const name, const int type, void* dataPtr, const int flags );
 void debugVarRender( void );

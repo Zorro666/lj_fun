@@ -26,8 +26,11 @@ extern void debugVarRender();
 extern int s_quit;
 extern int s_minimized;
 
+extern void game3DRender( void );
+extern void game2DRender( void );
 
 void renderBitmapString( float x, float y, float z, void *font, const char* const string );
+void inputTick( void );
 
 void engineInit( int argc, char* argv[] )
 {
@@ -55,8 +58,9 @@ void engineInit( int argc, char* argv[] )
 	s_quadratic = gluNewQuadric();			
 	gluQuadricNormals( s_quadratic, GLU_SMOOTH );
 	gluQuadricTexture( s_quadratic, GL_TRUE );
-
 }
+
+//	long lastTick = SDL_GetTicks();
 
 void engineReset( void )
 {
@@ -76,14 +80,26 @@ void engineTick( void )
 	rqtp.tv_nsec = s_sleepTime * MILLISECONDS;
 #undef MILLISECONDS
 	nanosleep( &rqtp, &rmtp );
+
+	// Handle mouse and keyboard input
+	inputTick();
 }
 
-void engineRender( void )
+void engineStartRendering( void )
 {
     // Clear the screen
     glClearColor(0.0, 0.0, 0.8, 0.0);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+}
 
+void engineFinishRendering( void )
+{
+    glFlush(); // Flush the buffer
+    SDL_GL_SwapBuffers();
+}
+
+void engineRender( void )
+{
     // Set the drawing color (RGB: WHITE)
     glColor3f(1.0,1.0,1.0);
 
@@ -97,6 +113,11 @@ void engineRender( void )
     glLoadIdentity();
     glTranslatef( s_cameraX, s_cameraY, s_cameraZ );
 
+	game3DRender();
+
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+
     // Set the viewport to be the entire window
     glViewport(0, 0, winWidth, winHeight);
 
@@ -104,15 +125,14 @@ void engineRender( void )
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
+	game2DRender();
+
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     gluOrtho2D(0, 120, 0, 20);
     glMatrixMode(GL_MODELVIEW);
 
     debugVarRender();
-
-    glFlush(); // Flush the buffer
-    SDL_GL_SwapBuffers();
 }
 
 // Return the width of the text rendered
@@ -182,7 +202,7 @@ void renderBitmapString( float x, float y, float z, void *font, const char* cons
     glPopMatrix();
 }
 
-void debugDrawSphere( float x, float y, float z, float size, int colour )
+void debugDrawSphere( float x, float y, float z, float radius, int colour )
 {
 	const float red = (float)(( colour >> 24 ) & 0xFF) / 255.0f;
 	const float green = (float)(( colour >> 16 ) & 0xFF) / 255.0f;
@@ -192,7 +212,21 @@ void debugDrawSphere( float x, float y, float z, float size, int colour )
     glPushMatrix();
 	glColor4f( red, green, blue, 0.5f );
 	glTranslatef( x, y, z );
-	gluSphere( s_quadratic, size, 32, 32 );
+	gluSphere( s_quadratic, radius, 32, 32 );
+    glPopMatrix();
+}
+
+void debugDrawCircle( float x, float y, float z, float radius, int colour )
+{
+	const float red = (float)(( colour >> 24 ) & 0xFF) / 255.0f;
+	const float green = (float)(( colour >> 16 ) & 0xFF) / 255.0f;
+	const float blue = (float)(( colour >> 8 ) & 0xFF) / 255.0f;
+
+    glMatrixMode(GL_MODELVIEW);
+    glPushMatrix();
+	glColor4f( red, green, blue, 0.5f );
+	glTranslatef( x, y, z );
+	gluDisk( s_quadratic, radius-0.01f, radius, 32, 32 );
     glPopMatrix();
 }
 
@@ -321,7 +355,7 @@ void MouseButtonDown( const int button, const int x, const int y, const int relX
 {
 }
  
-void engineHandleInput( void )
+void inputTick( void )
 {
 	// Poll for events, and handle the ones we care about.
 	SDL_Event event;

@@ -26,45 +26,68 @@ void WaitMessage( void )
 {
 }
 
-void mainLoop()
+void gameTick( void )
 {
-//	long lastTick = SDL_GetTicks();
- 
-	// Main loop: loop forever.
-	while ( !s_quit )
+}
+
+void game3DRender( void )
+{
+	debugDrawSphere( 0.0f, 0.0f, -10.0f, 3.0f, 0xFF0000FF );
+}
+
+void game2DRender( void )
+{
+	debugDrawCircle( 0.5f, 0.5f, 0.0f, 0.2f, 0x00FF00FF );
+}
+
+void gameSingleLoop()
+{
+	if ( s_minimized ) 
 	{
-		// Handle mouse and keyboard input
-		engineHandleInput();
- 
-		if ( s_minimized ) 
-		{
-			// Release some system resources if the application is minimized.
-			WaitMessage();
-		} 
-		else 
-		{
-			engineTick();
-			engineRender();
-		}
+		// Release some system resources if the application is minimized.
+		WaitMessage();
+	} 
+	else 
+	{
+		engineTick();
+		gameTick();
+		engineStartRendering();
+		engineRender();
+		engineFinishRendering();
 	}
 }
 
-
-int main(int argc, char* argv[])
+void gameInit( void )
 {
-    engineInit( argc, argv );
-
 	// Game init
-    debugVarInitialise( 64 );
+    debugVarInit( 64 );
     debugVarRegister( "Camera:x", DEBUG_VAR_FLOAT, &s_cameraX, 0 );
     debugVarRegister( "Camera:y", DEBUG_VAR_FLOAT, &s_cameraY, 0 );
     debugVarRegister( "Camera:z", DEBUG_VAR_FLOAT, &s_cameraZ, 0 );
     debugVarRegister( "Camera:fov", DEBUG_VAR_FLOAT, &s_cameraFoV, 0 );
     debugVarRegister( "Main:sleepTime", DEBUG_VAR_INT, &s_sleepTime, 0 );
+}
 
-	mainLoop();
+void gameReset( void )
+{
+}
 
-    debugVarDeInitialise();
+void gameShutdown( void )
+{
+    debugVarShutdown();
+}
+
+int main(int argc, char* argv[])
+{
+    engineInit( argc, argv );
+	gameInit();
+
+	while ( !s_quit )
+	{
+		gameSingleLoop();
+	}
+
+	gameShutdown();
 	engineShutdown();
 
     return 0;

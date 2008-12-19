@@ -9,11 +9,12 @@ void engineShutdown( void );
 
 void engineTick( void );
 
+void engineStartRendering( void );
 void engineRender( void );
+void engineFinishRendering( void );
 
-void engineHandleInput( void );
-
-float debugVarRenderText( const int render, const float x, const float y, const unsigned int colour, const char* const outputString );
+void debugDrawSphere( float x, float y, float z, float radius, int colour );
+void debugDrawCircle( float x, float y, float z, float radius, int colour );
 
 enum
 {

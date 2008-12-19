@@ -463,7 +463,7 @@ int main(int argc, char* argv[])
 {
  	SDL_Surface *screen;
 
-    debugVarInitialise( 64 );
+    debugVarInit( 64 );
     debugVarRegister( "Camera:x", DEBUG_VAR_FLOAT, &s_cameraX, 0 );
     debugVarRegister( "Camera:y", DEBUG_VAR_FLOAT, &s_cameraY, 0 );
     debugVarRegister( "Camera:z", DEBUG_VAR_FLOAT, &s_cameraZ, 0 );
@@ -488,7 +488,7 @@ int main(int argc, char* argv[])
 	mainLoop();
 
 	SDL_Quit();
-    debugVarDeInitialise();
+    debugVarShutdown();
 
     return 0;
 }
