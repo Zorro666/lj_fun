@@ -9,7 +9,7 @@
 #include <string.h>
 #include <time.h>
 
-#include "engine.h"
+#include "LJ_engine.h"
 #include "LJ_DebugVar/LJ_debugVar.h"
 
 float s_cameraFoV = 60.0f;
@@ -32,12 +32,12 @@ void gameTick( void )
 
 void game3DRender( void )
 {
-	debugDrawSphere( 0.0f, 0.0f, -10.0f, 3.0f, 0xFF0000FF );
+	LJ_debugDrawSphere( 0.0f, 0.0f, -10.0f, 3.0f, 0xFF0000FF );
 }
 
 void game2DRender( void )
 {
-	debugDrawCircle( 0.5f, 0.5f, 0.0f, 0.2f, 0x00FF00FF );
+	LJ_debugDrawCircle( 0.5f, 0.5f, 0.0f, 0.2f, 0x00FF00FF );
 }
 
 void gameSingleLoop()
@@ -49,11 +49,11 @@ void gameSingleLoop()
 	} 
 	else 
 	{
-		engineTick();
+		LJ_engineTick();
 		gameTick();
-		engineStartRendering();
-		engineRender();
-		engineFinishRendering();
+		LJ_engineStartRendering();
+		LJ_engineRender();
+		LJ_engineFinishRendering();
 	}
 }
 
@@ -80,7 +80,7 @@ void gameShutdown( void )
 
 int main(int argc, char* argv[])
 {
-    engineInit( argc, argv );
+    LJ_engineInit( argc, argv );
 	gameInit();
 
 	while ( !s_quit )
@@ -89,7 +89,7 @@ int main(int argc, char* argv[])
 	}
 
 	gameShutdown();
-	engineShutdown();
+	LJ_engineShutdown();
 
     return 0;
 }

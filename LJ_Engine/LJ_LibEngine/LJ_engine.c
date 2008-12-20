@@ -1,3 +1,6 @@
+#include "LJ_engine.h"
+#include "LJ_DebugVar/LJ_debugVar.h"
+
 #include <SDL/SDL.h>
 #include <SDL/SDL_opengl.h>
 #include <GL/gl.h>
@@ -5,9 +8,6 @@
 #include <GL/glut.h>
 
 #include <time.h>
-
-#include "engine.h"
-#include "LJ_DebugVar/LJ_debugVar.h"
 
 int winWidth = 768;
 int winHeight = 512;
@@ -31,7 +31,7 @@ extern void game2DRender( void );
 void renderBitmapString( float x, float y, float z, void *font, const char* const string );
 void inputTick( void );
 
-void engineInit( int argc, char* argv[] )
+void LJ_engineInit( int argc, char* argv[] )
 {
 	// Initialize SDL
 	SDL_Init( SDL_INIT_EVERYTHING );
@@ -61,16 +61,16 @@ void engineInit( int argc, char* argv[] )
 
 //	long lastTick = SDL_GetTicks();
 
-void engineReset( void )
+void LJ_engineReset( void )
 {
 }
 
-void engineShutdown( void )
+void LJ_engineShutdown( void )
 {
 	SDL_Quit();
 }
 
-void engineTick( void )
+void LJ_engineTick( void )
 {
 	struct timespec rqtp;
 	struct timespec rmtp;
@@ -84,20 +84,20 @@ void engineTick( void )
 	inputTick();
 }
 
-void engineStartRendering( void )
+void LJ_engineStartRendering( void )
 {
     // Clear the screen
     glClearColor(0.0, 0.0, 0.8, 0.0);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
-void engineFinishRendering( void )
+void LJ_engineFinishRendering( void )
 {
     glFlush(); // Flush the buffer
     SDL_GL_SwapBuffers();
 }
 
-void engineRender( void )
+void LJ_engineRender( void )
 {
     // Set the drawing color (RGB: WHITE)
     glColor3f(1.0,1.0,1.0);
@@ -201,7 +201,7 @@ void renderBitmapString( float x, float y, float z, void *font, const char* cons
     glPopMatrix();
 }
 
-void debugDrawSphere( float x, float y, float z, float radius, int colour )
+void LJ_debugDrawSphere( float x, float y, float z, float radius, int colour )
 {
 	const float red = (float)(( colour >> 24 ) & 0xFF) / 255.0f;
 	const float green = (float)(( colour >> 16 ) & 0xFF) / 255.0f;
@@ -215,7 +215,7 @@ void debugDrawSphere( float x, float y, float z, float radius, int colour )
     glPopMatrix();
 }
 
-void debugDrawCircle( float x, float y, float z, float radius, int colour )
+void LJ_debugDrawCircle( float x, float y, float z, float radius, int colour )
 {
 	const float red = (float)(( colour >> 24 ) & 0xFF) / 255.0f;
 	const float green = (float)(( colour >> 16 ) & 0xFF) / 255.0f;
@@ -239,7 +239,7 @@ void keyboard( SDL_KeyboardEvent* const keyEvent )
 	}
     switch ( keyEvent->keysym.sym ) 
 	{
-        case KEY_ESCAPE:  // The escape key
+        case LJ_KEY_ESCAPE:  // The escape key
         case 'Q':
         case 'q':
 		{
@@ -286,31 +286,31 @@ void keyboard( SDL_KeyboardEvent* const keyEvent )
             LJ_debugVarRender();
             break;
 		}
-		case KEY_BACKSPACE:
+		case LJ_KEY_BACKSPACE:
 		{
             LJ_debugVarInput( DEBUG_VAR_INPUT_CANCEL | fastKey );
             LJ_debugVarRender();
             break;
 		}
-		case KEY_UP:
+		case LJ_KEY_UP:
 		{
             LJ_debugVarInput( DEBUG_VAR_INPUT_UP | fastKey );
             LJ_debugVarRender();
    			break;
 		}
-		case KEY_DOWN:
+		case LJ_KEY_DOWN:
 		{
             LJ_debugVarInput( DEBUG_VAR_INPUT_DOWN | fastKey );
             LJ_debugVarRender();
    			break;
 		}
-		case KEY_LEFT:
+		case LJ_KEY_LEFT:
 		{
             LJ_debugVarInput( DEBUG_VAR_INPUT_LEFT | fastKey );
             LJ_debugVarRender();
    			break;
 		}
-		case KEY_RIGHT:
+		case LJ_KEY_RIGHT:
 		{
             LJ_debugVarInput( DEBUG_VAR_INPUT_RIGHT | fastKey );
             LJ_debugVarRender();
