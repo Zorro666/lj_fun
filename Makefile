@@ -31,7 +31,6 @@ cleangold: CLEAN=clean
 cleangold: build
 
 build:
-	@cp $(PROJECT_DIR)/Makefile $(PROJECT_DIR)/Makefile.save
 	@cp $(PROJECT_DIR)/$(PROJECT).cmake $(BASE_DIR)/CMakeLists.txt
 	@mkdir -p $(BUILD_DIR)
 	@cd $(BUILD_DIR) && cmake -DCMAKE_BUILD_TYPE=$(CONFIG) $(BASE_DIR) $* && $(MAKE) -s $(CLEAN)
