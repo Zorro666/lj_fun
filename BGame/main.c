@@ -61,11 +61,11 @@ void gameInit( void )
 {
 	// Game init
     LJ_debugVarInit( 64 );
-    LJ_debugVarRegister( "Camera:x", DEBUG_VAR_FLOAT, &s_cameraX, 0 );
-    LJ_debugVarRegister( "Camera:y", DEBUG_VAR_FLOAT, &s_cameraY, 0 );
-    LJ_debugVarRegister( "Camera:z", DEBUG_VAR_FLOAT, &s_cameraZ, 0 );
-    LJ_debugVarRegister( "Camera:fov", DEBUG_VAR_FLOAT, &s_cameraFoV, 0 );
-    LJ_debugVarRegister( "Main:sleepTime", DEBUG_VAR_INT, &s_sleepTime, 0 );
+    LJ_debugVarRegister( "Camera:x", LJ_DEBUG_VAR_FLOAT, &s_cameraX, 0 );
+    LJ_debugVarRegister( "Camera:y", LJ_DEBUG_VAR_FLOAT, &s_cameraY, 0 );
+    LJ_debugVarRegister( "Camera:z", LJ_DEBUG_VAR_FLOAT, &s_cameraZ, 0 );
+    LJ_debugVarRegister( "Camera:fov", LJ_DEBUG_VAR_FLOAT, &s_cameraFoV, 0 );
+    LJ_debugVarRegister( "Main:sleepTime", LJ_DEBUG_VAR_INT, &s_sleepTime, 0 );
 }
 
 void gameReset( void )

@@ -252,14 +252,14 @@ void renderSortInit( void )
 	s_maxNumTiles = 8;
 	s_maxNumTypesPerTile = 2;
 	s_maxNumInstancesPerTypePerTile = 8;
-    LJ_debugVarRegister( "RenderSort:maxNumTiles", DEBUG_VAR_INT, &s_maxNumTiles, 0 );
-    LJ_debugVarRegister( "RenderSort:maxNumTypesPerTile", DEBUG_VAR_INT, &s_maxNumTypesPerTile, 0 );
-    LJ_debugVarRegister( "RenderSort:maxNumInstancesPerTypePerTile", DEBUG_VAR_INT, &s_maxNumInstancesPerTypePerTile, 0 );
-    LJ_debugVarRegister( "RenderSort:numInstances", DEBUG_VAR_INT | DEBUG_VAR_READ_ONLY , &s_numInstances, 0 );
-    LJ_debugVarRegister( "RenderSort:numBatchItems", DEBUG_VAR_INT | DEBUG_VAR_READ_ONLY , &s_numBatchItems, 0 );
-    LJ_debugVarRegister( "RenderSort:XRange", DEBUG_VAR_FLOAT, &s_instanceXRange, 0 );
-    LJ_debugVarRegister( "RenderSort:YRange", DEBUG_VAR_FLOAT, &s_instanceYRange, 0 );
-    LJ_debugVarRegister( "RenderSort:ZRange", DEBUG_VAR_FLOAT, &s_instanceZRange, 0 );
+    LJ_debugVarRegister( "RenderSort:maxNumTiles", LJ_DEBUG_VAR_INT, &s_maxNumTiles, 0 );
+    LJ_debugVarRegister( "RenderSort:maxNumTypesPerTile", LJ_DEBUG_VAR_INT, &s_maxNumTypesPerTile, 0 );
+    LJ_debugVarRegister( "RenderSort:maxNumInstancesPerTypePerTile", LJ_DEBUG_VAR_INT, &s_maxNumInstancesPerTypePerTile, 0 );
+    LJ_debugVarRegister( "RenderSort:numInstances", LJ_DEBUG_VAR_INT | LJ_DEBUG_VAR_READ_ONLY , &s_numInstances, 0 );
+    LJ_debugVarRegister( "RenderSort:numBatchItems", LJ_DEBUG_VAR_INT | LJ_DEBUG_VAR_READ_ONLY , &s_numBatchItems, 0 );
+    LJ_debugVarRegister( "RenderSort:XRange", LJ_DEBUG_VAR_FLOAT, &s_instanceXRange, 0 );
+    LJ_debugVarRegister( "RenderSort:YRange", LJ_DEBUG_VAR_FLOAT, &s_instanceYRange, 0 );
+    LJ_debugVarRegister( "RenderSort:ZRange", LJ_DEBUG_VAR_FLOAT, &s_instanceZRange, 0 );
 }
 
 void renderSortTest( void )

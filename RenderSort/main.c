@@ -212,7 +212,7 @@ void specialKeyPressed(int key, int x, int y)
 	int fastKey = 0;
 	if ( modKey == GLUT_ACTIVE_CTRL )
 	{
-		fastKey = DEBUG_VAR_INPUT_FAST;
+		fastKey = LJ_DEBUG_VAR_INPUT_FAST;
 	}
 	switch ( key )
    	{
@@ -230,7 +230,7 @@ void keyboard( SDL_KeyboardEvent* const keyEvent )
 	int fastKey = 0;
 	if ( ( modifier & KMOD_LCTRL ) || ( modifier & KMOD_RCTRL ) )
 	{
-		fastKey = DEBUG_VAR_INPUT_FAST;
+		fastKey = LJ_DEBUG_VAR_INPUT_FAST;
 	}
     switch ( keyEvent->keysym.sym ) 
 	{
@@ -253,61 +253,61 @@ void keyboard( SDL_KeyboardEvent* const keyEvent )
 		}
         case 'w':
 		{
-            LJ_debugVarInput( DEBUG_VAR_INPUT_UP | fastKey );
+            LJ_debugVarInput( LJ_DEBUG_VAR_INPUT_UP | fastKey );
             LJ_debugVarRender();
             break;
 		}
         case 's':
 		{
-            LJ_debugVarInput( DEBUG_VAR_INPUT_DOWN | fastKey );
+            LJ_debugVarInput( LJ_DEBUG_VAR_INPUT_DOWN | fastKey );
             LJ_debugVarRender();
             break;
 		}
         case 'a':
 		{
-            LJ_debugVarInput( DEBUG_VAR_INPUT_LEFT | fastKey );
+            LJ_debugVarInput( LJ_DEBUG_VAR_INPUT_LEFT | fastKey );
             LJ_debugVarRender();
             break;
 		}
         case 'd':
 		{
-            LJ_debugVarInput( DEBUG_VAR_INPUT_RIGHT | fastKey );
+            LJ_debugVarInput( LJ_DEBUG_VAR_INPUT_RIGHT | fastKey );
             LJ_debugVarRender();
             break;
 		}
         case ' ':
 		{
-            LJ_debugVarInput( DEBUG_VAR_INPUT_SELECT | fastKey );
+            LJ_debugVarInput( LJ_DEBUG_VAR_INPUT_SELECT | fastKey );
             LJ_debugVarRender();
             break;
 		}
 		case KEY_BACKSPACE:
 		{
-            LJ_debugVarInput( DEBUG_VAR_INPUT_CANCEL | fastKey );
+            LJ_debugVarInput( LJ_DEBUG_VAR_INPUT_CANCEL | fastKey );
             LJ_debugVarRender();
             break;
 		}
 		case KEY_UP:
 		{
-            LJ_debugVarInput( DEBUG_VAR_INPUT_UP | fastKey );
+            LJ_debugVarInput( LJ_DEBUG_VAR_INPUT_UP | fastKey );
             LJ_debugVarRender();
    			break;
 		}
 		case KEY_DOWN:
 		{
-            LJ_debugVarInput( DEBUG_VAR_INPUT_DOWN | fastKey );
+            LJ_debugVarInput( LJ_DEBUG_VAR_INPUT_DOWN | fastKey );
             LJ_debugVarRender();
    			break;
 		}
 		case KEY_LEFT:
 		{
-            LJ_debugVarInput( DEBUG_VAR_INPUT_LEFT | fastKey );
+            LJ_debugVarInput( LJ_DEBUG_VAR_INPUT_LEFT | fastKey );
             LJ_debugVarRender();
    			break;
 		}
 		case KEY_RIGHT:
 		{
-            LJ_debugVarInput( DEBUG_VAR_INPUT_RIGHT | fastKey );
+            LJ_debugVarInput( LJ_DEBUG_VAR_INPUT_RIGHT | fastKey );
             LJ_debugVarRender();
 			break;
 		}
@@ -464,11 +464,11 @@ int main(int argc, char* argv[])
  	SDL_Surface *screen;
 
     LJ_debugVarInit( 64 );
-    LJ_debugVarRegister( "Camera:x", DEBUG_VAR_FLOAT, &s_cameraX, 0 );
-    LJ_debugVarRegister( "Camera:y", DEBUG_VAR_FLOAT, &s_cameraY, 0 );
-    LJ_debugVarRegister( "Camera:z", DEBUG_VAR_FLOAT, &s_cameraZ, 0 );
-    LJ_debugVarRegister( "Camera:fov", DEBUG_VAR_FLOAT, &s_cameraFoV, 0 );
-    LJ_debugVarRegister( "Main:sleepTime", DEBUG_VAR_INT, &s_sleepTime, 0 );
+    LJ_debugVarRegister( "Camera:x", LJ_DEBUG_VAR_FLOAT, &s_cameraX, 0 );
+    LJ_debugVarRegister( "Camera:y", LJ_DEBUG_VAR_FLOAT, &s_cameraY, 0 );
+    LJ_debugVarRegister( "Camera:z", LJ_DEBUG_VAR_FLOAT, &s_cameraZ, 0 );
+    LJ_debugVarRegister( "Camera:fov", LJ_DEBUG_VAR_FLOAT, &s_cameraFoV, 0 );
+    LJ_debugVarRegister( "Main:sleepTime", LJ_DEBUG_VAR_INT, &s_sleepTime, 0 );
 
 	renderSortInit();
 

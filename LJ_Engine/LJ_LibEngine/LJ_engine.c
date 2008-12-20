@@ -235,7 +235,7 @@ void keyboard( SDL_KeyboardEvent* const keyEvent )
 	int fastKey = 0;
 	if ( ( modifier & KMOD_LCTRL ) || ( modifier & KMOD_RCTRL ) )
 	{
-		fastKey = DEBUG_VAR_INPUT_FAST;
+		fastKey = LJ_DEBUG_VAR_INPUT_FAST;
 	}
     switch ( keyEvent->keysym.sym ) 
 	{
@@ -258,61 +258,61 @@ void keyboard( SDL_KeyboardEvent* const keyEvent )
 		}
         case 'w':
 		{
-            LJ_debugVarInput( DEBUG_VAR_INPUT_UP | fastKey );
+            LJ_debugVarInput( LJ_DEBUG_VAR_INPUT_UP | fastKey );
             LJ_debugVarRender();
             break;
 		}
         case 's':
 		{
-            LJ_debugVarInput( DEBUG_VAR_INPUT_DOWN | fastKey );
+            LJ_debugVarInput( LJ_DEBUG_VAR_INPUT_DOWN | fastKey );
             LJ_debugVarRender();
             break;
 		}
         case 'a':
 		{
-            LJ_debugVarInput( DEBUG_VAR_INPUT_LEFT | fastKey );
+            LJ_debugVarInput( LJ_DEBUG_VAR_INPUT_LEFT | fastKey );
             LJ_debugVarRender();
             break;
 		}
         case 'd':
 		{
-            LJ_debugVarInput( DEBUG_VAR_INPUT_RIGHT | fastKey );
+            LJ_debugVarInput( LJ_DEBUG_VAR_INPUT_RIGHT | fastKey );
             LJ_debugVarRender();
             break;
 		}
         case ' ':
 		{
-            LJ_debugVarInput( DEBUG_VAR_INPUT_SELECT | fastKey );
+            LJ_debugVarInput( LJ_DEBUG_VAR_INPUT_SELECT | fastKey );
             LJ_debugVarRender();
             break;
 		}
 		case LJ_KEY_BACKSPACE:
 		{
-            LJ_debugVarInput( DEBUG_VAR_INPUT_CANCEL | fastKey );
+            LJ_debugVarInput( LJ_DEBUG_VAR_INPUT_CANCEL | fastKey );
             LJ_debugVarRender();
             break;
 		}
 		case LJ_KEY_UP:
 		{
-            LJ_debugVarInput( DEBUG_VAR_INPUT_UP | fastKey );
+            LJ_debugVarInput( LJ_DEBUG_VAR_INPUT_UP | fastKey );
             LJ_debugVarRender();
    			break;
 		}
 		case LJ_KEY_DOWN:
 		{
-            LJ_debugVarInput( DEBUG_VAR_INPUT_DOWN | fastKey );
+            LJ_debugVarInput( LJ_DEBUG_VAR_INPUT_DOWN | fastKey );
             LJ_debugVarRender();
    			break;
 		}
 		case LJ_KEY_LEFT:
 		{
-            LJ_debugVarInput( DEBUG_VAR_INPUT_LEFT | fastKey );
+            LJ_debugVarInput( LJ_DEBUG_VAR_INPUT_LEFT | fastKey );
             LJ_debugVarRender();
    			break;
 		}
 		case LJ_KEY_RIGHT:
 		{
-            LJ_debugVarInput( DEBUG_VAR_INPUT_RIGHT | fastKey );
+            LJ_debugVarInput( LJ_DEBUG_VAR_INPUT_RIGHT | fastKey );
             LJ_debugVarRender();
 			break;
 		}
