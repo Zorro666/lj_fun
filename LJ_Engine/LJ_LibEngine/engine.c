@@ -7,7 +7,7 @@
 #include <time.h>
 
 #include "engine.h"
-#include "DebugVar/debugVar.h"
+#include "LJ_DebugVar/LJ_debugVar.h"
 
 int winWidth = 768;
 int winHeight = 512;
@@ -21,7 +21,6 @@ extern float s_cameraFoV;
 extern float s_cameraX;
 extern float s_cameraY;
 extern float s_cameraZ;
-extern void debugVarRender();
 
 extern int s_quit;
 extern int s_minimized;
@@ -132,11 +131,11 @@ void engineRender( void )
     gluOrtho2D(0, 120, 0, 20);
     glMatrixMode(GL_MODELVIEW);
 
-    debugVarRender();
+    LJ_debugVarRender();
 }
 
 // Return the width of the text rendered
-float debugVarRenderText( const int render, const float x, const float y, const unsigned int colour, const char* const outputString )
+float LJ_debugVarRenderText( const int render, const float x, const float y, const unsigned int colour, const char* const outputString )
 {
 	const float multiplier = 2.8f * ( 512.0f / (float)winWidth );
 	const int len = strlen( outputString );
@@ -155,7 +154,7 @@ float debugVarRenderText( const int render, const float x, const float y, const 
 	return len * multiplier;
 }
 
-void debugVarDrawBackground( const float x0, const float y0, const float x1, const float y1, const unsigned int colour )
+void LJ_debugVarDrawBackground( const float x0, const float y0, const float x1, const float y1, const unsigned int colour )
 {
 	const int red = ( colour >> 24 ) & 0xFF;
 	const int green = ( colour >> 16 ) & 0xFF;
@@ -180,12 +179,12 @@ void debugVarDrawBackground( const float x0, const float y0, const float x1, con
 	glPopMatrix();
 }
 
-void* debugVarMemAlloc( const int sizeInBytes )
+void* LJ_debugVarMemAlloc( const int sizeInBytes )
 {
 	return malloc( sizeInBytes );
 }
 
-void debugVarMemFree( void* memoryPtr )
+void LJ_debugVarMemFree( void* memoryPtr )
 {
 	free( memoryPtr );
 }
@@ -254,67 +253,67 @@ void keyboard( SDL_KeyboardEvent* const keyEvent )
 		}
         case 'r':
 		{
-            debugVarRender();
+            LJ_debugVarRender();
             break;
 		}
         case 'w':
 		{
-            debugVarInput( DEBUG_VAR_INPUT_UP | fastKey );
-            debugVarRender();
+            LJ_debugVarInput( DEBUG_VAR_INPUT_UP | fastKey );
+            LJ_debugVarRender();
             break;
 		}
         case 's':
 		{
-            debugVarInput( DEBUG_VAR_INPUT_DOWN | fastKey );
-            debugVarRender();
+            LJ_debugVarInput( DEBUG_VAR_INPUT_DOWN | fastKey );
+            LJ_debugVarRender();
             break;
 		}
         case 'a':
 		{
-            debugVarInput( DEBUG_VAR_INPUT_LEFT | fastKey );
-            debugVarRender();
+            LJ_debugVarInput( DEBUG_VAR_INPUT_LEFT | fastKey );
+            LJ_debugVarRender();
             break;
 		}
         case 'd':
 		{
-            debugVarInput( DEBUG_VAR_INPUT_RIGHT | fastKey );
-            debugVarRender();
+            LJ_debugVarInput( DEBUG_VAR_INPUT_RIGHT | fastKey );
+            LJ_debugVarRender();
             break;
 		}
         case ' ':
 		{
-            debugVarInput( DEBUG_VAR_INPUT_SELECT | fastKey );
-            debugVarRender();
+            LJ_debugVarInput( DEBUG_VAR_INPUT_SELECT | fastKey );
+            LJ_debugVarRender();
             break;
 		}
 		case KEY_BACKSPACE:
 		{
-            debugVarInput( DEBUG_VAR_INPUT_CANCEL | fastKey );
-            debugVarRender();
+            LJ_debugVarInput( DEBUG_VAR_INPUT_CANCEL | fastKey );
+            LJ_debugVarRender();
             break;
 		}
 		case KEY_UP:
 		{
-            debugVarInput( DEBUG_VAR_INPUT_UP | fastKey );
-            debugVarRender();
+            LJ_debugVarInput( DEBUG_VAR_INPUT_UP | fastKey );
+            LJ_debugVarRender();
    			break;
 		}
 		case KEY_DOWN:
 		{
-            debugVarInput( DEBUG_VAR_INPUT_DOWN | fastKey );
-            debugVarRender();
+            LJ_debugVarInput( DEBUG_VAR_INPUT_DOWN | fastKey );
+            LJ_debugVarRender();
    			break;
 		}
 		case KEY_LEFT:
 		{
-            debugVarInput( DEBUG_VAR_INPUT_LEFT | fastKey );
-            debugVarRender();
+            LJ_debugVarInput( DEBUG_VAR_INPUT_LEFT | fastKey );
+            LJ_debugVarRender();
    			break;
 		}
 		case KEY_RIGHT:
 		{
-            debugVarInput( DEBUG_VAR_INPUT_RIGHT | fastKey );
-            debugVarRender();
+            LJ_debugVarInput( DEBUG_VAR_INPUT_RIGHT | fastKey );
+            LJ_debugVarRender();
 			break;
 		}
 		default:

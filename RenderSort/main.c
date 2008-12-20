@@ -8,7 +8,7 @@
 #include <SDL/SDL.h>
 #include <SDL/SDL_opengl.h>
 
-#include "DebugVar/debugVar.h"
+#include "LJ_DebugVar/LJ_debugVar.h"
 #include "renderSort.h"
 
 #include <stdlib.h>
@@ -46,7 +46,7 @@ enum
 };
 
 // Return the width of the text rendered
-float debugVarRenderText( const int render, const float x, const float y, const unsigned int colour, const char* const outputString )
+float LJ_debugVarRenderText( const int render, const float x, const float y, const unsigned int colour, const char* const outputString )
 {
 	const float multiplier = 2.8f * ( 512.0f / (float)winWidth );
 	const int len = strlen( outputString );
@@ -65,7 +65,7 @@ float debugVarRenderText( const int render, const float x, const float y, const 
 	return len * multiplier;
 }
 
-void debugVarDrawBackground( const float x0, const float y0, const float x1, const float y1, const unsigned int colour )
+void LJ_debugVarDrawBackground( const float x0, const float y0, const float x1, const float y1, const unsigned int colour )
 {
 	const int red = ( colour >> 24 ) & 0xFF;
 	const int green = ( colour >> 16 ) & 0xFF;
@@ -90,12 +90,12 @@ void debugVarDrawBackground( const float x0, const float y0, const float x1, con
 	glPopMatrix();
 }
 
-void* debugVarMemAlloc( const int sizeInBytes )
+void* LJ_debugVarMemAlloc( const int sizeInBytes )
 {
 	return malloc( sizeInBytes );
 }
 
-void debugVarMemFree( void* memoryPtr )
+void LJ_debugVarMemFree( void* memoryPtr )
 {
 	free( memoryPtr );
 }
@@ -166,7 +166,7 @@ void display()
     gluOrtho2D(0, 120, 0, 20);
     glMatrixMode(GL_MODELVIEW);
 
-    debugVarRender();
+    LJ_debugVarRender();
 
     glFlush(); // Flush the buffer
     SDL_GL_SwapBuffers();
@@ -248,67 +248,67 @@ void keyboard( SDL_KeyboardEvent* const keyEvent )
 		}
         case 'r':
 		{
-            debugVarRender();
+            LJ_debugVarRender();
             break;
 		}
         case 'w':
 		{
-            debugVarInput( DEBUG_VAR_INPUT_UP | fastKey );
-            debugVarRender();
+            LJ_debugVarInput( DEBUG_VAR_INPUT_UP | fastKey );
+            LJ_debugVarRender();
             break;
 		}
         case 's':
 		{
-            debugVarInput( DEBUG_VAR_INPUT_DOWN | fastKey );
-            debugVarRender();
+            LJ_debugVarInput( DEBUG_VAR_INPUT_DOWN | fastKey );
+            LJ_debugVarRender();
             break;
 		}
         case 'a':
 		{
-            debugVarInput( DEBUG_VAR_INPUT_LEFT | fastKey );
-            debugVarRender();
+            LJ_debugVarInput( DEBUG_VAR_INPUT_LEFT | fastKey );
+            LJ_debugVarRender();
             break;
 		}
         case 'd':
 		{
-            debugVarInput( DEBUG_VAR_INPUT_RIGHT | fastKey );
-            debugVarRender();
+            LJ_debugVarInput( DEBUG_VAR_INPUT_RIGHT | fastKey );
+            LJ_debugVarRender();
             break;
 		}
         case ' ':
 		{
-            debugVarInput( DEBUG_VAR_INPUT_SELECT | fastKey );
-            debugVarRender();
+            LJ_debugVarInput( DEBUG_VAR_INPUT_SELECT | fastKey );
+            LJ_debugVarRender();
             break;
 		}
 		case KEY_BACKSPACE:
 		{
-            debugVarInput( DEBUG_VAR_INPUT_CANCEL | fastKey );
-            debugVarRender();
+            LJ_debugVarInput( DEBUG_VAR_INPUT_CANCEL | fastKey );
+            LJ_debugVarRender();
             break;
 		}
 		case KEY_UP:
 		{
-            debugVarInput( DEBUG_VAR_INPUT_UP | fastKey );
-            debugVarRender();
+            LJ_debugVarInput( DEBUG_VAR_INPUT_UP | fastKey );
+            LJ_debugVarRender();
    			break;
 		}
 		case KEY_DOWN:
 		{
-            debugVarInput( DEBUG_VAR_INPUT_DOWN | fastKey );
-            debugVarRender();
+            LJ_debugVarInput( DEBUG_VAR_INPUT_DOWN | fastKey );
+            LJ_debugVarRender();
    			break;
 		}
 		case KEY_LEFT:
 		{
-            debugVarInput( DEBUG_VAR_INPUT_LEFT | fastKey );
-            debugVarRender();
+            LJ_debugVarInput( DEBUG_VAR_INPUT_LEFT | fastKey );
+            LJ_debugVarRender();
    			break;
 		}
 		case KEY_RIGHT:
 		{
-            debugVarInput( DEBUG_VAR_INPUT_RIGHT | fastKey );
-            debugVarRender();
+            LJ_debugVarInput( DEBUG_VAR_INPUT_RIGHT | fastKey );
+            LJ_debugVarRender();
 			break;
 		}
 		default:
@@ -463,12 +463,12 @@ int main(int argc, char* argv[])
 {
  	SDL_Surface *screen;
 
-    debugVarInit( 64 );
-    debugVarRegister( "Camera:x", DEBUG_VAR_FLOAT, &s_cameraX, 0 );
-    debugVarRegister( "Camera:y", DEBUG_VAR_FLOAT, &s_cameraY, 0 );
-    debugVarRegister( "Camera:z", DEBUG_VAR_FLOAT, &s_cameraZ, 0 );
-    debugVarRegister( "Camera:fov", DEBUG_VAR_FLOAT, &s_cameraFoV, 0 );
-    debugVarRegister( "Main:sleepTime", DEBUG_VAR_INT, &s_sleepTime, 0 );
+    LJ_debugVarInit( 64 );
+    LJ_debugVarRegister( "Camera:x", DEBUG_VAR_FLOAT, &s_cameraX, 0 );
+    LJ_debugVarRegister( "Camera:y", DEBUG_VAR_FLOAT, &s_cameraY, 0 );
+    LJ_debugVarRegister( "Camera:z", DEBUG_VAR_FLOAT, &s_cameraZ, 0 );
+    LJ_debugVarRegister( "Camera:fov", DEBUG_VAR_FLOAT, &s_cameraFoV, 0 );
+    LJ_debugVarRegister( "Main:sleepTime", DEBUG_VAR_INT, &s_sleepTime, 0 );
 
 	renderSortInit();
 
@@ -488,7 +488,7 @@ int main(int argc, char* argv[])
 	mainLoop();
 
 	SDL_Quit();
-    debugVarShutdown();
+    LJ_debugVarShutdown();
 
     return 0;
 }

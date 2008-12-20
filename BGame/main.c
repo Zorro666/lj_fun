@@ -10,7 +10,7 @@
 #include <time.h>
 
 #include "engine.h"
-#include "DebugVar/debugVar.h"
+#include "LJ_DebugVar/LJ_debugVar.h"
 
 float s_cameraFoV = 60.0f;
 float s_cameraX = 0.0f;
@@ -60,21 +60,22 @@ void gameSingleLoop()
 void gameInit( void )
 {
 	// Game init
-    debugVarInit( 64 );
-    debugVarRegister( "Camera:x", DEBUG_VAR_FLOAT, &s_cameraX, 0 );
-    debugVarRegister( "Camera:y", DEBUG_VAR_FLOAT, &s_cameraY, 0 );
-    debugVarRegister( "Camera:z", DEBUG_VAR_FLOAT, &s_cameraZ, 0 );
-    debugVarRegister( "Camera:fov", DEBUG_VAR_FLOAT, &s_cameraFoV, 0 );
-    debugVarRegister( "Main:sleepTime", DEBUG_VAR_INT, &s_sleepTime, 0 );
+    LJ_debugVarInit( 64 );
+    LJ_debugVarRegister( "Camera:x", DEBUG_VAR_FLOAT, &s_cameraX, 0 );
+    LJ_debugVarRegister( "Camera:y", DEBUG_VAR_FLOAT, &s_cameraY, 0 );
+    LJ_debugVarRegister( "Camera:z", DEBUG_VAR_FLOAT, &s_cameraZ, 0 );
+    LJ_debugVarRegister( "Camera:fov", DEBUG_VAR_FLOAT, &s_cameraFoV, 0 );
+    LJ_debugVarRegister( "Main:sleepTime", DEBUG_VAR_INT, &s_sleepTime, 0 );
 }
 
 void gameReset( void )
 {
+	LJ_debugVarReset();
 }
 
 void gameShutdown( void )
 {
-    debugVarShutdown();
+    LJ_debugVarShutdown();
 }
 
 int main(int argc, char* argv[])
