@@ -1,8 +1,15 @@
 To be done:
 
+** Tasks
+* implement a base LJ_LibInput
+* implement a base LJ_LibCommon (base types, string)
+* add debug graphics layer to LJ_LibDebug
+* implement a base LJ_LibGraphics (2D graphics, texture handling)
+
 ** Building Process
 
 ** Code Intentions
+* should LJ_LibEngine be all the engine libs compiled into a behemoth (kind of defeats the purpose but might be nice)
 * use SDL as base engine functionality but encapsulate it away so it doesn't appear in any game code and only in root low-level engine files
 * task based system manager
 * write new features as tasks (microthrreads)
@@ -20,9 +27,10 @@ To be done:
 
 ** Contentious Issues
 * don't use any native types have all types pre type def'ed e.g. LJint32, LJuint32, LJint, LJuint, LJfloat etc.
-* prefix all functions/classes/types/enums etc. with LJ
+* prefix all engine functions/classes/types/enums etc. with LJ_
 
 ** Long Term Plans
 * get a toolchain up and running support 3D engine
 * get exporting from Maya going if possible
 * shaders even in 2D
+

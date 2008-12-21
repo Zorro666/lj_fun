@@ -12,3 +12,10 @@ cd RenderSort
 make
 ./renderSort
 
+Some Code Style Suggestions
+1. all engine directories/files/structs/enums/functions start with LJ_
+2. all game directories/files/structs/enums/functions start with the game prefix e.g. BG_
+3. all directories start with capital letter (the bit after the prefix)
+4. all files start with lowercase letter (the bit after the prefix)
+5. assert is not a swear word so lets use it ;)
+6. lets not use libc directly but wrap it ourselves in the engine (an ongoing task)
