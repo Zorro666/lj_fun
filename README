@@ -1,14 +1,10 @@
-Need to set an environment variable:
-
-BASEROOT to the root directory where these source files are
-
 To compile a project from the project's dir type:
 
 make <target> 
 
 where:
 
-<target> = {debug,release,gold,clean,cleanrelease,cleangold} : DEFAULT=debug
+<target> = {debug,release,gold,clean,cleanrelease,cleangold,tags,cleantags} : DEFAULT=debug
 
 e.g.
 
