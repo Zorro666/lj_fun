@@ -1,6 +1,6 @@
 #include "renderSort.h"
 
-#include "LJ_DebugVar/LJ_debugVar.h"
+#include "LJ_LibDebug/LJ_LibDebug.h"
 
 #include <stdlib.h>
 #include <stdio.h>
