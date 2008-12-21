@@ -11,5 +11,5 @@ LINK_DIRECTORIES(${GLOBAL_LINK_DIRECTORIES})
 ADD_EXECUTABLE(a.out main.c)
 
 #need to link to some other libraries ? just add them here
-TARGET_LINK_LIBRARIES (a.out LJ_LibDebug LJ_LibEngine GL glut ${SDL_LIBRARY})
+TARGET_LINK_LIBRARIES (a.out LJ_LibEngine LJ_LibDebug LJ_LibInput GL glut ${SDL_LIBRARY})
 

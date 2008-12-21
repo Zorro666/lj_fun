@@ -1,7 +1,7 @@
 #ifndef LJ_KEY_HH
 #define LJ_KEY_HH
 
-enum 
+enum LJ_inputKeyEnum
 {
 	LJ_KEY_START			= 0,
 	// The key IDs chosen to match ASCII
@@ -25,7 +25,7 @@ enum
 	LJ_KEY_PLUS				= 43,
 	LJ_KEY_COMMA			= 44,
 	LJ_KEY_MINUS			= 45,
-	LJ_KEY_PERIOD			= 46,
+	LJ_KEY_DOT				= 46,
 	LJ_KEY_SLASH			= 47,
 	LJ_KEY_0				= 48,
 	LJ_KEY_1				= 49,
@@ -92,7 +92,7 @@ enum
 	LJ_KEY_NUMPAD7			= 263,
 	LJ_KEY_NUMPAD8			= 264,
 	LJ_KEY_NUMPAD9			= 265,
-	LJ_KEY_NUMPAD_PERIOD	= 266,
+	LJ_KEY_NUMPAD_DOT		= 266,
 	LJ_KEY_NUMPAD_DIVIDE	= 267,
 	LJ_KEY_NUMPAD_MULTIPLY	= 268,
 	LJ_KEY_NUMPAD_MINUS		= 269,
@@ -155,7 +155,7 @@ enum
 } LJ_inputKeyEnum;
 
 // Valid keyboard modifiers 
-enum 
+enum LJ_inputKeyModifierEnum
 {
 	LJ_KEY_MOD_NONE  		= 0x0000,
 	LJ_KEY_MOD_LSHIFT		= 0x0001,

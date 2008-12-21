@@ -58,6 +58,8 @@ void LJ_engineInit( int argc, char* argv[] )
 	s_quadratic = gluNewQuadric();			
 	gluQuadricNormals( s_quadratic, GLU_SMOOTH );
 	gluQuadricTexture( s_quadratic, GL_TRUE );
+
+	LJ_inputInit();
 }
 
 //	long lastTick = SDL_GetTicks();
