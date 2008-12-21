@@ -2,7 +2,7 @@
 
 .PHONY: debug clean release cleanrelease gold cleangold tags cleantags
 
-BASE_DIR:=$(BASEROOT)
+BASE_DIR:=$(shell cd .. ; pwd )
 BUILDROOT:=Build
 BUILDROOT:=$(BASE_DIR)/$(BUILDROOT)
 BUILD_DIR=$(BUILDROOT)/$(PROJECT)_$(CONFIG)

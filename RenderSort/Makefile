@@ -3,5 +3,5 @@
 PROJECT:=RenderSort
 EXE_NAME:=renderSort
 
-include $(BASEROOT)/Makefile
+include ../Makefile
 
