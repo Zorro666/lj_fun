@@ -1,0 +1,16 @@
+#! /bin/make
+
+.PHONY: tags clean
+
+tags:
+	@ctags -R --exclude=CMakeFiles --c++-kinds=+p --fields=+iaS --extra=+q .
+	@cscope -R -b -q 
+
+clean:
+	@$(RM) -rvf tags
+	@$(RM) -rvf cscope.out
+	@$(RM) -rvf cscope.in.out
+	@$(RM) -rvf cscope.po.out
+
+all: tags
+

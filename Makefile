@@ -1,6 +1,6 @@
 #! /bin/make
 
-.PHONY: debug clean release cleanrelease gold cleangold
+.PHONY: debug clean release cleanrelease gold cleangold tags cleantags
 
 BASE_DIR:=$(BASEROOT)
 BUILDROOT:=Build
@@ -33,13 +33,19 @@ cleangold: build
 build:
 	@cp $(PROJECT_DIR)/$(PROJECT).cmake $(BASE_DIR)/CMakeLists.txt
 	@mkdir -p $(BUILD_DIR)
-	@cd $(BUILD_DIR) && cmake -DCMAKE_BUILD_TYPE=$(CONFIG) $(BASE_DIR) $* && $(MAKE) -s $(CLEAN)
+	@cd $(BUILD_DIR) && cmake -DCMAKE_BUILD_TYPE=$(CONFIG) $(BASE_DIR) $* && $(MAKE) --no-print-directory $(CLEAN)
 
 updateexe:
 	@cp -v --preserve=all $(BUILD_DIR)/$(PROJECT)/a.out $(PROJECT_DIR)/$(EXE_NAME)
 	@ls -lh $(PROJECT_DIR)/$(EXE_NAME)
 
 all: debug 
+
+tags:
+	$(MAKE) -C $(BASE_DIR) -f makefile.tags --no-print-directory
+
+cleantags:
+	$(MAKE) -C $(BASE_DIR) -f makefile.tags --no-print-directory clean
 
 test:
 	@echo "PROJECT=$(PROJECT)"
