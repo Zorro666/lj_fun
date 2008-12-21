@@ -14,8 +14,6 @@ typedef struct LJ_debugVarDef_s
     void* dataPtr;
 } LJ_debugVarDef;
 
-// Change 1
-
 typedef struct LJ_debugVarValue_s
 {
 	union 

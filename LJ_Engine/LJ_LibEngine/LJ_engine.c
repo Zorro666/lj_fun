@@ -1,5 +1,6 @@
-#include "LJ_engine.h"
-#include "LJ_DebugVar/LJ_debugVar.h"
+#include "LJ_LibEngine/LJ_LibEngine.h"
+#include "LJ_LibDebug/LJ_LibDebug.h"
+#include "LJ_LibInput/LJ_LibInput.h"
 
 #include <SDL/SDL.h>
 #include <SDL/SDL_opengl.h>

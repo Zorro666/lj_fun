@@ -9,8 +9,8 @@
 #include <string.h>
 #include <time.h>
 
-#include "LJ_engine.h"
-#include "LJ_DebugVar/LJ_debugVar.h"
+#include "LJ_LibEngine/LJ_LibEngine.h"
+#include "LJ_LibDebug/LJ_LibDebug.h"
 
 float s_cameraFoV = 60.0f;
 float s_cameraX = 0.0f;
