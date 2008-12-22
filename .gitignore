@@ -1,6 +1,6 @@
 *.swp
 Build
-./CMakeLists.txt
+CMakeLists.txt
 cscope.in.out
 cscope.po.out
 cscope.out
