@@ -1,8 +1,24 @@
 #include "LJ_key.h"
 
-char* s_keyNames[LJ_KEY_FINISH-LJ_KEY_START+1];
+#include "LJ_internal_key.h"
 
-void keyInit( void )
+#include <string.h>
+#include <stdio.h>
+
+#define LJ_NUM_KEYS (LJ_KEY_FINISH - LJ_KEY_START + 1)
+
+char* s_keyNames[LJ_NUM_KEYS];
+
+LJ_inputKeyStateEnum s_keyStateData[2][LJ_NUM_KEYS];
+int s_keyModifierStatusData[2] = { LJ_KEY_MOD_NONE, LJ_KEY_MOD_NONE };
+
+LJ_inputKeyStateEnum* s_keyPrevState;
+LJ_inputKeyStateEnum* s_keyThisState;
+
+int* s_keyModifierStatusPrev = NULL;
+int* s_keyModifierStatusThis = NULL;
+
+void LJ_keyInit( void )
 {
 	s_keyNames[LJ_KEY_UNKNOWN] = 			"UNKNOWN";
 	s_keyNames[LJ_KEY_BACKSPACE] = 			"BACKSPACE";
@@ -139,16 +155,62 @@ void keyInit( void )
 	s_keyNames[LJ_KEY_LALT] = 				"LALT";
 	s_keyNames[LJ_KEY_RMETA] = 				"RMETA";
 	s_keyNames[LJ_KEY_LMETA] = 				"LMETA";
-	s_keyNames[LJ_KEY_LSUPER] = 			"LSUPER";
-	s_keyNames[LJ_KEY_RSUPER] = 			"RSUPER";
+	s_keyNames[LJ_KEY_LWINDOWS] = 			"LWINDOWS";
+	s_keyNames[LJ_KEY_RWINDOWS] = 			"RWINDOWS";
 	s_keyNames[LJ_KEY_MODE] = 				"MODE";
 	
-		// Miscellaneous function keys 
+	// Miscellaneous function keys 
 	s_keyNames[LJ_KEY_HELP] = 				"HELP";
 	s_keyNames[LJ_KEY_PRINT] = 				"PRINT";
 	s_keyNames[LJ_KEY_SYSREQ] = 			"SYSREQ";
 	s_keyNames[LJ_KEY_BREAK] = 				"BREAK";
 	s_keyNames[LJ_KEY_MENU] = 				"MENU";
+
+	s_keyNames[LJ_KEY_APPACTIVE] = 			"APPACTIVE";
+	s_keyNames[LJ_KEY_QUIT] = 				"QUIT";
+
+	LJ_keyReset();
+}
+
+void LJ_keyReset( void )
+{
+	int i;
+
+	s_keyPrevState = &s_keyStateData[0][0];
+	s_keyThisState = &s_keyStateData[1][0];
+
+	s_keyModifierStatusPrev = &s_keyModifierStatusData[0];
+	s_keyModifierStatusThis = &s_keyModifierStatusData[1];
+
+	// Clear out this state
+	for ( i = 0; i < LJ_NUM_KEYS; i++ )
+	{
+		s_keyThisState[i] = LJ_KEY_STATE_UNKNOWN;
+		s_keyPrevState[i] = LJ_KEY_STATE_UNKNOWN;
+	}
+
+	*s_keyModifierStatusPrev = LJ_KEY_MOD_NONE;
+	*s_keyModifierStatusThis = LJ_KEY_MOD_NONE;
+}
+
+void LJ_keyTick( void )
+{
+	int i;
+
+	// Toggle the double buffer data 
+	LJ_inputKeyStateEnum* const temp = s_keyPrevState;
+	s_keyPrevState = s_keyThisState;
+	s_keyThisState = temp;
+
+	// Clear out this state
+	for ( i = 0; i < LJ_NUM_KEYS; i++ )
+	{
+		s_keyThisState[i] = LJ_KEY_STATE_UNKNOWN;
+	}
+}
+
+void LJ_keyShutdown( void )
+{
 }
 
 #if 0
@@ -176,4 +238,53 @@ enum
 #define LJ_KEY_MOD_META		(KMOD_LMETA|KMOD_RMETA)
 
 #endif // #if 0
+
+char* const LJ_keyGetKeyName( const LJ_inputKeyEnum key )
+{
+	if ( ( key < LJ_KEY_START ) || ( key >= LJ_KEY_FINISH ) )
+	{
+		return "UNKNOWN";
+	}
+	return s_keyNames[key];
+}
+
+void LJ_keyUp( const LJ_inputKeyEnum key, const int modifier )
+{
+	s_keyThisState[key] = LJ_KEY_STATE_RELEASED;
+	*s_keyModifierStatusThis = modifier;
+
+	// TODO: Include modifiers up and down
+
+	printf( "Key Up %d '%s'\n", key, LJ_keyGetKeyName( key ) );
+}
+ 
+void LJ_keyDown( const LJ_inputKeyEnum key, const int modifier )
+{
+	s_keyThisState[key] = LJ_KEY_STATE_PRESSED;
+	*s_keyModifierStatusThis = modifier;
+
+	// TODO: Include modifiers up and down
+
+	printf( "Key Down %d '%s'\n", key, LJ_keyGetKeyName( key ) );
+}
+ 
+LJ_inputKeyStateEnum LJ_keyGetKeyThisState( const LJ_inputKeyEnum key )
+{
+	return s_keyThisState[key];
+}
+
+LJ_inputKeyStateEnum LJ_keyGetKeyPrevState( const LJ_inputKeyEnum key )
+{
+	return s_keyPrevState[key];
+}
+
+LJ_inputKeyModifierEnum LJ_keyGetKeyThisModifier( void )
+{
+	return *s_keyModifierStatusThis;
+}
+
+LJ_inputKeyModifierEnum LJ_keyGetKeyPrevModifier( void )
+{
+	return *s_keyModifierStatusPrev;
+}
 

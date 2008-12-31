@@ -1,7 +1,7 @@
 #ifndef LJ_KEY_HH
 #define LJ_KEY_HH
 
-enum LJ_inputKeyEnum
+typedef enum LJ_inputKeyEnum
 {
 	LJ_KEY_START			= 0,
 	// The key IDs chosen to match ASCII
@@ -140,8 +140,8 @@ enum LJ_inputKeyEnum
 	LJ_KEY_LALT				= 308,
 	LJ_KEY_RMETA			= 309,
 	LJ_KEY_LMETA			= 310,
-	LJ_KEY_LSUPER			= 311,		/* Left "Windows" key */
-	LJ_KEY_RSUPER			= 312,		/* Right "Windows" key */
+	LJ_KEY_LWINDOWS			= 311,
+	LJ_KEY_RWINDOWS			= 312,
 	LJ_KEY_MODE				= 313,		/* "Alt Gr" key */
 
 	// Miscellaneous function keys 
@@ -151,11 +151,13 @@ enum LJ_inputKeyEnum
 	LJ_KEY_BREAK			= 318,
 	LJ_KEY_MENU				= 319,
 
+	LJ_KEY_APPACTIVE		= 350,
+	LJ_KEY_QUIT				= 351,
 	LJ_KEY_FINISH
 } LJ_inputKeyEnum;
 
 // Valid keyboard modifiers 
-enum LJ_inputKeyModifierEnum
+typedef enum LJ_inputKeyModifierEnum
 {
 	LJ_KEY_MOD_NONE  		= 0x0000,
 	LJ_KEY_MOD_LSHIFT		= 0x0001,
@@ -172,10 +174,17 @@ enum LJ_inputKeyModifierEnum
 	LJ_KEY_MOD_RESERVED 	= 0x8000
 } LJ_inputKeyModifierEnum;
 
-#define LJ_KEY_MOD_CTRL		(KMOD_LCTRL|KMOD_RCTRL)
-#define LJ_KEY_MOD_SHIFT	(KMOD_LSHIFT|KMOD_RSHIFT)
-#define LJ_KEY_MOD_ALT		(KMOD_LALT|KMOD_RALT)
-#define LJ_KEY_MOD_META		(KMOD_LMETA|KMOD_RMETA)
+typedef enum LJ_inputKeyStateEnum
+{
+	LJ_KEY_STATE_UNKNOWN = 		0,
+	LJ_KEY_STATE_PRESSED = 		1,
+	LJ_KEY_STATE_RELEASED = 	2
+} LJ_inputKeyStateEnum;
+
+#define LJ_KEY_MOD_SHIFT	(LJ_KEY_MOD_LSHIFT | LJ_KEY_MOD_RSHIFT)
+#define LJ_KEY_MOD_CTRL		(LJ_KEY_MOD_LCTRL | LJ_KEY_MOD_RCTRL)
+#define LJ_KEY_MOD_ALT		(LJ_KEY_MOD_LALT | LJ_KEY_MOD_RALT)
+#define LJ_KEY_MOD_META		(LJ_KEY_MOD_LMETA | LJ_KEY_MOD_RMETA)
 
 #endif // #ifndef LJ_KEY_HH
 

@@ -30,7 +30,8 @@ extern void game3DRender( void );
 extern void game2DRender( void );
 
 void renderBitmapString( float x, float y, float z, void *font, const char* const string );
-void inputTick( void );
+// TODO: this is very hacky
+void LJ_engineInputUpdate( void );
 
 void LJ_engineInit( int argc, char* argv[] )
 {
@@ -84,7 +85,8 @@ void LJ_engineTick( void )
 	nanosleep( &rqtp, &rmtp );
 
 	// Handle mouse and keyboard input
-	inputTick();
+	LJ_inputTick();
+	LJ_engineInputUpdate();
 }
 
 void LJ_engineStartRendering( void )
@@ -232,100 +234,60 @@ void LJ_debugDrawCircle( float x, float y, float z, float radius, int colour )
     glPopMatrix();
 }
 
-void keyboard( SDL_KeyboardEvent* const keyEvent )
+void LJ_engineInputUpdate( void )
 {
-	const SDLMod modifier = keyEvent->keysym.mod;
+	const LJ_inputKeyModifier modifier = LJ_inputGetKeyModifier();
 	int fastKey = 0;
-	if ( ( modifier & KMOD_LCTRL ) || ( modifier & KMOD_RCTRL ) )
+
+	if ( ( LJ_inputKeyClicked( LJ_KEY_ESCAPE ) ) || ( LJ_inputKeyClicked( LJ_KEY_q ) ) )
+	{
+		s_quit = 1;
+	}
+
+	if ( modifier & LJ_KEY_MOD_CTRL )
 	{
 		fastKey = LJ_DEBUG_VAR_INPUT_FAST;
 	}
-    switch ( keyEvent->keysym.sym ) 
+	if ( ( LJ_inputKeyClicked( LJ_KEY_UP ) ) || ( LJ_inputKeyClicked( LJ_KEY_w ) ) )
 	{
-        case LJ_KEY_ESCAPE:  // The escape key
-        case 'Q':
-        case 'q':
-		{
-            exit(0);   // Simply exit
-            break;
-		}
-        case 'p':
-        case 'P':
-		{
-            break;
-		}
+		LJ_debugVarInput( LJ_DEBUG_VAR_INPUT_UP | fastKey );
+   		LJ_debugVarRender();
+	}
+	if ( ( LJ_inputKeyClicked( LJ_KEY_DOWN ) ) || ( LJ_inputKeyClicked( LJ_KEY_s ) ) )
+	{
+		LJ_debugVarInput( LJ_DEBUG_VAR_INPUT_DOWN | fastKey );
+   		LJ_debugVarRender();
+	}
+	if ( ( LJ_inputKeyClicked( LJ_KEY_LEFT ) ) || ( LJ_inputKeyClicked( LJ_KEY_a ) ) )
+	{
+		LJ_debugVarInput( LJ_DEBUG_VAR_INPUT_LEFT | fastKey );
+   		LJ_debugVarRender();
+	}
+	if ( ( LJ_inputKeyClicked( LJ_KEY_RIGHT ) ) || ( LJ_inputKeyClicked( LJ_KEY_d ) ) )
+	{
+		LJ_debugVarInput( LJ_DEBUG_VAR_INPUT_RIGHT | fastKey );
+   		LJ_debugVarRender();
+	}
+	if ( LJ_inputKeyClicked( LJ_KEY_SPACE ) )
+	{
+		LJ_debugVarInput( LJ_DEBUG_VAR_INPUT_SELECT | fastKey );
+   		LJ_debugVarRender();
+	}
+	if ( LJ_inputKeyClicked( LJ_KEY_BACKSPACE ) )
+	{
+		LJ_debugVarInput( LJ_DEBUG_VAR_INPUT_CANCEL | fastKey );
+   		LJ_debugVarRender();
+	}
+/*
+    switch ( symKey ) 
+	{
         case 'r':
 		{
             LJ_debugVarRender();
             break;
 		}
-        case 'w':
-		{
-            LJ_debugVarInput( LJ_DEBUG_VAR_INPUT_UP | fastKey );
-            LJ_debugVarRender();
-            break;
-		}
-        case 's':
-		{
-            LJ_debugVarInput( LJ_DEBUG_VAR_INPUT_DOWN | fastKey );
-            LJ_debugVarRender();
-            break;
-		}
-        case 'a':
-		{
-            LJ_debugVarInput( LJ_DEBUG_VAR_INPUT_LEFT | fastKey );
-            LJ_debugVarRender();
-            break;
-		}
-        case 'd':
-		{
-            LJ_debugVarInput( LJ_DEBUG_VAR_INPUT_RIGHT | fastKey );
-            LJ_debugVarRender();
-            break;
-		}
-        case ' ':
-		{
-            LJ_debugVarInput( LJ_DEBUG_VAR_INPUT_SELECT | fastKey );
-            LJ_debugVarRender();
-            break;
-		}
-		case LJ_KEY_BACKSPACE:
-		{
-            LJ_debugVarInput( LJ_DEBUG_VAR_INPUT_CANCEL | fastKey );
-            LJ_debugVarRender();
-            break;
-		}
-		case LJ_KEY_UP:
-		{
-            LJ_debugVarInput( LJ_DEBUG_VAR_INPUT_UP | fastKey );
-            LJ_debugVarRender();
-   			break;
-		}
-		case LJ_KEY_DOWN:
-		{
-            LJ_debugVarInput( LJ_DEBUG_VAR_INPUT_DOWN | fastKey );
-            LJ_debugVarRender();
-   			break;
-		}
-		case LJ_KEY_LEFT:
-		{
-            LJ_debugVarInput( LJ_DEBUG_VAR_INPUT_LEFT | fastKey );
-            LJ_debugVarRender();
-   			break;
-		}
-		case LJ_KEY_RIGHT:
-		{
-            LJ_debugVarInput( LJ_DEBUG_VAR_INPUT_RIGHT | fastKey );
-            LJ_debugVarRender();
-			break;
-		}
-		default:
-		{	
-			int symKey = keyEvent->keysym.sym;
-			printf( "Unhandled key %d 0x%X '%c' '%s'\n", symKey, symKey, symKey, SDL_GetKeyName( symKey ) );
-			break;
-		}
     }
+*/
 }
 
 void WindowActive( void )
@@ -336,110 +298,3 @@ void WindowInactive( void )
 {
 }
  
-void KeyUp( SDL_KeyboardEvent* const keyEvent )
-{
-}
- 
-void KeyDown( SDL_KeyboardEvent* const keyEvent )
-{
-	keyboard( keyEvent );
-}
- 
-void MouseMoved( const int x, const int y, const int relX, const int relY )
-{
-}
- 
-void MouseButtonUp( const int button, const int x, const int y, const int relX, const int relY )
-{
-}
-
-void MouseButtonDown( const int button, const int x, const int y, const int relX, const int relY )
-{
-}
- 
-void inputTick( void )
-{
-	// Poll for events, and handle the ones we care about.
-	SDL_Event event;
-	while ( SDL_PollEvent( &event ) ) 
-	{
-		switch ( event.type ) 
-		{
-			case SDL_KEYDOWN:
-			{
-				// If escape is pressed set the Quit-flag
-				if ( event.key.keysym.sym == SDLK_ESCAPE )
-				{
-					s_quit = 1;
-					break;
-				}
- 
-				KeyDown( &event.key );
-				break;
-			}
- 
-			case SDL_KEYUP:
-			{
-				KeyUp( &event.key );
-				break;
-			}
- 
-			case SDL_QUIT:
-			{
-				s_quit = 1;
-				break;
-			}
- 
-			case SDL_MOUSEMOTION:
-			{
-				MouseMoved(
-							event.motion.x, 
-							event.motion.y, 
-							event.motion.xrel, 
-							event.motion.yrel );
-				break;
-			}
- 
-			case SDL_MOUSEBUTTONUP:
-			{
-				MouseButtonUp(
-						event.button.button, 
-						event.motion.x, 
-						event.motion.y, 
-						event.motion.xrel, 
-						event.motion.yrel);
-				break;
-			}
-
-			case SDL_MOUSEBUTTONDOWN:
-			{
-				MouseButtonDown(
-						event.button.button, 
-						event.motion.x, 
-						event.motion.y, 
-						event.motion.xrel, 
-						event.motion.yrel);
-				break;
-			}
-
-			case SDL_ACTIVEEVENT:
-			{
-				if ( event.active.state & SDL_APPACTIVE ) 
-				{
-					if ( event.active.gain ) 
-					{
-						s_minimized = 0;
-						WindowActive();
-					} 
-					else 
-					{
-						s_minimized = 1;
-						WindowInactive();
-					}
-				}
-				break;
-			}
-		}
-	} 
-}
-
