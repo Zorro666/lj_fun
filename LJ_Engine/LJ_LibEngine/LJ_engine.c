@@ -211,7 +211,7 @@ void renderBitmapString( LJ_float x, LJ_float y, LJ_float z, void *font, const L
     glPopMatrix();
 }
 
-void LJ_debugDrawSphere( LJ_float x, LJ_float y, LJ_float z, LJ_float radius, LJ_int colour )
+void LJ_debugDrawSphere( const LJ_float x, const LJ_float y, const LJ_float z, const LJ_float radius, const LJ_uint colour )
 {
 	const LJ_float red = (LJ_float)(( colour >> 24 ) & 0xFF) / 255.0f;
 	const LJ_float green = (LJ_float)(( colour >> 16 ) & 0xFF) / 255.0f;
@@ -225,7 +225,7 @@ void LJ_debugDrawSphere( LJ_float x, LJ_float y, LJ_float z, LJ_float radius, LJ
     glPopMatrix();
 }
 
-void LJ_debugDrawCircle( LJ_float x, LJ_float y, LJ_float z, LJ_float radius, LJ_int colour )
+void LJ_debugDrawCircle( const LJ_float x, const LJ_float y, const LJ_float z, const LJ_float radius, const LJ_uint colour )
 {
 	const LJ_float red = (LJ_float)(( colour >> 24 ) & 0xFF) / 255.0f;
 	const LJ_float green = (LJ_float)(( colour >> 16 ) & 0xFF) / 255.0f;

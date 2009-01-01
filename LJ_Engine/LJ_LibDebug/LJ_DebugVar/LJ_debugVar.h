@@ -1,6 +1,8 @@
 #ifndef LJ_DEGBUVAR_H
 #define LJ_DEGBUVAR_H
 
+#include "LJ_LibCommon/LJ_LibCommon.h"
+
 struct LJ_debugVarDef_s;
 
 enum LJ_debugVarInputEnum
