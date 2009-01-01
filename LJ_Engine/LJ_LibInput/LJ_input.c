@@ -152,7 +152,7 @@ int LJ_inputKeyClicked( const LJ_inputKey key )
 	return 0;
 }
 
-char* const LJ_inputGetKeyName( const LJ_inputKey key )
+char* LJ_inputGetKeyName( const LJ_inputKey key )
 {
 	return LJ_keyGetKeyName( key );
 }

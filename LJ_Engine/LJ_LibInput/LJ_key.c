@@ -218,9 +218,9 @@ void LJ_keyShutdown( void )
 {
 }
 
-char* const LJ_keyGetKeyName( const LJ_inputKeyEnum key )
+char* LJ_keyGetKeyName( const LJ_inputKeyEnum key )
 {
-	if ( ( key < LJ_KEY_START ) || ( key >= LJ_KEY_FINISH ) )
+	if ( key >= LJ_KEY_FINISH )
 	{
 		return "UNKNOWN";
 	}

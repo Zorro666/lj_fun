@@ -12,7 +12,7 @@ void LJ_keyReset( void );
 void LJ_keyTick( void );
 void LJ_keyShutdown( void );
 
-char* const LJ_keyGetKeyName( const LJ_inputKeyEnum key );
+char* LJ_keyGetKeyName( const LJ_inputKeyEnum key );
 LJ_inputKeyStateEnum LJ_keyGetKeyPrevState( const LJ_inputKeyEnum key );
 LJ_inputKeyStateEnum LJ_keyGetKeyThisState( const LJ_inputKeyEnum key );
 

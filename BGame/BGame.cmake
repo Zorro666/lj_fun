@@ -12,7 +12,7 @@ if ( NOT SDL_FOUND )
 endif ( NOT SDL_FOUND )
 
 #Global definitions
-SET(GLOBAL_CFLAGS -Wall -Werror -Wdeclaration-after-statement)
+SET(GLOBAL_CFLAGS -Wextra -Wall -Werror -Wdeclaration-after-statement)
 SET(GLOBAL_DEFINITIONS ${GLOBAL_CFLAGS} ${CONFIG_CFLAGS})
 
 SET(GLOBAL_INCLUDE_DIRECTORIES )
@@ -27,4 +27,5 @@ SET(CMAKE_VERBOSE_MAKEFILE OFF)
 ADD_SUBDIRECTORY(LJ_Engine/LJ_LibEngine)
 ADD_SUBDIRECTORY(LJ_Engine/LJ_LibDebug)
 ADD_SUBDIRECTORY(LJ_Engine/LJ_LibInput)
+ADD_SUBDIRECTORY(LJ_Engine/LJ_LibCommon)
 ADD_SUBDIRECTORY(BGame)

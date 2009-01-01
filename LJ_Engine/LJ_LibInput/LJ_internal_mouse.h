@@ -12,7 +12,7 @@ void LJ_mouseReset( void );
 void LJ_mouseTick( void );
 void LJ_mouseShutdown( void );
 
-char* const LJ_mouseGetButtonName( const LJ_inputMouseButtonEnum button );
+char* LJ_mouseGetButtonName( const LJ_inputMouseButtonEnum button );
 
 LJ_inputMouseButtonStateEnum LJ_mouseGetButtonPrevState( const LJ_inputMouseButtonEnum button );
 LJ_inputMouseButtonStateEnum LJ_mouseGetButtonThisState( const LJ_inputMouseButtonEnum button );

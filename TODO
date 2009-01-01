@@ -1,9 +1,13 @@
 To be done:
 
 ** Tasks
-* test mouse button click detection in LJ_LibInput
 * implement a base LJ_LibCommon (base types (LJ_Bool), string, memory, printf)
-* add debug graphics layer to LJ_LibDebug (just like good old CoreDebug argggh, rose tinted glasses)
+** add base types including LJ_Bool
+** add basic string functions (test and use them in debug var code)
+** add basic mem functions: copy, zero
+** add own printf function
+* sort out debug var interface to engine - its own input handling, toggle on/off
+* add debug graphics layer to LJ_LibDebug (just like good old CoreDebug yeah rose tinted glasses)
 * implement a base LJ_LibGraphics (2D graphics, texture handling)
 
 ** Building Process

@@ -75,7 +75,7 @@ void LJ_mouseShutdown( void )
 {
 }
 
-char* const LJ_mouseGetButtonName( const LJ_inputMouseButtonEnum button )
+char* LJ_mouseGetButtonName( const LJ_inputMouseButtonEnum button )
 {
 	return s_mousePrivateData.mouseButtonNames[button];
 }
