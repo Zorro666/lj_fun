@@ -202,10 +202,10 @@ void LJ_keyTick( void )
 	s_keyPrevState = s_keyThisState;
 	s_keyThisState = temp;
 
-	// Clear out this state
+	// Copy last frame state to this state
 	for ( i = 0; i < LJ_NUM_KEYS; i++ )
 	{
-		s_keyThisState[i] = LJ_KEY_STATE_UNKNOWN;
+		s_keyThisState[i] = s_keyPrevState[i];
 	}
 }
 
