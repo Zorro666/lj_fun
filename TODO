@@ -1,8 +1,7 @@
 To be done:
 
 ** Tasks
-* implement a base LJ_LibCommon (base types (LJ_Bool), string, memory, printf)
-** add base types including LJ_Bool
+* implement a base LJ_LibCommon (string, memory, printf)
 ** add basic string functions (test and use them in debug var code)
 ** add basic mem functions: copy, zero
 ** add own printf function
