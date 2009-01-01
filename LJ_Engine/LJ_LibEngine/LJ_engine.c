@@ -16,6 +16,8 @@ int winHeight = 512;
 SDL_Surface* s_sdlScreen;
 GLUquadricObj* s_quadratic;
 
+int s_debugVarEnabled = 0;
+
 extern int s_sleepTime;
 
 extern float s_cameraFoV;
@@ -136,7 +138,10 @@ void LJ_engineRender( void )
     gluOrtho2D(0, 120, 0, 20);
     glMatrixMode(GL_MODELVIEW);
 
-    LJ_debugVarRender();
+	if ( s_debugVarEnabled )
+	{
+    	LJ_debugVarRender();
+	}
 }
 
 // Return the width of the text rendered
@@ -251,32 +256,31 @@ void LJ_engineInputUpdate( void )
 	if ( ( LJ_inputKeyClicked( LJ_KEY_UP ) ) || ( LJ_inputKeyClicked( LJ_KEY_w ) ) )
 	{
 		LJ_debugVarInput( LJ_DEBUG_VAR_INPUT_UP | fastKey );
-   		LJ_debugVarRender();
 	}
 	if ( ( LJ_inputKeyClicked( LJ_KEY_DOWN ) ) || ( LJ_inputKeyClicked( LJ_KEY_s ) ) )
 	{
 		LJ_debugVarInput( LJ_DEBUG_VAR_INPUT_DOWN | fastKey );
-   		LJ_debugVarRender();
 	}
 	if ( ( LJ_inputKeyClicked( LJ_KEY_LEFT ) ) || ( LJ_inputKeyClicked( LJ_KEY_a ) ) )
 	{
 		LJ_debugVarInput( LJ_DEBUG_VAR_INPUT_LEFT | fastKey );
-   		LJ_debugVarRender();
 	}
 	if ( ( LJ_inputKeyClicked( LJ_KEY_RIGHT ) ) || ( LJ_inputKeyClicked( LJ_KEY_d ) ) )
 	{
 		LJ_debugVarInput( LJ_DEBUG_VAR_INPUT_RIGHT | fastKey );
-   		LJ_debugVarRender();
 	}
 	if ( LJ_inputKeyClicked( LJ_KEY_SPACE ) )
 	{
 		LJ_debugVarInput( LJ_DEBUG_VAR_INPUT_SELECT | fastKey );
-   		LJ_debugVarRender();
 	}
 	if ( LJ_inputKeyClicked( LJ_KEY_BACKSPACE ) )
 	{
 		LJ_debugVarInput( LJ_DEBUG_VAR_INPUT_CANCEL | fastKey );
-   		LJ_debugVarRender();
+	}
+	if ( LJ_inputMouseButtonClicked( LJ_MOUSE_BUTTON_RIGHT ) )
+	{
+		printf( "Right button clicked\n" );
+		s_debugVarEnabled ^= 1;
 	}
 /*
     switch ( symKey ) 

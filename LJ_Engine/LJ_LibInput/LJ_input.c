@@ -81,24 +81,24 @@ void LJ_inputTick( void )
 			case SDL_MOUSEBUTTONUP:
 			{
 				const int button = event.button.button;
-				const int x = event.motion.x;
-				const int y = event.motion.y;
-				const int xDelta = event.motion.xrel;
-				const int yDelta = event.motion.yrel;
+				//const int x = event.motion.x;
+				//const int y = event.motion.y;
+				//const int xDelta = event.motion.xrel;
+				//const int yDelta = event.motion.yrel;
 				LJ_mouseButtonUp( button );
-				LJ_mouseSetPosition( x, y, xDelta, yDelta );
+				//LJ_mouseSetPosition( x, y, xDelta, yDelta );
 				break;
 			}
 
 			case SDL_MOUSEBUTTONDOWN:
 			{
 				const int button = event.button.button;
-				const int x = event.motion.x;
-				const int y = event.motion.y;
-				const int xDelta = event.motion.xrel;
-				const int yDelta = event.motion.yrel;
+				//const int x = event.motion.x;
+				//const int y = event.motion.y;
+				//const int xDelta = event.motion.xrel;
+				//const int yDelta = event.motion.yrel;
 				LJ_mouseButtonDown( button );
-				LJ_mouseSetPosition( x, y, xDelta, yDelta );
+				//LJ_mouseSetPosition( x, y, xDelta, yDelta );
 				break;
 			}
 

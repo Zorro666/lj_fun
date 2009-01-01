@@ -82,12 +82,12 @@ char* const LJ_mouseGetButtonName( const LJ_inputMouseButtonEnum button )
 
 LJ_inputMouseButtonStateEnum LJ_mouseGetButtonPrevState( const LJ_inputMouseButtonEnum button )
 {
-	return LJ_MOUSE_BUTTON_STATE_RELEASED;
+	return s_mousePrivateData.mouseButtonPrevState[button];
 }
 
 LJ_inputMouseButtonStateEnum LJ_mouseGetButtonThisState( const LJ_inputMouseButtonEnum button )
 {
-	return LJ_MOUSE_BUTTON_STATE_RELEASED;
+	return s_mousePrivateData.mouseButtonThisState[button];
 }
 
 void LJ_mouseButtonUp( const LJ_inputMouseButtonEnum button )
@@ -103,7 +103,7 @@ void LJ_mouseButtonDown( const LJ_inputMouseButtonEnum button )
 {
 	// Copy the this state to the prev state because can get up & down events in the same update loop
 	s_mousePrivateData.mouseButtonPrevState[button] = s_mousePrivateData.mouseButtonThisState[button];
-	s_mousePrivateData.mouseButtonThisState[button] = LJ_MOUSE_BUTTON_STATE_RELEASED;
+	s_mousePrivateData.mouseButtonThisState[button] = LJ_MOUSE_BUTTON_STATE_PRESSED;
 
 	printf( "Button Down %d '%s'\n", button, LJ_mouseGetButtonName( button ) );
 }
