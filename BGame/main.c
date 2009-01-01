@@ -11,6 +11,7 @@
 
 #include "LJ_LibEngine/LJ_LibEngine.h"
 #include "LJ_LibDebug/LJ_LibDebug.h"
+#include "LJ_LibInput/LJ_LibInput.h"
 
 float s_cameraFoV = 60.0f;
 float s_cameraX = 0.0f;
@@ -37,7 +38,19 @@ void game3DRender( void )
 
 void game2DRender( void )
 {
-	LJ_debugDrawCircle( 0.5f, 0.5f, 0.0f, 0.2f, 0x00FF00FF );
+	int mouseX, mouseY;
+
+	float x, y;
+	float radius = 0.1f;
+	const float WIN_WIDTH = 768;
+	const float WIN_HEIGHT = 512;
+
+	LJ_inputMouseGetPosition( &mouseX, &mouseY );
+
+	x = (float)mouseX / WIN_WIDTH;
+	y = 1.0f - (float)mouseY / WIN_HEIGHT;
+
+	LJ_debugDrawCircle( x, y, 0.0f, radius, 0x00FF00FF );
 }
 
 void gameSingleLoop()

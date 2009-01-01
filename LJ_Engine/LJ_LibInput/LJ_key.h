@@ -176,9 +176,9 @@ typedef enum LJ_inputKeyModifierEnum
 
 typedef enum LJ_inputKeyStateEnum
 {
-	LJ_KEY_STATE_UNKNOWN = 		0,
-	LJ_KEY_STATE_PRESSED = 		1,
-	LJ_KEY_STATE_RELEASED = 	2
+	LJ_KEY_STATE_UNKNOWN 	= 0,
+	LJ_KEY_STATE_PRESSED 	= 1,
+	LJ_KEY_STATE_RELEASED	= 2
 } LJ_inputKeyStateEnum;
 
 #define LJ_KEY_MOD_SHIFT	(LJ_KEY_MOD_LSHIFT | LJ_KEY_MOD_RSHIFT)

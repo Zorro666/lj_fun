@@ -1,6 +1,12 @@
 #ifndef LJ_INTERNAL_KEY_HH
 #define LJ_INTERNAL_KEY_HH
 
+///////////////////////////////////////////////////////////////////////////////////
+//
+// Standard module functions
+//
+///////////////////////////////////////////////////////////////////////////////////
+
 void LJ_keyInit( void );
 void LJ_keyReset( void );
 void LJ_keyTick( void );
@@ -15,6 +21,5 @@ LJ_inputKeyModifierEnum LJ_keyGetKeyPrevModifier( void );
 
 void LJ_keyUp( const LJ_inputKeyEnum key, const int modifier );
 void LJ_keyDown( const LJ_inputKeyEnum key, const int modifier );
-
 
 #endif // #ifndef LJ_INTERNAL_KEY_HH
