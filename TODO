@@ -1,8 +1,8 @@
 To be done:
 
 ** Tasks
-* implement mouse handling in LJ_LibInput
-* implement a base LJ_LibCommon (base types, string, memory, printf)
+* test mouse button click detection in LJ_LibInput
+* implement a base LJ_LibCommon (base types (LJ_Bool), string, memory, printf)
 * add debug graphics layer to LJ_LibDebug (just like good old CoreDebug argggh, rose tinted glasses)
 * implement a base LJ_LibGraphics (2D graphics, texture handling)
 
