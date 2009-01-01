@@ -1,5 +1,5 @@
-#ifndef LJ_KEY_HH
-#define LJ_KEY_HH
+#ifndef LJ_KEY_H
+#define LJ_KEY_H
 
 typedef enum LJ_inputKeyEnum
 {
@@ -186,5 +186,5 @@ typedef enum LJ_inputKeyStateEnum
 #define LJ_KEY_MOD_ALT		(LJ_KEY_MOD_LALT | LJ_KEY_MOD_RALT)
 #define LJ_KEY_MOD_META		(LJ_KEY_MOD_LMETA | LJ_KEY_MOD_RMETA)
 
-#endif // #ifndef LJ_KEY_HH
+#endif // #ifndef LJ_KEY_H
 

@@ -1,5 +1,5 @@
-#ifndef LJ_INTERNAL_KEY_HH
-#define LJ_INTERNAL_KEY_HH
+#ifndef LJ_INTERNAL_KEY_H
+#define LJ_INTERNAL_KEY_H
 
 #include "LJ_LibCommon/LJ_LibCommon.h"
 
@@ -24,4 +24,4 @@ LJ_inputKeyModifierEnum LJ_keyGetKeyPrevModifier( void );
 void LJ_keyUp( const LJ_inputKeyEnum key, const LJ_int modifier );
 void LJ_keyDown( const LJ_inputKeyEnum key, const LJ_int modifier );
 
-#endif // #ifndef LJ_INTERNAL_KEY_HH
+#endif // #ifndef LJ_INTERNAL_KEY_H

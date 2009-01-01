@@ -1,5 +1,5 @@
-#ifndef LJ_BASE_HH
-#define LJ_BASE_HH
+#ifndef LJ_TYPES_H
+#define LJ_TYPES_H
 
 ///////////////////////////////////////////////////////////////////////////////////
 //
@@ -43,5 +43,5 @@ typedef double LJ_float64;
 #define LJ_1KB		(1024)
 #define LJ_1MB		(1024*1024)
 
-#endif // #ifndef LJ_BASE_HH
+#endif // #ifndef LJ_TYPES_H
 

@@ -1,5 +1,5 @@
-#ifndef LJ_ENGINE_HH
-#define LJ_ENGINE_HH
+#ifndef LJ_ENGINE_H
+#define LJ_ENGINE_H
 
 #include "LJ_LibCommon/LJ_LibCommon.h"
 
@@ -18,5 +18,5 @@ void LJ_engineFinishRendering( void );
 void LJ_debugDrawSphere( const LJ_float x, const LJ_float y, const LJ_float z, const LJ_float radius, const LJ_uint colour );
 void LJ_debugDrawCircle( const LJ_float x, const LJ_float y, const LJ_float z, const LJ_float radius, const LJ_uint colour );
 
-#endif // #ifndef LJ_ENGINE_HH
+#endif // #ifndef LJ_ENGINE_H
 

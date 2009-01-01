@@ -1,5 +1,5 @@
-#ifndef LJ_INPUT_HH
-#define LJ_INPUT_HH
+#ifndef LJ_INPUT_H
+#define LJ_INPUT_H
 
 #include "LJ_LibCommon/LJ_LibCommon.h"
 
@@ -47,5 +47,5 @@ LJ_bool LJ_inputMouseButtonPressed( const LJ_inputMouseButton button );
 LJ_bool LJ_inputMouseButtonReleased( const LJ_inputMouseButton button );
 LJ_bool LJ_inputMouseButtonClicked( const LJ_inputMouseButton button );
 
-#endif // #ifndef LJ_INPUT_HH
+#endif // #ifndef LJ_INPUT_H
 

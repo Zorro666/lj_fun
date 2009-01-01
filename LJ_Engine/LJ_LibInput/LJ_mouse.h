@@ -1,5 +1,5 @@
-#ifndef LJ_MOUSE_HH
-#define LJ_MOUSE_HH
+#ifndef LJ_MOUSE_H
+#define LJ_MOUSE_H
 
 typedef enum LJ_inputMouseButtonEnum
 {
@@ -21,5 +21,5 @@ typedef enum LJ_inputMouseButtonStateEnum
 	LJ_MOUSE_BUTTON_STATE_RELEASED 	= 2
 } LJ_inputMouseButtonStateEnum;
 
-#endif // #ifndef LJ_MOUSE_HH
+#endif // #ifndef LJ_MOUSE_H
 

@@ -1,5 +1,5 @@
-#ifndef LJ_INTERNAL_MOUSE_HH
-#define LJ_INTERNAL_MOUSE_HH
+#ifndef LJ_INTERNAL_MOUSE_H
+#define LJ_INTERNAL_MOUSE_H
 
 #include "LJ_LibCommon/LJ_LibCommon.h"
 
@@ -26,5 +26,5 @@ void LJ_mouseButtonUp( const LJ_inputMouseButtonEnum button );
 void LJ_mouseButtonDown( const LJ_inputMouseButtonEnum button );
 void LJ_mouseSetPosition( const LJ_int x, const LJ_int y, const LJ_int xDelta, const LJ_int yDelta );
 
-#endif // #ifndef LJ_INTERNAL_MOUSE_HH
+#endif // #ifndef LJ_INTERNAL_MOUSE_H
 
