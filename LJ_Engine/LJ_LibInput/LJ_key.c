@@ -9,16 +9,16 @@
 
 typedef struct LJ_keyPrivateData
 {
-	char* keyNames[LJ_NUM_KEYS];
+	LJ_char* keyNames[LJ_NUM_KEYS];
 
 	LJ_inputKeyStateEnum keyStateData[2][LJ_NUM_KEYS];
-	int keyModifierStatusData[2];
+	LJ_int keyModifierStatusData[2];
 
 	LJ_inputKeyStateEnum* keyPrevState;
 	LJ_inputKeyStateEnum* keyThisState;
 
-	int* keyModifierStatusPrev;
-	int* keyModifierStatusThis;
+	LJ_int* keyModifierStatusPrev;
+	LJ_int* keyModifierStatusThis;
 } LJ_keyPrivateData;
 
 static LJ_keyPrivateData s_keyPrivateData;
@@ -34,15 +34,15 @@ void LJ_keyInit( void )
 	s_keyPrivateData.keyNames[LJ_KEY_ESCAPE] 				= "ESCAPE";
 	s_keyPrivateData.keyNames[LJ_KEY_SPACE] 				= "SPACE";
 	s_keyPrivateData.keyNames[LJ_KEY_EXCLAIM] 				= "!";
-	s_keyPrivateData.keyNames[LJ_KEY_QUOTEDBL] 			= "\"";
-	s_keyPrivateData.keyNames[LJ_KEY_HASH] 				= "#";
+	s_keyPrivateData.keyNames[LJ_KEY_QUOTEDBL] 				= "\"";
+	s_keyPrivateData.keyNames[LJ_KEY_HASH] 					= "#";
 	s_keyPrivateData.keyNames[LJ_KEY_DOLLAR] 				= "$";
 	s_keyPrivateData.keyNames[LJ_KEY_AMPERSAND] 			= "&";
 	s_keyPrivateData.keyNames[LJ_KEY_QUOTE] 				= "'";
 	s_keyPrivateData.keyNames[LJ_KEY_LEFTPAREN] 			= "(";
 	s_keyPrivateData.keyNames[LJ_KEY_RIGHTPAREN] 			= ")";
-	s_keyPrivateData.keyNames[LJ_KEY_ASTERISK] 			= "*";
-	s_keyPrivateData.keyNames[LJ_KEY_PLUS] 				= "+";
+	s_keyPrivateData.keyNames[LJ_KEY_ASTERISK] 				= "*";
+	s_keyPrivateData.keyNames[LJ_KEY_PLUS] 					= "+";
 	s_keyPrivateData.keyNames[LJ_KEY_COMMA] 				= ",";
 	s_keyPrivateData.keyNames[LJ_KEY_MINUS] 				= "-";
 	s_keyPrivateData.keyNames[LJ_KEY_DOT] 					= ".";
@@ -59,16 +59,16 @@ void LJ_keyInit( void )
 	s_keyPrivateData.keyNames[LJ_KEY_9] 					= "9";
 	s_keyPrivateData.keyNames[LJ_KEY_COLON] 				= ":";
 	s_keyPrivateData.keyNames[LJ_KEY_SEMICOLON] 			= ";";
-	s_keyPrivateData.keyNames[LJ_KEY_LESS] 				= "<";
+	s_keyPrivateData.keyNames[LJ_KEY_LESS] 					= "<";
 	s_keyPrivateData.keyNames[LJ_KEY_EQUALS] 				= "=";
 	s_keyPrivateData.keyNames[LJ_KEY_GREATER] 				= ">";
-	s_keyPrivateData.keyNames[LJ_KEY_QUESTION] 			= "?";
+	s_keyPrivateData.keyNames[LJ_KEY_QUESTION] 				= "?";
 	s_keyPrivateData.keyNames[LJ_KEY_AT] 					= "@";
 	
 	// Skip uppercase letters
 	s_keyPrivateData.keyNames[LJ_KEY_LEFTBRACKET] 			= "[";
 	s_keyPrivateData.keyNames[LJ_KEY_BACKSLASH] 			= "\\";
-	s_keyPrivateData.keyNames[LJ_KEY_RIGHTBRACKET] 		= "]";
+	s_keyPrivateData.keyNames[LJ_KEY_RIGHTBRACKET] 			= "]";
 	s_keyPrivateData.keyNames[LJ_KEY_CARET] 				= "~";
 	s_keyPrivateData.keyNames[LJ_KEY_UNDERSCORE] 			= "_";
 	s_keyPrivateData.keyNames[LJ_KEY_BACKQUOTE] 			= "`";
@@ -115,21 +115,21 @@ void LJ_keyInit( void )
 	s_keyPrivateData.keyNames[LJ_KEY_NUMPAD_DOT] 			= "NUMPAD DOT";
 	s_keyPrivateData.keyNames[LJ_KEY_NUMPAD_DIVIDE] 		= "NUMPAD DIVIDE";
 	s_keyPrivateData.keyNames[LJ_KEY_NUMPAD_MULTIPLY] 		= "NUMPAD TIMES";
-	s_keyPrivateData.keyNames[LJ_KEY_NUMPAD_MINUS] 		= "NUMPAD MINUS";
+	s_keyPrivateData.keyNames[LJ_KEY_NUMPAD_MINUS] 			= "NUMPAD MINUS";
 	s_keyPrivateData.keyNames[LJ_KEY_NUMPAD_PLUS] 			= "NUMPAD PLUS";
-	s_keyPrivateData.keyNames[LJ_KEY_NUMPAD_ENTER] 		= "NUMPAD ENTER";
+	s_keyPrivateData.keyNames[LJ_KEY_NUMPAD_ENTER] 			= "NUMPAD ENTER";
 	s_keyPrivateData.keyNames[LJ_KEY_NUMPAD_EQUALS] 		= "NUMPAD EQUALS";
 	
 		// Arrows + Home/End pad 
 	s_keyPrivateData.keyNames[LJ_KEY_UP] 					= "UP";
-	s_keyPrivateData.keyNames[LJ_KEY_DOWN] 				= "DOWN";
+	s_keyPrivateData.keyNames[LJ_KEY_DOWN] 					= "DOWN";
 	s_keyPrivateData.keyNames[LJ_KEY_RIGHT] 				= "RIGHT";
-	s_keyPrivateData.keyNames[LJ_KEY_LEFT] 				= "LEFT";
+	s_keyPrivateData.keyNames[LJ_KEY_LEFT] 					= "LEFT";
 	s_keyPrivateData.keyNames[LJ_KEY_INSERT] 				= "INSERT";
-	s_keyPrivateData.keyNames[LJ_KEY_HOME] 				= "HOME";
+	s_keyPrivateData.keyNames[LJ_KEY_HOME] 					= "HOME";
 	s_keyPrivateData.keyNames[LJ_KEY_END] 					= "END";
 	s_keyPrivateData.keyNames[LJ_KEY_PAGEUP] 				= "PAGE UP";
-	s_keyPrivateData.keyNames[LJ_KEY_PAGEDOWN] 			= "PAGE DOWN";
+	s_keyPrivateData.keyNames[LJ_KEY_PAGEDOWN] 				= "PAGE DOWN";
 	
 	// Function keys 
 	s_keyPrivateData.keyNames[LJ_KEY_F1] 					= "F1";
@@ -150,36 +150,36 @@ void LJ_keyInit( void )
 	
 	// modifier keys 
 	s_keyPrivateData.keyNames[LJ_KEY_NUMLOCK] 				= "NUM LOCK";
-	s_keyPrivateData.keyNames[LJ_KEY_CAPSLOCK] 			= "CAPS LOCK";
+	s_keyPrivateData.keyNames[LJ_KEY_CAPSLOCK] 				= "CAPS LOCK";
 	s_keyPrivateData.keyNames[LJ_KEY_SCROLLOCK] 			= "SCROLL LOCK";
 	s_keyPrivateData.keyNames[LJ_KEY_RSHIFT] 				= "RSHIFT";
 	s_keyPrivateData.keyNames[LJ_KEY_LSHIFT] 				= "LSHIFT";
 	s_keyPrivateData.keyNames[LJ_KEY_RCTRL] 				= "RCTRL";
 	s_keyPrivateData.keyNames[LJ_KEY_LCTRL] 				= "LCTRL";
-	s_keyPrivateData.keyNames[LJ_KEY_RALT] 				= "RALT";
-	s_keyPrivateData.keyNames[LJ_KEY_LALT] 				= "LALT";
+	s_keyPrivateData.keyNames[LJ_KEY_RALT] 					= "RALT";
+	s_keyPrivateData.keyNames[LJ_KEY_LALT] 					= "LALT";
 	s_keyPrivateData.keyNames[LJ_KEY_RMETA] 				= "RMETA";
 	s_keyPrivateData.keyNames[LJ_KEY_LMETA] 				= "LMETA";
-	s_keyPrivateData.keyNames[LJ_KEY_LWINDOWS] 			= "LWINDOWS";
-	s_keyPrivateData.keyNames[LJ_KEY_RWINDOWS] 			= "RWINDOWS";
-	s_keyPrivateData.keyNames[LJ_KEY_MODE] 				= "MODE";
+	s_keyPrivateData.keyNames[LJ_KEY_LWINDOWS] 				= "LWINDOWS";
+	s_keyPrivateData.keyNames[LJ_KEY_RWINDOWS] 				= "RWINDOWS";
+	s_keyPrivateData.keyNames[LJ_KEY_MODE] 					= "MODE";
 	
 	// Miscellaneous function keys 
-	s_keyPrivateData.keyNames[LJ_KEY_HELP] 				= "HELP";
+	s_keyPrivateData.keyNames[LJ_KEY_HELP] 					= "HELP";
 	s_keyPrivateData.keyNames[LJ_KEY_PRINT] 				= "PRINT";
 	s_keyPrivateData.keyNames[LJ_KEY_SYSREQ] 				= "SYSREQ";
 	s_keyPrivateData.keyNames[LJ_KEY_BREAK] 				= "BREAK";
-	s_keyPrivateData.keyNames[LJ_KEY_MENU] 				= "MENU";
+	s_keyPrivateData.keyNames[LJ_KEY_MENU] 					= "MENU";
 
 	s_keyPrivateData.keyNames[LJ_KEY_APPACTIVE] 			= "APPACTIVE";
-	s_keyPrivateData.keyNames[LJ_KEY_QUIT] 				= "QUIT";
+	s_keyPrivateData.keyNames[LJ_KEY_QUIT] 					= "QUIT";
 
 	LJ_keyReset();
 }
 
 void LJ_keyReset( void )
 {
-	int i;
+	LJ_int i;
 
 	s_keyPrivateData.keyPrevState = &s_keyPrivateData.keyStateData[0][0];
 	s_keyPrivateData.keyThisState = &s_keyPrivateData.keyStateData[1][0];
@@ -200,7 +200,7 @@ void LJ_keyReset( void )
 
 void LJ_keyTick( void )
 {
-	int i;
+	LJ_int i;
 
 	// Toggle the double buffer data 
 	LJ_inputKeyStateEnum* const temp = s_keyPrivateData.keyPrevState;
@@ -218,7 +218,7 @@ void LJ_keyShutdown( void )
 {
 }
 
-char* LJ_keyGetKeyName( const LJ_inputKeyEnum key )
+LJ_char* LJ_keyGetKeyName( const LJ_inputKeyEnum key )
 {
 	if ( key >= LJ_KEY_FINISH )
 	{
@@ -227,7 +227,7 @@ char* LJ_keyGetKeyName( const LJ_inputKeyEnum key )
 	return s_keyPrivateData.keyNames[key];
 }
 
-void LJ_keyUp( const LJ_inputKeyEnum key, const int modifier )
+void LJ_keyUp( const LJ_inputKeyEnum key, const LJ_int modifier )
 {
 	// Copy the this state to the prev state because can get up & down events in the same update loop
 	s_keyPrivateData.keyPrevState[key] = s_keyPrivateData.keyThisState[key];
@@ -239,7 +239,7 @@ void LJ_keyUp( const LJ_inputKeyEnum key, const int modifier )
 	printf( "Key Up %d '%s'\n", key, LJ_keyGetKeyName( key ) );
 }
  
-void LJ_keyDown( const LJ_inputKeyEnum key, const int modifier )
+void LJ_keyDown( const LJ_inputKeyEnum key, const LJ_int modifier )
 {
 	// Copy the this state to the prev state because can get up & down events in the same update loop
 	s_keyPrivateData.keyPrevState[key] = s_keyPrivateData.keyThisState[key];

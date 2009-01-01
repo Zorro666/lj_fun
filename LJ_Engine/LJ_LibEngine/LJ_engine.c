@@ -10,32 +10,32 @@
 
 #include <time.h>
 
-int winWidth = 768;
-int winHeight = 512;
+LJ_int winWidth = 768;
+LJ_int winHeight = 512;
 
 SDL_Surface* s_sdlScreen;
 GLUquadricObj* s_quadratic;
 
-int s_debugVarEnabled = 0;
+LJ_int s_debugVarEnabled = 0;
 
-extern int s_sleepTime;
+extern LJ_int s_sleepTime;
 
-extern float s_cameraFoV;
-extern float s_cameraX;
-extern float s_cameraY;
-extern float s_cameraZ;
+extern LJ_float s_cameraFoV;
+extern LJ_float s_cameraX;
+extern LJ_float s_cameraY;
+extern LJ_float s_cameraZ;
 
-extern int s_quit;
-extern int s_minimized;
+extern LJ_int s_quit;
+extern LJ_int s_minimized;
 
 extern void game3DRender( void );
 extern void game2DRender( void );
 
-void renderBitmapString( float x, float y, float z, void *font, const char* const string );
+void renderBitmapString( LJ_float x, LJ_float y, LJ_float z, void *font, const LJ_char* const string );
 // TODO: this is very hacky
 void LJ_engineInputUpdate( void );
 
-void LJ_engineInit( int argc, char* argv[] )
+void LJ_engineInit( LJ_int argc, LJ_char* argv[] )
 {
 	// Initialize SDL
 	SDL_Init( SDL_INIT_EVERYTHING );
@@ -145,18 +145,18 @@ void LJ_engineRender( void )
 }
 
 // Return the width of the text rendered
-float LJ_debugVarRenderText( const int render, const float x, const float y, const unsigned int colour, const char* const outputString )
+LJ_float LJ_debugVarRenderText( const LJ_int render, const LJ_float x, const LJ_float y, const LJ_uint colour, const LJ_char* const outputString )
 {
-	const float multiplier = 2.8f * ( 512.0f / (float)winWidth );
-	const int len = strlen( outputString );
+	const LJ_float multiplier = 2.8f * ( 512.0f / (LJ_float)winWidth );
+	const LJ_int len = strlen( outputString );
 	if ( render == 1 )
 	{
-		float new_x = x;
-		float new_y = 19 - y;
+		LJ_float new_x = x;
+		LJ_float new_y = 19 - y;
 		void* bitmapFont = GLUT_BITMAP_TIMES_ROMAN_24;
-		const int red = ( colour >> 24 ) & 0xFF;
-		const int green = ( colour >> 16 ) & 0xFF;
-		const int blue = ( colour >> 8 ) & 0xFF;
+		const LJ_int red = ( colour >> 24 ) & 0xFF;
+		const LJ_int green = ( colour >> 16 ) & 0xFF;
+		const LJ_int blue = ( colour >> 8 ) & 0xFF;
 		glDisable( GL_DEPTH_TEST );
 		glColor3f( red/255.0f, green/255.0f, blue/255.0f );
 		renderBitmapString( new_x, new_y, -0.5f, bitmapFont, outputString );
@@ -164,11 +164,11 @@ float LJ_debugVarRenderText( const int render, const float x, const float y, con
 	return len * multiplier;
 }
 
-void LJ_debugVarDrawBackground( const float x0, const float y0, const float x1, const float y1, const unsigned int colour )
+void LJ_debugVarDrawBackground( const LJ_float x0, const LJ_float y0, const LJ_float x1, const LJ_float y1, const LJ_uint colour )
 {
-	const int red = ( colour >> 24 ) & 0xFF;
-	const int green = ( colour >> 16 ) & 0xFF;
-	const int blue = ( colour >> 8 ) & 0xFF;
+	const LJ_int red = ( colour >> 24 ) & 0xFF;
+	const LJ_int green = ( colour >> 16 ) & 0xFF;
+	const LJ_int blue = ( colour >> 8 ) & 0xFF;
 	glColor3f( red/255.0f, green/255.0f, blue/255.0f );
 	glDisable( GL_DEPTH_TEST );
     glPushMatrix();
@@ -189,7 +189,7 @@ void LJ_debugVarDrawBackground( const float x0, const float y0, const float x1, 
 	glPopMatrix();
 }
 
-void* LJ_debugVarMemAlloc( const int sizeInBytes )
+void* LJ_debugVarMemAlloc( const LJ_int sizeInBytes )
 {
 	return malloc( sizeInBytes );
 }
@@ -199,9 +199,9 @@ void LJ_debugVarMemFree( void* memoryPtr )
 	free( memoryPtr );
 }
 
-void renderBitmapString( float x, float y, float z, void *font, const char* const string) 
+void renderBitmapString( LJ_float x, LJ_float y, LJ_float z, void *font, const LJ_char* const string) 
 {  
-    const char* c;
+    const LJ_char* c;
     glPushMatrix();
     glRasterPos3f(x, y, z );
     for ( c=string; *c != '\0'; c++) 
@@ -211,11 +211,11 @@ void renderBitmapString( float x, float y, float z, void *font, const char* cons
     glPopMatrix();
 }
 
-void LJ_debugDrawSphere( float x, float y, float z, float radius, int colour )
+void LJ_debugDrawSphere( LJ_float x, LJ_float y, LJ_float z, LJ_float radius, LJ_int colour )
 {
-	const float red = (float)(( colour >> 24 ) & 0xFF) / 255.0f;
-	const float green = (float)(( colour >> 16 ) & 0xFF) / 255.0f;
-	const float blue = (float)(( colour >> 8 ) & 0xFF) / 255.0f;
+	const LJ_float red = (LJ_float)(( colour >> 24 ) & 0xFF) / 255.0f;
+	const LJ_float green = (LJ_float)(( colour >> 16 ) & 0xFF) / 255.0f;
+	const LJ_float blue = (LJ_float)(( colour >> 8 ) & 0xFF) / 255.0f;
 
     glMatrixMode(GL_MODELVIEW);
     glPushMatrix();
@@ -225,11 +225,11 @@ void LJ_debugDrawSphere( float x, float y, float z, float radius, int colour )
     glPopMatrix();
 }
 
-void LJ_debugDrawCircle( float x, float y, float z, float radius, int colour )
+void LJ_debugDrawCircle( LJ_float x, LJ_float y, LJ_float z, LJ_float radius, LJ_int colour )
 {
-	const float red = (float)(( colour >> 24 ) & 0xFF) / 255.0f;
-	const float green = (float)(( colour >> 16 ) & 0xFF) / 255.0f;
-	const float blue = (float)(( colour >> 8 ) & 0xFF) / 255.0f;
+	const LJ_float red = (LJ_float)(( colour >> 24 ) & 0xFF) / 255.0f;
+	const LJ_float green = (LJ_float)(( colour >> 16 ) & 0xFF) / 255.0f;
+	const LJ_float blue = (LJ_float)(( colour >> 8 ) & 0xFF) / 255.0f;
 
     glMatrixMode(GL_MODELVIEW);
     glPushMatrix();
@@ -242,7 +242,7 @@ void LJ_debugDrawCircle( float x, float y, float z, float radius, int colour )
 void LJ_engineInputUpdate( void )
 {
 	const LJ_inputKeyModifier modifier = LJ_inputGetKeyModifier();
-	int fastKey = 0;
+	LJ_int fastKey = 0;
 
 	if ( ( LJ_inputKeyClicked( LJ_KEY_ESCAPE ) ) || ( LJ_inputKeyClicked( LJ_KEY_q ) ) )
 	{

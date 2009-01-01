@@ -8,17 +8,17 @@
 
 typedef struct LJ_mousePrivateData
 {
-	char* mouseButtonNames[LJ_NUM_MOUSE_BUTTONS];
+	LJ_char* mouseButtonNames[LJ_NUM_MOUSE_BUTTONS];
 
 	LJ_inputMouseButtonStateEnum mouseButtonStateData[2][LJ_NUM_MOUSE_BUTTONS];
 
 	LJ_inputMouseButtonStateEnum* mouseButtonPrevState;
 	LJ_inputMouseButtonStateEnum* mouseButtonThisState;
 
-	int mousePositionX;
-	int mousePositionY;
-	int mouseDeltaX;
-	int mouseDeltaY;
+	LJ_int mousePositionX;
+	LJ_int mousePositionY;
+	LJ_int mouseDeltaX;
+	LJ_int mouseDeltaY;
 } LJ_mousePrivateData;
 
 static LJ_mousePrivateData s_mousePrivateData;
@@ -37,7 +37,7 @@ void LJ_mouseInit( void )
 
 void LJ_mouseReset( void )
 {
-	int i;
+	LJ_int i;
 
 	s_mousePrivateData.mouseButtonPrevState = &s_mousePrivateData.mouseButtonStateData[0][0];
 	s_mousePrivateData.mouseButtonThisState = &s_mousePrivateData.mouseButtonStateData[1][0];
@@ -57,7 +57,7 @@ void LJ_mouseReset( void )
 
 void LJ_mouseTick( void )
 {
-	int i;
+	LJ_int i;
 
 	// Toggle the double buffer data 
 	LJ_inputMouseButtonStateEnum* const temp = s_mousePrivateData.mouseButtonPrevState;
@@ -75,7 +75,7 @@ void LJ_mouseShutdown( void )
 {
 }
 
-char* LJ_mouseGetButtonName( const LJ_inputMouseButtonEnum button )
+LJ_char* LJ_mouseGetButtonName( const LJ_inputMouseButtonEnum button )
 {
 	return s_mousePrivateData.mouseButtonNames[button];
 }
@@ -108,7 +108,7 @@ void LJ_mouseButtonDown( const LJ_inputMouseButtonEnum button )
 	printf( "Button Down %d '%s'\n", button, LJ_mouseGetButtonName( button ) );
 }
 
-void LJ_mouseSetPosition( const int x, const int y, const int xDelta, const int yDelta )
+void LJ_mouseSetPosition( const LJ_int x, const LJ_int y, const LJ_int xDelta, const LJ_int yDelta )
 {
 	s_mousePrivateData.mousePositionX = x;
 	s_mousePrivateData.mousePositionY = y;
@@ -118,7 +118,7 @@ void LJ_mouseSetPosition( const int x, const int y, const int xDelta, const int 
 	printf( "Pos %d %d\n", x, y );
 }
 
-void LJ_mouseGetPosition( int* const x, int* const y )
+void LJ_mouseGetPosition( LJ_int* const x, LJ_int* const y )
 {
 	if ( x )
 	{
@@ -130,7 +130,7 @@ void LJ_mouseGetPosition( int* const x, int* const y )
 	}
 }
 
-void LJ_mouseGetMovement( int* const deltaX, int* const deltaY )
+void LJ_mouseGetMovement( LJ_int* const deltaX, LJ_int* const deltaY )
 {
 	if ( deltaX )
 	{

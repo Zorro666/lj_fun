@@ -13,14 +13,14 @@
 #include "LJ_LibDebug/LJ_LibDebug.h"
 #include "LJ_LibInput/LJ_LibInput.h"
 
-float s_cameraFoV = 60.0f;
-float s_cameraX = 0.0f;
-float s_cameraY = 0.0f;
-float s_cameraZ = -10.0f;
-int s_sleepTime = 100;
+LJ_float s_cameraFoV = 60.0f;
+LJ_float s_cameraX = 0.0f;
+LJ_float s_cameraY = 0.0f;
+LJ_float s_cameraZ = -10.0f;
+LJ_int s_sleepTime = 100;
 
-int s_quit = 0;
-int s_minimized = 0;
+LJ_int s_quit = 0;
+LJ_int s_minimized = 0;
 
 // pause the application until focus in regained
 void WaitMessage( void )
@@ -38,17 +38,17 @@ void game3DRender( void )
 
 void game2DRender( void )
 {
-	int mouseX, mouseY;
+	LJ_int mouseX, mouseY;
 
-	float x, y;
-	float radius = 0.1f;
-	const float WIN_WIDTH = 768;
-	const float WIN_HEIGHT = 512;
+	LJ_float x, y;
+	LJ_float radius = 0.1f;
+	const LJ_float WIN_WIDTH = 768;
+	const LJ_float WIN_HEIGHT = 512;
 
 	LJ_inputMouseGetPosition( &mouseX, &mouseY );
 
-	x = (float)mouseX / WIN_WIDTH;
-	y = 1.0f - (float)mouseY / WIN_HEIGHT;
+	x = (LJ_float)mouseX / WIN_WIDTH;
+	y = 1.0f - (LJ_float)mouseY / WIN_HEIGHT;
 
 	LJ_debugDrawCircle( x, y, 0.0f, radius, 0x00FF00FF );
 }
@@ -91,7 +91,7 @@ void gameShutdown( void )
     LJ_debugVarShutdown();
 }
 
-int main(int argc, char* argv[])
+LJ_int main(LJ_int argc, LJ_char* argv[])
 {
     LJ_engineInit( argc, argv );
 	gameInit();

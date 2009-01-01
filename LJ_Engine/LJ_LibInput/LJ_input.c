@@ -41,14 +41,14 @@ void LJ_inputTick( void )
 	// Drain the event queue of keyboard, mouse events
 	while ( SDL_PollEvent( &event ) ) 
 	{
-		const int keyType = event.type;
+		const LJ_int keyType = event.type;
 		switch ( keyType ) 
 		{
 			case SDL_KEYDOWN:
 			{
 				const SDL_KeyboardEvent* const keyEvent = &event.key;
 				const LJ_inputKeyEnum key = keyEvent->keysym.sym;
-				const int modifier = keyEvent->keysym.mod;
+				const LJ_int modifier = keyEvent->keysym.mod;
 				LJ_keyDown( key, modifier );
 				break;
 			}
@@ -57,7 +57,7 @@ void LJ_inputTick( void )
 			{
 				const SDL_KeyboardEvent* const keyEvent = &event.key;
 				const LJ_inputKeyEnum key = keyEvent->keysym.sym;
-				const int modifier = keyEvent->keysym.mod;
+				const LJ_int modifier = keyEvent->keysym.mod;
 				LJ_keyUp( key, modifier );
 				break;
 			}
@@ -70,21 +70,21 @@ void LJ_inputTick( void )
  
 			case SDL_MOUSEMOTION:
 			{
-				const int x = event.motion.x;
-				const int y = event.motion.y;
-				const int xDelta = event.motion.xrel;
-				const int yDelta = event.motion.yrel;
+				const LJ_int x = event.motion.x;
+				const LJ_int y = event.motion.y;
+				const LJ_int xDelta = event.motion.xrel;
+				const LJ_int yDelta = event.motion.yrel;
 				LJ_mouseSetPosition( x, y, xDelta, yDelta );
 				break;
 			}
  
 			case SDL_MOUSEBUTTONUP:
 			{
-				const int button = event.button.button;
-				//const int x = event.motion.x;
-				//const int y = event.motion.y;
-				//const int xDelta = event.motion.xrel;
-				//const int yDelta = event.motion.yrel;
+				const LJ_int button = event.button.button;
+				//const LJ_int x = event.motion.x;
+				//const LJ_int y = event.motion.y;
+				//const LJ_int xDelta = event.motion.xrel;
+				//const LJ_int yDelta = event.motion.yrel;
 				LJ_mouseButtonUp( button );
 				//LJ_mouseSetPosition( x, y, xDelta, yDelta );
 				break;
@@ -92,11 +92,11 @@ void LJ_inputTick( void )
 
 			case SDL_MOUSEBUTTONDOWN:
 			{
-				const int button = event.button.button;
-				//const int x = event.motion.x;
-				//const int y = event.motion.y;
-				//const int xDelta = event.motion.xrel;
-				//const int yDelta = event.motion.yrel;
+				const LJ_int button = event.button.button;
+				//const LJ_int x = event.motion.x;
+				//const LJ_int y = event.motion.y;
+				//const LJ_int xDelta = event.motion.xrel;
+				//const LJ_int yDelta = event.motion.yrel;
 				LJ_mouseButtonDown( button );
 				//LJ_mouseSetPosition( x, y, xDelta, yDelta );
 				break;
@@ -127,19 +127,19 @@ void LJ_inputTick( void )
 //
 ///////////////////////////////////////////////////////////////////////////////////
 
-int LJ_inputKeyPressed( const LJ_inputKey key )
+LJ_bool LJ_inputKeyPressed( const LJ_inputKey key )
 {
 	const LJ_inputKeyStateEnum value = LJ_keyGetKeyThisState( key );
 	return ( value == LJ_KEY_STATE_PRESSED );
 }
 
-int LJ_inputKeyReleased( const LJ_inputKey key )
+LJ_bool LJ_inputKeyReleased( const LJ_inputKey key )
 {
 	const LJ_inputKeyStateEnum value = LJ_keyGetKeyThisState( key );
 	return ( value == LJ_KEY_STATE_RELEASED );
 }
 
-int LJ_inputKeyClicked( const LJ_inputKey key )
+LJ_bool LJ_inputKeyClicked( const LJ_inputKey key )
 {
 	const LJ_inputKeyStateEnum prevValue = LJ_keyGetKeyPrevState( key );
 	const LJ_inputKeyStateEnum thisValue = LJ_keyGetKeyThisState( key );
@@ -152,7 +152,7 @@ int LJ_inputKeyClicked( const LJ_inputKey key )
 	return 0;
 }
 
-char* LJ_inputGetKeyName( const LJ_inputKey key )
+LJ_char* LJ_inputGetKeyName( const LJ_inputKey key )
 {
 	return LJ_keyGetKeyName( key );
 }
@@ -168,38 +168,38 @@ LJ_inputKeyModifier LJ_inputGetKeyModifier( void )
 //
 ///////////////////////////////////////////////////////////////////////////////////
 
-void LJ_inputMouseGetPosition( int* const x, int* const y )
+void LJ_inputMouseGetPosition( LJ_int* const x, LJ_int* const y )
 {
 	LJ_mouseGetPosition( x, y );
 }
 
-void LJ_inputMouseGetMovement( int* const deltaX, int* const deltaY )
+void LJ_inputMouseGetMovement( LJ_int* const deltaX, LJ_int* const deltaY )
 {
 	LJ_mouseGetMovement( deltaX, deltaY );
 }
 
-int LJ_inputMouseButtonPressed( const LJ_inputMouseButton button )
+LJ_bool LJ_inputMouseButtonPressed( const LJ_inputMouseButton button )
 {
 	const LJ_inputMouseButtonStateEnum value = LJ_mouseGetButtonThisState( button );
-	return ( value == LJ_MOUSE_BUTTON_STATE_PRESSED );
+	return ( ( value == LJ_MOUSE_BUTTON_STATE_PRESSED ) ? LJ_TRUE : LJ_FALSE );
 }
 
-int LJ_inputMouseButtonReleased( const LJ_inputMouseButton button )
+LJ_bool LJ_inputMouseButtonReleased( const LJ_inputMouseButton button )
 {
 	const LJ_inputMouseButtonStateEnum value = LJ_mouseGetButtonThisState( button );
-	return ( value == LJ_MOUSE_BUTTON_STATE_RELEASED );
+	return ( ( value == LJ_MOUSE_BUTTON_STATE_RELEASED ) ? LJ_TRUE : LJ_FALSE );
 }
 
-int LJ_inputMouseButtonClicked( const LJ_inputMouseButton button )
+LJ_bool LJ_inputMouseButtonClicked( const LJ_inputMouseButton button )
 {
 	const LJ_inputMouseButtonStateEnum prevValue = LJ_mouseGetButtonPrevState( button );
 	const LJ_inputMouseButtonStateEnum thisValue = LJ_mouseGetButtonThisState( button );
 
 	if ( ( prevValue == LJ_MOUSE_BUTTON_STATE_PRESSED ) && ( thisValue == LJ_MOUSE_BUTTON_STATE_RELEASED ) )
 	{
-		return 1;
+		return LJ_TRUE;
 	}
 
-	return 0;
+	return LJ_FALSE;
 }
 

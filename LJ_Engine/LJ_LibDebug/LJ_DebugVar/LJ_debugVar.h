@@ -22,18 +22,18 @@ enum LJ_debugVarVarEnum
 	LJ_DEBUG_VAR_READ_ONLY = ( 1 << 3 ),
 };
 
-void LJ_debugVarInit( const int maxNumVars );
+void LJ_debugVarInit( const LJ_int maxNumVars );
 void LJ_debugVarReset( void );
 void LJ_debugVarShutdown( void );
 
-int LJ_debugVarRegister( const char* const name, const int type, void* dataPtr, const int flags );
+LJ_int LJ_debugVarRegister( const LJ_char* const name, const LJ_int type, void* dataPtr, const LJ_int flags );
 void LJ_debugVarRender( void );
-void LJ_debugVarInput( const int debugInput );
+void LJ_debugVarInput( const LJ_int debugInput );
 
 // External functions that must be provided to make this system work
-extern float LJ_debugVarRenderText( const int render, const float x, const float y, const unsigned int colour, const char* const outputString ); 
-extern void* LJ_debugVarMemAlloc( const int sizeInBytes );
+extern LJ_float LJ_debugVarRenderText( const LJ_int render, const LJ_float x, const LJ_float y, const LJ_uint colour, const LJ_char* const outputString ); 
+extern void* LJ_debugVarMemAlloc( const LJ_int sizeInBytes );
 extern void LJ_debugVarMemFree( void* memoryPtr );
-extern void LJ_debugVarDrawBackground( const float x0, const float y0, const float x1, const float y1, const unsigned int colour );
+extern void LJ_debugVarDrawBackground( const LJ_float x0, const LJ_float y0, const LJ_float x1, const LJ_float y1, const LJ_uint colour );
 
 #endif // #ifndef LJ_DEGBUVAR_H
