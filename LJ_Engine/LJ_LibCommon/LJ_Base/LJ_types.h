@@ -15,11 +15,14 @@ typedef int LJ_bool;
 typedef char LJ_char;
 typedef unsigned char LJ_uchar;
 
-typedef short LJ_short;
+typedef signed short LJ_short;
 typedef unsigned short LJ_ushort;
 
-typedef int LJ_int;
+typedef signed int LJ_int;
 typedef unsigned int LJ_uint;
+
+typedef signed long int LJ_long;
+typedef unsigned long int LJ_ulong;
 
 typedef float LJ_float;
 typedef double LJ_double;
@@ -36,6 +39,9 @@ typedef LJ_ushort LJ_uint16;
 
 typedef LJ_int LJ_int32;
 typedef LJ_uint LJ_uint32;
+
+typedef LJ_long LJ_int64;
+typedef LJ_ulong LJ_uint64;
 
 typedef float LJ_float32;
 typedef double LJ_float64;

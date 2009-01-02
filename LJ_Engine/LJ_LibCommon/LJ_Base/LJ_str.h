@@ -10,7 +10,7 @@
 //
 /////////////////////////////////////////////////////////////////////////////////////////////////
 
-LJ_uint GetLength( const LJ_char* const string );
+LJ_uint LJ_strGetLength( const LJ_char* const string );
 
 void LJ_strCopy( LJ_char* const to, const LJ_char* const from );
 void LJ_strNCopy( LJ_char* const to, const LJ_char* const from, const LJ_uint maxLength );
