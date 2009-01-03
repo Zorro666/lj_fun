@@ -1111,13 +1111,13 @@ LJ_uint LJ_strReadUTF8( const LJ_char** c )
 	// TODO: huge amount of error checking that could be done to verify this is a valid UTF-8 sequence
 
 	LJ_uint utf8 = *(*c++);
-	if ((utf8 & 0x80) == 0)
+	if ( ( utf8 & 0x80 ) == 0 )
 	{
 		// simple ASCII character
 		return utf8;
 	}
 
-	if ((utf8 & 0xE0) == 0xC0) // binary 110xxxxx 10xxxxxx
+	if ( ( utf8 & 0xE0 ) == 0xC0 ) // binary 110xxxxx 10xxxxxx
 	{
 		// 2 bytes per character
 		utf8 &= 0x1F;
@@ -1126,7 +1126,7 @@ LJ_uint LJ_strReadUTF8( const LJ_char** c )
 		return utf8;
 	}
 
-	if ((utf8 & 0xF0) == 0xE0) // binary 1110xxxx 10xxxxxx 10xxxxxx
+	if ( ( utf8 & 0xF0 ) == 0xE0 ) // binary 1110xxxx 10xxxxxx 10xxxxxx
 	{
 		// 3 bytes per character
 		utf8 &= 0x0F;
@@ -1137,7 +1137,7 @@ LJ_uint LJ_strReadUTF8( const LJ_char** c )
 		return utf8;
 	}
 
-	if ((utf8 & 0xF8) == 0xF0) // binary 11110xxx 10xxxxxx 10xxxxxx 10xxxxxx
+	if ( ( utf8 & 0xF8 ) == 0xF0 ) // binary 11110xxx 10xxxxxx 10xxxxxx 10xxxxxx
 	{
 		// 4 bytes per character
 		utf8 &= 0x07;
@@ -1150,7 +1150,7 @@ LJ_uint LJ_strReadUTF8( const LJ_char** c )
 		return utf8;
 	}
 
-	if ((utf8 & 0xFC) == 0xF8) // binary 111110xx 10xxxxxx 10xxxxxx 10xxxxxx 10xxxxxx
+	if ( ( utf8 & 0xFC ) == 0xF8 ) // binary 111110xx 10xxxxxx 10xxxxxx 10xxxxxx 10xxxxxx
 	{
 		// 5 bytes per character
 		utf8 &= 0x03;
@@ -1165,7 +1165,7 @@ LJ_uint LJ_strReadUTF8( const LJ_char** c )
 		return utf8;
 	}
 
-	if ((utf8 & 0xFE) == 0xFC) // binary 1111110x 10xxxxxx 10xxxxxx 10xxxxxx 10xxxxxx 10xxxxxx
+	if ( ( utf8 & 0xFE ) == 0xFC ) // binary 1111110x 10xxxxxx 10xxxxxx 10xxxxxx 10xxxxxx 10xxxxxx
 	{
 		// 6 bytes per character
 		utf8 &= 0x01;
@@ -1188,58 +1188,58 @@ LJ_uint LJ_strReadUTF8( const LJ_char** c )
 
 LJ_uint LJ_strWriteUTF8( LJ_char** c, const LJ_uint unicode )
 {
-	if (unicode < 0x80)
+	if ( unicode < 0x80 )
 	{
 		// simple ASCII character
 		*(*c++) = unicode;
 		return 1;
 	}
 
-	if (unicode < 0x800)
+	if ( unicode < 0x800 )
 	{
 		// 2 bytes
-		*(*c++) = 0xC0 + ((unicode >> 6) & 0x1F);
-		*(*c++) = 0x80 + (unicode & 0x3F);
+		*(*c++) = 0xC0 + ( ( unicode >> 6 ) & 0x1F );
+		*(*c++) = 0x80 + ( unicode & 0x3F );
 		return 2;
 	}
 
-	if (unicode < 0x10000)
+	if ( unicode < 0x10000 )
 	{
 		// 3 bytes
-		*(*c++) = 0xE0 + ((unicode >> 12) & 0x0F);
-		*(*c++) = 0x80 + ((unicode >> 6) & 0x3F);
-		*(*c++) = 0x80 + (unicode & 0x3F);
+		*(*c++) = 0xE0 + ( ( unicode >> 12 ) & 0x0F );
+		*(*c++) = 0x80 + ( ( unicode >> 6 ) & 0x3F );
+		*(*c++) = 0x80 + ( unicode & 0x3F );
 		return 3;
 	}
 
-	if (unicode < 0x200000)
+	if ( unicode < 0x200000 )
 	{
 		// 4 bytes
-		*(*c++) = 0xF0 + ((unicode >> 18) & 0x07);
-		*(*c++) = 0x80 + ((unicode >> 12) & 0x3F);
-		*(*c++) = 0x80 + ((unicode >> 6) & 0x3F);
-		*(*c++) = 0x80 + (unicode & 0x3F);
+		*(*c++) = 0xF0 + ( ( unicode >> 18 ) & 0x07 );
+		*(*c++) = 0x80 + ( ( unicode >> 12 ) & 0x3F );
+		*(*c++) = 0x80 + ( ( unicode >> 6 ) & 0x3F );
+		*(*c++) = 0x80 + ( unicode & 0x3F );
 		return 4;
 	}
 
-	if (unicode < 0x4000000)
+	if ( unicode < 0x4000000 )
 	{
 		// 5 bytes
-		*(*c++) = 0xF8 + ((unicode >> 24) & 0x03);
-		*(*c++) = 0x80 + ((unicode >> 18) & 0x3F);
-		*(*c++) = 0x80 + ((unicode >> 12) & 0x3F);
-		*(*c++) = 0x80 + ((unicode >> 6) & 0x3F);
-		*(*c++) = 0x80 + (unicode & 0x3F);
+		*(*c++) = 0xF8 + ( ( unicode >> 24 ) & 0x03 );
+		*(*c++) = 0x80 + ( ( unicode >> 18 ) & 0x3F );
+		*(*c++) = 0x80 + ( ( unicode >> 12 ) & 0x3F );
+		*(*c++) = 0x80 + ( ( unicode >> 6 ) & 0x3F );
+		*(*c++) = 0x80 + ( unicode & 0x3F );
 		return 5;
 	}
 
 	// 6 bytes
-	*(*c++) = 0xFC + ((unicode >> 30) & 0x01);
-	*(*c++) = 0x80 + ((unicode >> 24) & 0x3F);
-	*(*c++) = 0x80 + ((unicode >> 18) & 0x3F);
-	*(*c++) = 0x80 + ((unicode >> 12) & 0x3F);
-	*(*c++) = 0x80 + ((unicode >> 6) & 0x3F);
-	*(*c++) = 0x80 + (unicode & 0x3F);
+	*(*c++) = 0xFC + ( ( unicode >> 30 ) & 0x01 );
+	*(*c++) = 0x80 + ( ( unicode >> 24 ) & 0x3F );
+	*(*c++) = 0x80 + ( ( unicode >> 18 ) & 0x3F );
+	*(*c++) = 0x80 + ( ( unicode >> 12 ) & 0x3F );
+	*(*c++) = 0x80 + ( ( unicode >> 6 ) & 0x3F );
+	*(*c++) = 0x80 + ( unicode & 0x3F );
 	return 6;
 }
 
