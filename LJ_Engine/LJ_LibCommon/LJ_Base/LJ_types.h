@@ -2,10 +2,13 @@
 #define LJ_TYPES_H
 
 #include <stdarg.h>
+#include <sys/types.h>
 
 ///////////////////////////////////////////////////////////////////////////////////
 //
 // Base types
+//
+// These types should be per compiler/platform
 //
 ///////////////////////////////////////////////////////////////////////////////////
 
@@ -28,20 +31,21 @@ typedef float LJ_float;
 typedef double LJ_double;
 
 // Types of fixed bit size e.g. for reading/writing to/from files
-typedef LJ_char LJ_char8;
-typedef LJ_short LJ_char16;
+// These should be changed to use the explcit sizes
+typedef int8_t LJ_char8;
+typedef int16_t LJ_char16;
 
-typedef LJ_char LJ_int8;
-typedef LJ_uchar LJ_uint8;
+typedef int8_t LJ_int8;
+typedef u_int8_t LJ_uint8;
 
-typedef LJ_short LJ_int16;
-typedef LJ_ushort LJ_uint16;
+typedef int16_t LJ_int16;
+typedef u_int16_t LJ_uint16;
 
-typedef LJ_int LJ_int32;
-typedef LJ_uint LJ_uint32;
+typedef int32_t LJ_int32;
+typedef u_int32_t LJ_uint32;
 
-typedef LJ_long LJ_int64;
-typedef LJ_ulong LJ_uint64;
+typedef int64_t LJ_int64;
+typedef u_int64_t LJ_uint64;
 
 typedef float LJ_float32;
 typedef double LJ_float64;
