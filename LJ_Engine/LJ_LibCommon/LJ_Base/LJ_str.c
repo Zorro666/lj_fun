@@ -1,5 +1,7 @@
 #include "LJ_str.h"
 
+#include <stdlib.h>
+
 //*******************************************************************
 // Constants
 //*******************************************************************
@@ -640,11 +642,11 @@ LJ_int LJ_strVSPrint( LJ_char* const to, const LJ_uint maxLen, const LJ_char* co
 	return length;
 }
 
-LJ_int LJ_strSPrint(LJ_char* const to, const LJ_uint maxLength, const LJ_char* const format, ...)
+LJ_int LJ_strSPrint( LJ_char* const to, const LJ_uint maxLength, const LJ_char* const format, ... )
 {
 	CoreVAList args;
-	CORE_VA_START(args, format);
-	return VSPrint(to, maxLength, format, args);
+	CORE_VA_START( args, format );
+	return LJ_strVSPrint( to, maxLength, format, args );
 }
 
 LJ_uint LJ_strGetLength( const LJ_char* const string )
@@ -683,7 +685,7 @@ void LJ_strNCopy( LJ_char* const to, const LJ_char* const from, const LJ_uint ma
 	{
 		to[index] = from[index];
 
-		if (from[index] == 0)
+		if ( from[index] == 0 )
 		{
 			// found terminator
 			return;
@@ -696,14 +698,14 @@ void LJ_strNCopy( LJ_char* const to, const LJ_char* const from, const LJ_uint ma
 	to[index] = 0;
 }
 
-LJ_bool LJ_strIsSame(const LJ_char* const string, const LJ_char* const compare)
+LJ_bool LJ_strIsSame( const LJ_char* const string, const LJ_char* const compare )
 {
 	const LJ_char* readString = string;
 	const LJ_char* readCompare = compare;
 
-	while (*readString == *readCompare)
+	while ( *readString == *readCompare )
 	{
-		if (*readString == 0)
+		if ( *readString == 0 )
 		{
 			return LJ_TRUE;
 		}
@@ -715,29 +717,29 @@ LJ_bool LJ_strIsSame(const LJ_char* const string, const LJ_char* const compare)
 	return LJ_FALSE;
 }
 
-LJ_bool LJ_strIsNSame(const LJ_char* const string, const LJ_char* const compare, const LJ_uint maxLength)
+LJ_bool LJ_strIsNSame( const LJ_char* const string, const LJ_char* const compare, const LJ_uint maxLength )
 {
-	if (maxLength == 0)
-	{
-		return LJ_TRUE;
-	}
-
 	const LJ_char* readString = string;
 	const LJ_char* readCompare = compare;
 	LJ_uint length = 0;
 
-	while (1)
+	if ( maxLength == 0 )
 	{
-		if (length == maxLength)
+		return LJ_TRUE;
+	}
+
+	while ( 1 )
+	{
+		if ( length == maxLength )
 		{
 			return LJ_TRUE;
 		}
-		else if (*readString != *readCompare)
+		else if ( *readString != *readCompare )
 		{
 			return LJ_FALSE;
 		}
 
-		if (*readString == 0)
+		if ( *readString == 0 )
 		{
 			return LJ_TRUE;
 		}
@@ -750,15 +752,15 @@ LJ_bool LJ_strIsNSame(const LJ_char* const string, const LJ_char* const compare,
 	//  return LJ_FALSE;
 }
 
-LJ_int LJ_strFindChar(const LJ_char* const string, const LJ_char c )
+LJ_int LJ_strFindChar( const LJ_char* const string, const LJ_char c )
 {
 	const LJ_char* read = string;
 
-	while (*read != 0)
+	while ( *read != 0 )
 	{
-		if (*read == c )
+		if ( *read == c )
 		{
-			return read - string;
+			return ( read - string );
 		}
 
 		read++;
@@ -767,22 +769,24 @@ LJ_int LJ_strFindChar(const LJ_char* const string, const LJ_char c )
 	return -1;
 }
 
-LJ_int LJ_strReverseFindChar(const LJ_char* const string, const LJ_char c )
+LJ_int LJ_strReverseFindChar( const LJ_char* const string, const LJ_char c )
 {
+	const LJ_char* read;
+
 	// Catch the zero length string
-	const LJ_int length = GetLength(string);
-	if (length == 0)
+	const LJ_int length = LJ_strGetLength( string );
+	if ( length == 0 )
 	{
 		return -1;
 	}
 
-	const LJ_char* read = string + length - 1;
+	read = string + length - 1;
 
-	while (*read != 0)
+	while ( *read != 0 )
 	{
-		if (*read == c )
+		if ( *read == c )
 		{
-			return read - string;
+			return ( read - string );
 		}
 
 		read--;
@@ -791,44 +795,44 @@ LJ_int LJ_strReverseFindChar(const LJ_char* const string, const LJ_char c )
 	return -1;
 }
 
-void LJ_strCat(LJ_char* const to, const LJ_char* const from)
+void LJ_strCat( LJ_char* const to, const LJ_char* const from )
 {
-	LJ_char* write = to + GetLength(to);
-	Copy(write, from);
+	LJ_char* write = to + LJ_strGetLength( to );
+	LJ_strCopy( write, from );
 }
 
-void LJ_strCat(LJ_char* const to, const LJ_char c )
+void LJ_strCatChar( LJ_char* const to, const LJ_char c )
 {
-	LJ_char* write = to + GetLength(to);
+	LJ_char* write = to + LJ_strGetLength( to );
 	*write = c;
 	*(write + 1) = 0;
 }
 
-void LJ_strNCat(LJ_char* const to, const LJ_char* const from, const LJ_uint maxLength)
+void LJ_strNCat( LJ_char* const to, const LJ_char* const from, const LJ_uint maxLength )
 {
-	LJ_uint length = GetLength(to);
+	LJ_uint length = LJ_strGetLength( to );
 
-	NCopy(&to[length], from, maxLength - length);
+	LJ_strNCopy( &to[length], from, maxLength - length );
 }
 
-LJ_float LJ_strToFloat(const LJ_char* const string)
+LJ_float LJ_strToFloat( const LJ_char* const string )
 {
-	return (LJ_float)(atof(string));
+	return (LJ_float)( atof( string ) );
 }
 
-LJ_int LJ_strToInt(const LJ_char* const string)
+LJ_int LJ_strToInt( const LJ_char* const string )
 {
-	return (LJ_int)(atoi(string));
+	return (LJ_int)( atoi( string ) );
 }
 
-LJ_bool LJ_strIsSameIgnoreCase(const LJ_char* const string, const LJ_char* const compare)
+LJ_bool LJ_strIsSameIgnoreCase( const LJ_char* const string, const LJ_char* const compare )
 {
 	const LJ_char* readString = string;
 	const LJ_char* readCompare = compare;
 
-	while (ToUpper(*readString) == ToUpper(*readCompare))
+	while ( LJ_strToUpperChar( *readString ) == LJ_strToUpperChar( *readCompare ) )
 	{
-		if (*readString == 0)
+		if ( *readString == 0 )
 		{
 			return LJ_TRUE;
 		}
@@ -840,7 +844,7 @@ LJ_bool LJ_strIsSameIgnoreCase(const LJ_char* const string, const LJ_char* const
 	return LJ_FALSE;
 }
 
-LJ_bool LJ_strIsNSameIgnoreCase(const LJ_char* const string, const LJ_char* const compare, const LJ_uint maxLength)
+LJ_bool LJ_strIsNSameIgnoreCase( const LJ_char* const string, const LJ_char* const compare, const LJ_uint maxLength )
 {
 	const LJ_char* readString = string;
 	const LJ_char* readCompare = compare;
@@ -849,15 +853,10 @@ LJ_bool LJ_strIsNSameIgnoreCase(const LJ_char* const string, const LJ_char* cons
 	LJ_char char1;
 	do
 	{
-		if (length == maxLength)
-		{
-			return LJ_TRUE;
-		}
+		const LJ_char char2 = LJ_strToUpperChar( *readCompare );
+		char1 = LJ_strToUpperChar( *readString );
 
-		char1 = ToUpper(*readString);
-		const LJ_char char2 = ToUpper(*readCompare);
-
-		if (char1 != char2)
+		if ( char1 != char2 )
 		{
 			return LJ_FALSE;
 		}
@@ -865,17 +864,22 @@ LJ_bool LJ_strIsNSameIgnoreCase(const LJ_char* const string, const LJ_char* cons
 		readString++;
 		readCompare++;
 		length++;
+
+		if ( length == maxLength )
+		{
+			return LJ_TRUE;
+		}
 	}
-	while (char1 != 0);
+	while ( char1 != 0 );
 
 	return LJ_TRUE;
 }
 
-LJ_char LJ_strToUpper( const LJ_char c )
+LJ_char LJ_strToUpperChar( const LJ_char c )
 {
-	LJ_char result = char;
+	LJ_char result = c;
 
-	if ((char >= 'a') && (char <= 'z'))
+	if ( ( c >= 'a') && ( c <= 'z') )
 	{
 		result -= ('a' -'A');
 	}
@@ -883,11 +887,11 @@ LJ_char LJ_strToUpper( const LJ_char c )
 	return result;
 }
 
-LJ_char LJ_strToLower( const LJ_char c )
+LJ_char LJ_strToLowerChar( const LJ_char c )
 {
 	LJ_char result = c;
 
-	if ((char >= 'A') && (char <= 'Z'))
+	if ( ( c >= 'A') && ( c <= 'Z') )
 	{
 		result += ('a' -'A');
 	}
@@ -895,14 +899,14 @@ LJ_char LJ_strToLower( const LJ_char c )
 	return result;
 }
 
-void LJ_strToUpper(LJ_char* const to, const LJ_char* const from)
+void LJ_strToUpper( LJ_char* const to, const LJ_char* const from )
 {
 	const LJ_char* read = from;
 	LJ_char* write = to;
 
-	while (*read != 0)
+	while ( *read != 0 )
 	{
-		*write = CoreStr::ToUpper(*read);
+		*write = LJ_strToUpperChar( *read );
 		read++;
 		write++;
 	}
@@ -910,14 +914,14 @@ void LJ_strToUpper(LJ_char* const to, const LJ_char* const from)
 	*write = 0;
 }
 
-void LJ_strToLower(LJ_char* const to, const LJ_char* const from)
+void LJ_strToLower( LJ_char* const to, const LJ_char* const from )
 {
 	const LJ_char* read = from;
 	LJ_char* write = to;
 
-	while (*read != 0)
+	while ( *read != 0 )
 	{
-		*write = CoreStr::ToLower(*read);
+		*write = LJ_strToLowerChar( *read );
 		read++;
 		write++;
 	}
@@ -925,34 +929,36 @@ void LJ_strToLower(LJ_char* const to, const LJ_char* const from)
 	*write = 0;
 }
 
-LJ_bool LJ_strIsHex(const LJ_char* const string, LJ_uint &value)
+LJ_bool LJ_strIsHex( const LJ_char* const string, LJ_uint* const val )
 {
-	value = 0;
+	LJ_int length;
+	LJ_uint value = 0;
+	LJ_int index = 2;
+
+	*val = 0;
 
 	// must start 0x
-	if (!IsNSameIgnoreCase(string, "0x", 2))
+	if ( !LJ_strIsNSameIgnoreCase( string, "0x", 2 ) )
 	{
 		return LJ_FALSE;
 	}
 
 	// must be 32-bit or less
-	LJ_int length = CoreStr::GetLength(string);
-	if (length > 10)
+	length = LJ_strGetLength( string );
+	if ( length > 10 )
 	{
 		return LJ_FALSE;
 	}
 
 	// start at position two and work out value
-	LJ_uint value = 0;
-	LJ_int index = 2;
 
-	while (index < length)
+	while ( index < length )
 	{
-		value *= 16;
-		LJ_char c = ToUpper(string[index]);
+		LJ_char c = LJ_strToUpperChar( string[index] );
+		const LJ_int digit = LJ_strFindChar( "0123456789ABCDEF", c );
 
-		const LJ_int digit = FindChar( "0123456789ABCDEF", c );
-		if (digit < 0)
+		value *= 16;
+		if ( digit < 0 )
 		{
 			return LJ_FALSE;
 		}
@@ -962,30 +968,29 @@ LJ_bool LJ_strIsHex(const LJ_char* const string, LJ_uint &value)
 		index++;
 	}
 
-	value = value;
+	*val = value;
 	return LJ_TRUE;
 }
 
-LJ_bool LJ_strIsInt(const LJ_char* const string, LJ_int &value)
+LJ_bool LJ_strIsInt( const LJ_char* const string, LJ_int* const val )
 {
 	LJ_int value = 0;
 	LJ_int index = 0;
 	LJ_bool isNegative = LJ_FALSE;
 
-	if (string[0] == '-')
+	if ( string[0] == '-' )
 	{
 		isNegative = LJ_TRUE;
 		index++;
 	}
 
-	LJ_int length = CoreStr::GetLength(string);
-	while (index < length)
+	while ( string[0] != 0 )
 	{
-		value *= 10;
-		LJ_char c = ToUpper(string[index]);
+		LJ_char c = LJ_strToUpperChar( string[index] );
+		LJ_int digit = LJ_strFindChar( "0123456789", c );
 
-		LJ_int digit = FindChar( "0123456789", c );
-		if (digit < 0)
+		value *= 10;
+		if ( digit < 0 )
 		{
 			return LJ_FALSE;
 		}
@@ -995,32 +1000,32 @@ LJ_bool LJ_strIsInt(const LJ_char* const string, LJ_int &value)
 		index++;
 	}
 
-	if (isNegative)
+	if ( isNegative )
 	{
 		value = -value;
 	}
 
-	value = value;
+	*val = value;
 	return LJ_TRUE;
 }
 
-LJ_int LJ_strFindTextIndex(const LJ_char* const string, const LJ_char* find)
+LJ_int LJ_strFindTextIndex( const LJ_char* const string, const LJ_char* const find )
 {
 	const LJ_char* read = string;
-	LJ_int length = GetLength(find);
+	LJ_int length = LJ_strGetLength( find );
 
-	while (*read != 0)
+	while ( *read != 0 )
 	{
 		LJ_int i;
-		for (i = 0; i < length; i++)
+		for ( i = 0; i < length; i++ )
 		{
-			if (read[i] != find[i])
+			if ( read[i] != find[i] )
 			{
 				break;
 			}
 		}
 
-		if (i == length)
+		if ( i == length )
 		{
 			return read - string;
 		}
@@ -1031,9 +1036,9 @@ LJ_int LJ_strFindTextIndex(const LJ_char* const string, const LJ_char* find)
 	return -1;
 }
 
-LJ_bool LJ_strFindText(const LJ_char* const string, const LJ_char* find)
+LJ_bool LJ_strFindText( const LJ_char* const string, const LJ_char* const find )
 {
-	if (FindTextIndex(string, find) == -1)
+	if ( LJ_strFindTextIndex( string, find ) == -1 )
 	{
 		return LJ_FALSE;
 	}
@@ -1041,23 +1046,23 @@ LJ_bool LJ_strFindText(const LJ_char* const string, const LJ_char* find)
 	return LJ_TRUE;
 }
 
-LJ_int LJ_strFindTextIgnoreCaseIndex(const LJ_char* const string, const LJ_char* find)
+LJ_int LJ_strFindTextIgnoreCaseIndex( const LJ_char* const string, const LJ_char* const find )
 {
 	const LJ_char* read = string;
-	LJ_int length = GetLength(find);
+	LJ_int length = LJ_strGetLength( find );
 
-	while (*read != 0)
+	while ( *read != 0 )
 	{
 		LJ_int i;
-		for (i = 0; i < length; i++)
+		for ( i = 0; i < length; i++ )
 		{
-			if (ToUpper(read[i]) != ToUpper(find[i]))
+			if ( LJ_strToUpperChar( read[i] ) != LJ_strToUpperChar( find[i] ) )
 			{
 				break;
 			}
 		}
 
-		if (i == length)
+		if ( i == length )
 		{
 			return read - string;
 		}
@@ -1068,9 +1073,9 @@ LJ_int LJ_strFindTextIgnoreCaseIndex(const LJ_char* const string, const LJ_char*
 	return -1;
 }
 
-LJ_bool LJ_strFindTextIgnoreCase(const LJ_char* const string, const LJ_char* find)
+LJ_bool LJ_strFindTextIgnoreCase( const LJ_char* const string, const LJ_char* const find )
 {
-	if (FindTextIgnoreCaseIndex(string, find) == -1)
+	if ( LJ_strFindTextIgnoreCaseIndex( string, find ) == -1 )
 	{
 		return LJ_FALSE;
 	}
@@ -1078,25 +1083,25 @@ LJ_bool LJ_strFindTextIgnoreCase(const LJ_char* const string, const LJ_char* fin
 	return LJ_TRUE;
 }
 
-LJ_int LJ_strCompare(const LJ_char* const string, const LJ_char* const compare)
+LJ_int LJ_strCompare( const LJ_char* const string, const LJ_char* const compare )
 {
 	LJ_uint index = 0;
 
 	do
 	{
-		if (string[index] < compare[index])
+		if ( string[index] < compare[index] )
 		{
 			return -1;
 		}
 
-		if (string[index] > compare[index])
+		if ( string[index] > compare[index] )
 		{
 			return 1;
 		}
 
 		index++;
 	}
-	while (string[index - 1]);
+	while ( string[index - 1] );
 
 	return 0;
 }
@@ -1105,7 +1110,7 @@ LJ_uint LJ_strReadUTF8( const LJ_char** c )
 {
 	// TODO: huge amount of error checking that could be done to verify this is a valid UTF-8 sequence
 
-	LJ_uint utf8 = *(c++);
+	LJ_uint utf8 = *(*c++);
 	if ((utf8 & 0x80) == 0)
 	{
 		// simple ASCII character
@@ -1117,7 +1122,7 @@ LJ_uint LJ_strReadUTF8( const LJ_char** c )
 		// 2 bytes per character
 		utf8 &= 0x1F;
 		utf8 <<= 6;
-		utf8 += *(c++) & 0x3F;
+		utf8 += *(*c++) & 0x3F;
 		return utf8;
 	}
 
@@ -1126,9 +1131,9 @@ LJ_uint LJ_strReadUTF8( const LJ_char** c )
 		// 3 bytes per character
 		utf8 &= 0x0F;
 		utf8 <<= 6;
-		utf8 += *(c++) & 0x3F;
+		utf8 += *(*c++) & 0x3F;
 		utf8 <<= 6;
-		utf8 += *(c++) & 0x3F;
+		utf8 += *(*c++) & 0x3F;
 		return utf8;
 	}
 
@@ -1137,11 +1142,11 @@ LJ_uint LJ_strReadUTF8( const LJ_char** c )
 		// 4 bytes per character
 		utf8 &= 0x07;
 		utf8 <<= 6;
-		utf8 += *(c++) & 0x3F;
+		utf8 += *(*c++) & 0x3F;
 		utf8 <<= 6;
-		utf8 += *(c++) & 0x3F;
+		utf8 += *(*c++) & 0x3F;
 		utf8 <<= 6;
-		utf8 += *(c++) & 0x3F;
+		utf8 += *(*c++) & 0x3F;
 		return utf8;
 	}
 
@@ -1150,13 +1155,13 @@ LJ_uint LJ_strReadUTF8( const LJ_char** c )
 		// 5 bytes per character
 		utf8 &= 0x03;
 		utf8 <<= 6;
-		utf8 += *(c++) & 0x3F;
+		utf8 += *(*c++) & 0x3F;
 		utf8 <<= 6;
-		utf8 += *(c++) & 0x3F;
+		utf8 += *(*c++) & 0x3F;
 		utf8 <<= 6;
-		utf8 += *(c++) & 0x3F;
+		utf8 += *(*c++) & 0x3F;
 		utf8 <<= 6;
-		utf8 += *(c++) & 0x3F;
+		utf8 += *(*c++) & 0x3F;
 		return utf8;
 	}
 
@@ -1165,15 +1170,15 @@ LJ_uint LJ_strReadUTF8( const LJ_char** c )
 		// 6 bytes per character
 		utf8 &= 0x01;
 		utf8 <<= 6;
-		utf8 += *(c++) & 0x3F;
+		utf8 += *(*c++) & 0x3F;
 		utf8 <<= 6;
-		utf8 += *(c++) & 0x3F;
+		utf8 += *(*c++) & 0x3F;
 		utf8 <<= 6;
-		utf8 += *(c++) & 0x3F;
+		utf8 += *(*c++) & 0x3F;
 		utf8 <<= 6;
-		utf8 += *(c++) & 0x3F;
+		utf8 += *(*c++) & 0x3F;
 		utf8 <<= 6;
-		utf8 += *(c++) & 0x3F;
+		utf8 += *(*c++) & 0x3F;
 		return utf8;
 	}
 
@@ -1186,55 +1191,55 @@ LJ_uint LJ_strWriteUTF8( LJ_char** c, const LJ_uint unicode )
 	if (unicode < 0x80)
 	{
 		// simple ASCII character
-		*(c++) = unicode;
+		*(*c++) = unicode;
 		return 1;
 	}
 
 	if (unicode < 0x800)
 	{
 		// 2 bytes
-		*(c++) = 0xC0 + ((unicode >> 6) & 0x1F);
-		*(c++) = 0x80 + (unicode & 0x3F);
+		*(*c++) = 0xC0 + ((unicode >> 6) & 0x1F);
+		*(*c++) = 0x80 + (unicode & 0x3F);
 		return 2;
 	}
 
 	if (unicode < 0x10000)
 	{
 		// 3 bytes
-		*(c++) = 0xE0 + ((unicode >> 12) & 0x0F);
-		*(c++) = 0x80 + ((unicode >> 6) & 0x3F);
-		*(c++) = 0x80 + (unicode & 0x3F);
+		*(*c++) = 0xE0 + ((unicode >> 12) & 0x0F);
+		*(*c++) = 0x80 + ((unicode >> 6) & 0x3F);
+		*(*c++) = 0x80 + (unicode & 0x3F);
 		return 3;
 	}
 
 	if (unicode < 0x200000)
 	{
 		// 4 bytes
-		*(c++) = 0xF0 + ((unicode >> 18) & 0x07);
-		*(c++) = 0x80 + ((unicode >> 12) & 0x3F);
-		*(c++) = 0x80 + ((unicode >> 6) & 0x3F);
-		*(c++) = 0x80 + (unicode & 0x3F);
+		*(*c++) = 0xF0 + ((unicode >> 18) & 0x07);
+		*(*c++) = 0x80 + ((unicode >> 12) & 0x3F);
+		*(*c++) = 0x80 + ((unicode >> 6) & 0x3F);
+		*(*c++) = 0x80 + (unicode & 0x3F);
 		return 4;
 	}
 
 	if (unicode < 0x4000000)
 	{
 		// 5 bytes
-		*(c++) = 0xF8 + ((unicode >> 24) & 0x03);
-		*(c++) = 0x80 + ((unicode >> 18) & 0x3F);
-		*(c++) = 0x80 + ((unicode >> 12) & 0x3F);
-		*(c++) = 0x80 + ((unicode >> 6) & 0x3F);
-		*(c++) = 0x80 + (unicode & 0x3F);
+		*(*c++) = 0xF8 + ((unicode >> 24) & 0x03);
+		*(*c++) = 0x80 + ((unicode >> 18) & 0x3F);
+		*(*c++) = 0x80 + ((unicode >> 12) & 0x3F);
+		*(*c++) = 0x80 + ((unicode >> 6) & 0x3F);
+		*(*c++) = 0x80 + (unicode & 0x3F);
 		return 5;
 	}
 
 	// 6 bytes
-	*(c++) = 0xFC + ((unicode >> 30) & 0x01);
-	*(c++) = 0x80 + ((unicode >> 24) & 0x3F);
-	*(c++) = 0x80 + ((unicode >> 18) & 0x3F);
-	*(c++) = 0x80 + ((unicode >> 12) & 0x3F);
-	*(c++) = 0x80 + ((unicode >> 6) & 0x3F);
-	*(c++) = 0x80 + (unicode & 0x3F);
+	*(*c++) = 0xFC + ((unicode >> 30) & 0x01);
+	*(*c++) = 0x80 + ((unicode >> 24) & 0x3F);
+	*(*c++) = 0x80 + ((unicode >> 18) & 0x3F);
+	*(*c++) = 0x80 + ((unicode >> 12) & 0x3F);
+	*(*c++) = 0x80 + ((unicode >> 6) & 0x3F);
+	*(*c++) = 0x80 + (unicode & 0x3F);
 	return 6;
 }
 
@@ -1243,335 +1248,268 @@ LJ_uint LJ_strWriteUTF8( LJ_char** c, const LJ_uint unicode )
 //-------------------------------------------------------------------
 
 // copy the rest string to buffer if the start matches compare, returns LJ_TRUE if it does match
-LJ_bool LJ_strCopyAfterMatchIgnoreCase(const LJ_char* const string, const LJ_char* const compare, LJ_char* const buffer)
+LJ_bool LJ_strCopyAfterMatchIgnoreCase( const LJ_char* const string, const LJ_char* const compare, LJ_char* const buffer )
 {
-	LJ_int stringLength = GetLength(compare);
-	if (IsNSameIgnoreCase(string, compare, stringLength))
+	LJ_int stringLength = LJ_strGetLength( compare );
+	if ( LJ_strIsNSameIgnoreCase( string, compare, stringLength ) )
 	{
 		if (buffer!=LJ_NULL)
 		{
-			Copy(buffer, &string[stringLength]);
+			LJ_strCopy(buffer, &string[stringLength]);
 		}
-		return(LJ_TRUE);
+		return LJ_TRUE;
 	}
 
-	if (buffer!=LJ_NULL)
+	if ( buffer != LJ_NULL )
 	{
-		buffer[0] = 0;
+		*buffer = 0;
 	}
-	return(LJ_FALSE);
+	return LJ_FALSE;
 }
 
 // is the first of string the same as the whole of compare
-LJ_bool LJ_strIsFirstPartSame(const LJ_char* const string, const LJ_char* const compare)
+LJ_bool LJ_strIsFirstPartSame( const LJ_char* const string, const LJ_char* const compare )
 {
 	LJ_int index = 0;
-	while (compare[index] != 0)
+	while ( compare[index] != 0 )
 	{
-		if (string[index] != compare[index])
+		if ( string[index] != compare[index] )
 		{
-			return(LJ_FALSE);
+			return LJ_FALSE;
 		}
 		index++;
 	}
-	return(LJ_TRUE);
+	return LJ_TRUE;
 }
 
-LJ_bool LJ_strIsFirstPartSameIgnoreCase(const LJ_char* const string, const LJ_char* const compare)
+LJ_bool LJ_strIsFirstPartSameIgnoreCase( const LJ_char* const string, const LJ_char* const compare )
 {
 	LJ_int index = 0;
-	while (compare[index] != 0)
+	while ( compare[index] != 0 )
 	{
-		if (ToUpper(string[index]) != ToUpper(compare[index]))
+		if ( LJ_strToUpperChar( string[index] ) != LJ_strToUpperChar( compare[index] ) )
 		{
-			return(LJ_FALSE);
+			return LJ_FALSE;
 		}
 		index++;
 	}
-	return(LJ_TRUE);
+	return LJ_TRUE;
 }
 
 // if the first part of string matches stringToSkip, skip past it
-LJ_bool LJ_strSkipString(LJ_char*& string, const LJ_char* const stringToSkip)
+LJ_bool LJ_strSkipString( const LJ_char** string, const LJ_char* const stringToSkip )
 {
 	LJ_int index = 0;
-	while (stringToSkip[index] != 0)
+	while ( stringToSkip[index] != 0 )
 	{
-		if (string[index] != stringToSkip[index])
+		if ( *string[index] != stringToSkip[index] )
 		{
-			return(LJ_FALSE);
+			return LJ_FALSE;
 		}
 		index++;
 	}
-	string += index;
-	return(LJ_TRUE);
+	*string += index;
+	return LJ_TRUE;
 }
 
-LJ_bool LJ_strSkipString(const LJ_char*& string, const LJ_char* const stringToSkip)
+LJ_bool LJ_strSkipStringIgnoreCase( const LJ_char** string, const LJ_char* const stringToSkip)
 {
 	LJ_int index = 0;
-	while (stringToSkip[index] != 0)
+	while ( stringToSkip[index] != 0 )
 	{
-		if (string[index] != stringToSkip[index])
+		if ( LJ_strToUpperChar( *string[index] ) != LJ_strToUpperChar( stringToSkip[index] ) )
 		{
-			return(LJ_FALSE);
+			return LJ_FALSE;
 		}
 		index++;
 	}
-	string += index;
-	return(LJ_TRUE);
-}
-
-LJ_bool LJ_strSkipStringIgnoreCase(LJ_char*& string, const LJ_char* const stringToSkip)
-{
-	LJ_int index = 0;
-	while (stringToSkip[index] != 0)
-	{
-		if (ToUpper(string[index]) != ToUpper(stringToSkip[index]))
-		{
-			return(LJ_FALSE);
-		}
-		index++;
-	}
-	string += index;
-	return(LJ_TRUE);
-}
-LJ_bool LJ_strSkipStringIgnoreCase(const LJ_char*& string, const LJ_char* const stringToSkip)
-{
-	LJ_int index = 0;
-	while (stringToSkip[index] != 0)
-	{
-		if (ToUpper(string[index]) != ToUpper(stringToSkip[index]))
-		{
-			return(LJ_FALSE);
-		}
-		index++;
-	}
-	string += index;
-	return(LJ_TRUE);
+	*string += index;
+	return LJ_TRUE;
 }
 
 //-------------------------------------------------------------------
 // character based functions
 //-------------------------------------------------------------------
 
-LJ_char LJ_strGetLastChar(const LJ_char* const string)
+LJ_char LJ_strGetLastChar( const LJ_char* const string )
 {
 	if (string!=LJ_NULL)
 	{
-		LJ_int stringLength = GetLength(string);
-		if (stringLength>0)
+		LJ_int stringLength = LJ_strGetLength( string );
+		if ( stringLength > 0 )
 		{
-			return(string[stringLength-1]);
+			return string[stringLength-1];
 		}
 	}
 	return(0);
 }
 
-void LJ_strSetLastChar(LJ_char* const istring, LJ_char c )
+void LJ_strSetLastChar( LJ_char* const string, const LJ_char c )
 {
-	if (istring != LJ_NULL)
+	if ( string != LJ_NULL )
 	{
-		LJ_int stringLength = GetLength(istring);
-		if (stringLength>0)
+		LJ_int stringLength = LJ_strGetLength( string );
+		if ( stringLength > 0 )
 		{
-			istring[stringLength-1] = c;
+			string[stringLength-1] = c;
 		}
 	}
 }
 
-void LJ_strAppendChar(LJ_char* const istring, LJ_char c )
+void LJ_strAppendChar( LJ_char* const string, const LJ_char c )
 {
-	if (istring != LJ_NULL)
+	if ( string != LJ_NULL )
 	{
-		if (char != 0)
+		if ( c != 0 )
 		{
-			LJ_int stringLength = GetLength(istring);
-			istring[stringLength] = c;
-			istring[stringLength+1] = 0;
+			LJ_int stringLength = LJ_strGetLength( string );
+			string[stringLength] = c;
+			string[stringLength+1] = 0;
 		}
 	}
 }
 
 
-//is the last character of the string a slash
-LJ_bool LJ_strIsLastCharSlash(const LJ_char* const string)
+// is the last character of the string a slash
+LJ_bool LJ_strIsLastCharSlash( const LJ_char* const string )
 {
-	LJ_char c = GetLastChar(string);
-	return(IsSlash(c));
+	const LJ_char c = LJ_strGetLastChar( string );
+	return( LJ_strIsSlash( c ) );
 }
 
-//return '/' or '\\', depending on which is used by the string.
-//if neither or both are used, returns defaultSlash
-LJ_char LJ_strGetSlashToUse(const LJ_char* const string, const LJ_char defaultSlash)
+// return '/' or '\\', depending on which is used by the string.
+// if neither or both are used, returns defaultSlash
+LJ_char LJ_strGetSlashToUse( const LJ_char* const string, const LJ_char defaultSlash )
 {
 	LJ_char slash = 0;
 	const LJ_char* s = string;
-	while (s[0] != 0)
+	while ( *s != 0 )
 	{
-		LJ_char c = s[0];
-		if (IsSlash(c))
+		const LJ_char c = *s;
+		if ( LJ_strIsSlash( c ) )
 		{
-			if( (slash != 0) && (slash != c) )
+			if( ( slash != 0 ) && ( slash != c ) )
 			{
-				//both slashes being used!
-				return(defaultSlash);
+				// both slashes being used!
+				return defaultSlash;
 			}
 			slash = c;
 		}
 		s++;
 	}
-	if (slash == 0)
+	if ( slash == 0 )
 	{
-		//neither slash
-		return(defaultSlash);
+		// neither slash
+		return defaultSlash;
 	}
-	return(slash);
+	return slash;
 }
 
-//convert slashes
-LJ_int LJ_strConvertSlashes(LJ_char* const istring, const LJ_char slash)
+// convert slashes
+LJ_int LJ_strConvertSlashes( LJ_char* const string, const LJ_char slash )
 {
 	LJ_int slashCount = 0;
 
-	const LJ_char* s = istring;
-	LJ_char* d = istring;
-	while (s[0] != 0)
+	const LJ_char* s = string;
+	LJ_char* d = string;
+	while ( *s != 0 )
 	{
-		LJ_char c = s[0];
+		const LJ_char c = *s;
 		s++;
 
-		if (IsSlash(c))
+		if ( LJ_strIsSlash( c ) )
 		{
 			slashCount++;
-			if (slash != 0)
+			if ( slash != 0 )
 			{
-				d[0] = slash;
+				*d = slash;
 				d++;
 			}
 		}
 		else
 		{
-			d[0] = c;
+			*d = c;
 			d++;
 		}
 	}
 
-	d[0] = 0;
-	return(slashCount);
+	*d = 0;
+	return slashCount;
 }
 
-LJ_char* LJ_strSkipSlashes(LJ_char* const string)
+LJ_char* LJ_strSkipSlashes( const LJ_char* const string )
 {
-	LJ_char* returnString = string;
-	while (IsSlash(returnString[0]))
+	LJ_char* returnString = (LJ_char*)string;
+	while ( LJ_strIsSlash( returnString[0] ) )
 	{
 		returnString++;
 	}
-	return(returnString);
-}
-
-const LJ_char* LJ_strSkipSlashes(const LJ_char* const string)
-{
-	const LJ_char* returnString = string;
-	while (IsSlash(returnString[0]))
-	{
-		returnString++;
-	}
-	return(returnString);
+	return returnString;
 }
 
 //remove slashes from the end of the string
-void LJ_strRemoveSlashesFromEnd(LJ_char* const istring)
+void LJ_strRemoveSlashesFromEnd( LJ_char* const string )
 {
-	while (IsLastCharSlash(istring))
+	while ( LJ_strIsLastCharSlash( string ) )
 	{
-		SetLastChar(istring, 0);
+		LJ_strSetLastChar( string, 0 );
 	}
 }
 
 //make sure there is a slash on the end of the string
-void LJ_strMakeSureEndsWithSlash(LJ_char* const istring, const LJ_char slash)
+void LJ_strMakeSureEndsWithSlash( LJ_char* const string, const LJ_char slash )
 {
-	if (!IsLastCharSlash(istring))
+	if ( !LJ_strIsLastCharSlash( string ) )
 	{
-		AppendChar(istring, slash);
+		LJ_strAppendChar( string, slash );
 	}
 }
 
-LJ_char* LJ_strFindFirstSlash(LJ_char* const string)
+LJ_char* LJ_strFindFirstSlash( const LJ_char* const string )
 {
-	LJ_char* returnString = string;
-	while (returnString[0]!=0)
+	LJ_char* returnString = (LJ_char*)string;
+	while ( returnString[0] != 0 )
 	{
-		if (IsSlash(returnString[0]))
+		if ( LJ_strIsSlash( returnString[0] ) )
 		{
-			return(returnString);
+			return returnString;
 		}
 		returnString++;
 	}
-	return(LJ_NULL);
+	return LJ_NULL;
 }
 
-const LJ_char* LJ_strFindFirstSlash(const LJ_char* const string)
-{
-	const LJ_char* returnString = string;
-	while (returnString[0]!=0)
-	{
-		if (IsSlash(returnString[0]))
-		{
-			return(returnString);
-		}
-		returnString++;
-	}
-	return(LJ_NULL);
-}
-
-LJ_char* LJ_strFindLastSlash(LJ_char* const string)
+LJ_char* LJ_strFindLastSlash( const LJ_char* const string )
 {
 	LJ_char* lastSlash = LJ_NULL;
-	LJ_char* s = string;
-	while (s[0]!=0)
+	LJ_char* s = (LJ_char*)string;
+	while ( *s != 0 )
 	{
-		if (IsSlash(s[0]))
+		if ( LJ_strIsSlash( *s ) )
 		{
 			lastSlash = s;
 		}
 		s++;
 	}
-	return(lastSlash);
-}
-const LJ_char* LJ_strFindLastSlash(const LJ_char* const string)
-{
-	const LJ_char* lastSlash = LJ_NULL;
-	const LJ_char* s = string;
-	while (s[0]!=0)
-	{
-		if (IsSlash(s[0]))
-		{
-			lastSlash = s;
-		}
-		s++;
-	}
-	return(lastSlash);
+	return lastSlash;
 }
 
-//remove the rest of the string after the last slash, returns LJ_TRUE if anything removed
-LJ_bool LJ_strRemoveAfterLastSlash(LJ_char* const istring)
+// remove the rest of the string after the last slash, returns LJ_TRUE if anything removed
+LJ_bool LJ_strRemoveAfterLastSlash( LJ_char* const string )
 {
-	LJ_char* lastSlash = FindLastSlash(istring);
-	if (lastSlash == LJ_NULL)
+	LJ_char* const lastSlash = LJ_strFindLastSlash( string );
+	if ( lastSlash == LJ_NULL )
 	{
-		return(LJ_FALSE);
+		return LJ_FALSE;
 	}
 	lastSlash[1] = 0;
-	return(LJ_TRUE);
+	return LJ_TRUE;
 }
 
-//does the string contain a slash
+// does the string contain a slash
 LJ_bool LJ_strHasSlash(const LJ_char* const string)
 {
-	return(FindFirstSlash(string) != LJ_NULL);
+	return ( LJ_strFindFirstSlash( string ) != LJ_NULL );
 }
 
 

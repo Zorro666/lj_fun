@@ -38,13 +38,13 @@ LJ_float LJ_strToFloat( const LJ_char* const string );
 LJ_int LJ_strToInt( const LJ_char* const string );
 LJ_int LJ_strVSPrint( LJ_char* const to, const LJ_uint maxLength, const LJ_char* const format, LJ_valist* list );
 LJ_int LJ_strSPrint( LJ_char* const to, const LJ_uint maxLength, const LJ_char* const format, ... );
-LJ_bool LJ_strIsHex( const LJ_char* const string, LJ_uint* value );
-LJ_bool LJ_strIsInt( const LJ_char* const string, LJ_int* value );
+LJ_bool LJ_strIsHex( const LJ_char* const string, LJ_uint* const val );
+LJ_bool LJ_strIsInt( const LJ_char* const string, LJ_int* const val );
 
-LJ_int LJ_strFindTextIndex( const LJ_char* const string, const LJ_char* find );
-LJ_int LJ_strFindTextIgnoreCaseIndex( const LJ_char* const string, const LJ_char* find );
-LJ_bool LJ_strFindText( const LJ_char* const string, const LJ_char* find );
-LJ_bool LJ_strFindTextIgnoreCase( const LJ_char* const string, const LJ_char* find );
+LJ_int LJ_strFindTextIndex( const LJ_char* const string, const LJ_char* const find );
+LJ_int LJ_strFindTextIgnoreCaseIndex( const LJ_char* const string, const LJ_char* const find );
+LJ_bool LJ_strFindText( const LJ_char* const string, const LJ_char* const find );
+LJ_bool LJ_strFindTextIgnoreCase( const LJ_char* const string, const LJ_char* const find );
 
 // -1 if string < compare, 0 if string = compare, 1 if string > compare
 LJ_int LJ_strCompare( const LJ_char* const string, const LJ_char* const compare );
@@ -72,8 +72,8 @@ LJ_bool LJ_strIsDigit( const LJ_char c );				//is 0-9
 LJ_bool LJ_strIsHexDigit( const LJ_char c );			//is 0-9 or A-F
 
 LJ_char LJ_strGetLastChar( const LJ_char* const string );
-void LJ_strSetLastChar( LJ_char* const string, LJ_char c );
-void LJ_strAppendChar( LJ_char* const string, LJ_char c );
+void LJ_strSetLastChar( LJ_char* const string, const LJ_char c );
+void LJ_strAppendChar( LJ_char* const string, const LJ_char c );
 
 // is the last character of the string a slash
 LJ_bool LJ_strIsLastCharSlash( const LJ_char* const string );
@@ -86,7 +86,7 @@ LJ_char LJ_strGetSlashToUse( const LJ_char* const string, const LJ_char defaultS
 LJ_int LJ_strConvertSlashes( LJ_char* const string, const LJ_char slash );
 
 // skip slashes
-LJ_char* LJ_strSkipSlashes( LJ_char* const string );
+LJ_char* LJ_strSkipSlashes( const LJ_char* const string );
 
 // remove slashes from the end of the string
 void LJ_strRemoveSlashesFromEnd( LJ_char* const string );
