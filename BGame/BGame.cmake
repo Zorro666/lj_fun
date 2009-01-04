@@ -11,7 +11,7 @@ if ( NOT SDL_FOUND )
 endif ( NOT SDL_FOUND )
 
 # Global definitions
-SET( GLOBAL_CFLAGS -Wextra -Wall -Werror -Wdeclaration-after-statement )
+SET( GLOBAL_CFLAGS -Wextra -Wall -Werror -Wdeclaration-after-statement -fstrict-aliasing )
 SET( GLOBAL_DEFINITIONS ${GLOBAL_CFLAGS} ${CONFIG_CFLAGS} )
 
 SET( GLOBAL_INCLUDE_DIRECTORIES )

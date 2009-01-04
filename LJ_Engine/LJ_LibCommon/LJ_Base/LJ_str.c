@@ -224,19 +224,10 @@ static LJ_uint LJ_strAppendHex( LJ_char* const to, const LJ_uint currentLength, 
 static LJ_uint LJ_strAppendFloat( LJ_char* const to, const LJ_uint currentLength, const LJ_uint maxLen, 
 								  const LJ_float value, const LJ_strFormatFlags* const flags )
 {
-	// get LJ_float as its binary representation
-	// TODO: very nasty aliasing going on here
-	const LJ_uint binary = *(LJ_uint*)&value;
-
-	// extract component parts
-	const LJ_uint sign = (binary & 0x80000000);
-	LJ_int exponent = ((binary - sign) >> 23) - 127;
-	LJ_ulong mantissa = (binary & 0x007FFFFFL) + 0x00800000L;
-
-	const LJ_ulong DECIMAL_POINT = (1UL << FIXED_POINT_SHIFT);
-	const LJ_ulong DIV_DECIMAL = (LJ_ulong)(DECIMAL_POINT * 10000000UL);
-	const LJ_ulong MIN_DECIMAL 	= (DECIMAL_POINT / 10000000UL);
-	const LJ_ulong MAX_DECIMAL 	= (DIV_DECIMAL * 10UL);
+	const LJ_ulong DECIMAL_POINT = ( 1UL << FIXED_POINT_SHIFT );
+	const LJ_ulong DIV_DECIMAL = (LJ_ulong)( DECIMAL_POINT * 10000000UL );
+	const LJ_ulong MIN_DECIMAL 	= ( DECIMAL_POINT / 10000000UL );
+	const LJ_ulong MAX_DECIMAL 	= ( DIV_DECIMAL * 10UL );
 
 	LJ_int endDigit;
 	LJ_ulong decimal;
@@ -246,15 +237,32 @@ static LJ_uint LJ_strAppendFloat( LJ_char* const to, const LJ_uint currentLength
 	LJ_uint index = 0;
 	LJ_int digit;
 
+	LJ_uint sign;
+	LJ_int exponent;
+	LJ_ulong mantissa;
+
+	// get LJ_float as its binary representation
+	LJ_floatInt noAliasingTemp;
+	LJ_uint binary;
+
+	noAliasingTemp.floatVal = value;
+	binary = noAliasingTemp.uintVal;
+
+	// extract component parts
+	sign = ( binary & 0x80000000 );
+	exponent = ( ( binary - sign ) >> 23 ) - 127;
+	mantissa = ( binary & 0x007FFFFFL ) + 0x00800000L;
+
+
 	// turn into 33.31 fixed point number range which covers most numbers we'll want to deal with, right?
 	exponent += ( FIXED_POINT_SHIFT - MANTISSA_SHIFT );
 
 	// shift the mantissa into the required fixed point format
-	if (exponent < 0)
+	if ( exponent < 0 )
 	{
 		mantissa >>= -exponent;
 	}
-	else if (exponent > 0)
+	else if ( exponent > 0 )
 	{
 		mantissa <<= exponent;
 	}
@@ -287,13 +295,13 @@ static LJ_uint LJ_strAppendFloat( LJ_char* const to, const LJ_uint currentLength
 	}
 
 	// check the exponent and mantissa are still in range
-	if ( exponent >= 64 - MANTISSA_SHIFT || mantissa >= MAX_DECIMAL )
+	if ( ( exponent >= ( 64 - MANTISSA_SHIFT ) ) || ( mantissa >= MAX_DECIMAL ) )
 	{
 		// overflow
 		LJ_strCopy( &output[index], "HUGE" );
-		return LJ_strAppendString(to, currentLength, maxLen, output, index + 4, flags );
+		return LJ_strAppendString( to, currentLength, maxLen, output, index + 4, flags );
 	}
-	else if ( exponent < -MANTISSA_SHIFT || mantissa < MIN_DECIMAL )
+	else if ( ( exponent < -MANTISSA_SHIFT ) || ( mantissa < MIN_DECIMAL ) )
 	{
 		// underflow
 		const LJ_uint length = 2 - endDigit;

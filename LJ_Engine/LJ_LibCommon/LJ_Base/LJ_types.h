@@ -26,8 +26,8 @@ typedef unsigned short LJ_ushort;
 typedef signed int LJ_int;
 typedef unsigned int LJ_uint;
 
-typedef signed long int LJ_long;
-typedef unsigned long int LJ_ulong;
+typedef signed long long int LJ_long;
+typedef unsigned long long int LJ_ulong;
 
 typedef float LJ_float;
 typedef double LJ_double;
@@ -69,6 +69,17 @@ typedef va_list LJ_valist;
 // Handy sizes
 #define LJ_1KB		(1024)
 #define LJ_1MB		(1024*1024)
+
+// Useful struct union to handle float/int pointer aliasing
+typedef struct LJ_floatInt
+{
+	union 
+	{
+		LJ_float floatVal;
+		LJ_uint uintVal;
+		LJ_int intVal;
+	};
+} LJ_floatInt;
 
 #endif // #ifndef LJ_TYPES_H
 
