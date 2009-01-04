@@ -1,8 +1,8 @@
-#include "LJ_key.h"
+#include "LJ_LibCommon/LJ_LibCommon.h"
 
+#include "LJ_key.h"
 #include "LJ_internal_key.h"
 
-#include <string.h>
 #include <stdio.h>
 
 #define LJ_NUM_KEYS (LJ_KEY_FINISH - LJ_KEY_START + 1)

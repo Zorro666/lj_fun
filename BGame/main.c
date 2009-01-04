@@ -2,12 +2,7 @@
 //
 // Test commit for RSS feed into Thunderbird
 
-#include <SDL/SDL.h>
-
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
-#include <time.h>
+#include "LJ_LibCommon/LJ_LibCommon.h"
 
 #include "LJ_LibEngine/LJ_LibEngine.h"
 #include "LJ_LibDebug/LJ_LibDebug.h"

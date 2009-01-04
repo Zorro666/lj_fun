@@ -1,15 +1,15 @@
-#if you don't want the full compiler output, remove the following line
-SET(CMAKE_VERBOSE_MAKEFILE OFF)
+# if you don't want the full compiler output, remove the following line
+SET( CMAKE_VERBOSE_MAKEFILE OFF )
+SET( CMAKE_VERBOSE_MAKEFILE ON )
 
-#add definitions, compiler switches, etc.
-ADD_DEFINITIONS(${GLOBAL_DEFINITIONS})
+# add definitions, compiler switches, etc.
+ADD_DEFINITIONS( ${GLOBAL_DEFINITIONS} )
 
-INCLUDE_DIRECTORIES(${GLOBAL_INCLUDE_DIRECTORIES})
-LINK_DIRECTORIES(${GLOBAL_LINK_DIRECTORIES})
+INCLUDE_DIRECTORIES( ${GLOBAL_INCLUDE_DIRECTORIES} )
 
-#list all source files here
-ADD_EXECUTABLE(a.out main.c)
+# list all source files here
+ADD_EXECUTABLE( a.out main.c )
 
-#need to link to some other libraries ? just add them here
-TARGET_LINK_LIBRARIES (a.out LJ_LibEngine LJ_LibDebug LJ_LibInput GL glut ${SDL_LIBRARY})
+# need to link to some other libraries ? just add them here
+TARGET_LINK_LIBRARIES( a.out LJ_LibCommon LJ_LibDebug LJ_LibInput LJ_LibEngine GL glut ${SDL_LIBRARY} )
 

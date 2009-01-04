@@ -31,7 +31,6 @@ typedef float LJ_float;
 typedef double LJ_double;
 
 // Types of fixed bit size e.g. for reading/writing to/from files
-// These should be changed to use the explcit sizes
 typedef int8_t LJ_char8;
 typedef int16_t LJ_char16;
 
@@ -47,11 +46,17 @@ typedef u_int32_t LJ_uint32;
 typedef int64_t LJ_int64;
 typedef u_int64_t LJ_uint64;
 
+// TODO: need a 128-bit type
+
 typedef float LJ_float32;
 typedef double LJ_float64;
 
-// VA args (yuck yuck)
+// VA args (yuck yuck) and very compiler/platform specific
 typedef va_list LJ_valist;
+
+#define LJ_VA_START( ap, v )	( va_start( (ap), (LJ_int8*)(v) ) )
+#define LJ_VA_ARG( ap, t )		( va_arg( (ap), t ) )
+#define LJ_VA_END( ap )			( va_end( (ap) ) )
 
 // For the boolean types
 #define LJ_TRUE 	(1)

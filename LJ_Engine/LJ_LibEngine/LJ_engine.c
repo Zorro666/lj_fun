@@ -1,3 +1,5 @@
+#include "LJ_LibCommon/LJ_LibCommon.h"
+
 #include "LJ_LibEngine/LJ_LibEngine.h"
 #include "LJ_LibDebug/LJ_LibDebug.h"
 #include "LJ_LibInput/LJ_LibInput.h"
@@ -63,6 +65,8 @@ void LJ_engineInit( LJ_int argc, LJ_char* argv[] )
 	gluQuadricTexture( s_quadratic, GL_TRUE );
 
 	LJ_inputInit();
+
+	printf( "%d\n", LJ_strCompare( "jake", "bob" ) );
 }
 
 //	long lastTick = SDL_GetTicks();

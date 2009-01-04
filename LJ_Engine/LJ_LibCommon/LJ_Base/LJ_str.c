@@ -510,7 +510,7 @@ LJ_int LJ_strVSPrint( LJ_char* const to, const LJ_uint maxLen, const LJ_char* co
 			if ( chr == '*' )
 			{
 				// get precision from parameter
-				flags.precision = CORE_VA_ARG(list, LJ_int);
+				flags.precision = LJ_VA_ARG( *list, LJ_int );
 				mode = FCM_SIZE;
 				continue;
 			}
@@ -545,7 +545,7 @@ LJ_int LJ_strVSPrint( LJ_char* const to, const LJ_uint maxLen, const LJ_char* co
 				case 'c':
 				{
 					// character
-					const LJ_char character = (LJ_char)CORE_VA_ARG(list, LJ_int);
+					const LJ_char character = (LJ_char)LJ_VA_ARG( *list, LJ_int );
 					if ( to != LJ_NULL )
 					{
 						to[length] = character;
@@ -557,7 +557,7 @@ LJ_int LJ_strVSPrint( LJ_char* const to, const LJ_uint maxLen, const LJ_char* co
 				case 's':
 				{
 					// string
-					const LJ_char* subString = CORE_VA_ARG(list, LJ_char*);
+					const LJ_char* subString = LJ_VA_ARG( *list, LJ_char* );
 					LJ_int strLen;
 					if ( subString == LJ_NULL )
 					{
@@ -582,7 +582,7 @@ LJ_int LJ_strVSPrint( LJ_char* const to, const LJ_uint maxLen, const LJ_char* co
 				case 'e':
 				case 'E':
 				{
-					const LJ_float value = (LJ_float)CORE_VA_ARG(list, LJ_double);
+					const LJ_float value = (LJ_float)LJ_VA_ARG( *list, LJ_double );
 					length = LJ_strAppendFloat( to, length, maxLength, value, &flags );
 					break;
 				}
@@ -592,8 +592,7 @@ LJ_int LJ_strVSPrint( LJ_char* const to, const LJ_uint maxLen, const LJ_char* co
 				case 'u':
 					{
 						// integer
-						//const LJ_int value = CORE_VA_ARG(list, LJ_int);
-						const LJ_long value = (flags.longSize == LJ_FALSE) ? CORE_VA_ARG(list, LJ_int) : CORE_VA_ARG(list, LJ_long);
+						const LJ_long value = ( flags.longSize == LJ_FALSE ) ? LJ_VA_ARG( *list, LJ_int ) : LJ_VA_ARG( *list, LJ_long );
 						length = LJ_strAppendNumber( to, length, maxLength, value, &flags );
 						break;
 					}
@@ -603,8 +602,7 @@ LJ_int LJ_strVSPrint( LJ_char* const to, const LJ_uint maxLen, const LJ_char* co
 				case 'X':
 					{
 						// hex integer
-						//const LJ_uint value = CORE_VA_ARG(list, LJ_uint);
-						const LJ_ulong value = ( flags.longSize == LJ_FALSE ) ? CORE_VA_ARG(list, LJ_uint) : CORE_VA_ARG(list, LJ_ulong);
+						const LJ_ulong value = ( flags.longSize == LJ_FALSE ) ? LJ_VA_ARG( *list, LJ_uint ) : LJ_VA_ARG( *list, LJ_ulong );
 						length = LJ_strAppendHex( to, length, maxLength, value, &flags );
 						break;
 					}
@@ -612,7 +610,7 @@ LJ_int LJ_strVSPrint( LJ_char* const to, const LJ_uint maxLen, const LJ_char* co
 				case 'b':
 					{
 						// binary
-						const LJ_uint value = CORE_VA_ARG(list, LJ_uint);
+						const LJ_uint value = LJ_VA_ARG( *list, LJ_uint );
 						length = LJ_strAppendBinary( to, length, maxLength, value, &flags );
 						break;
 					}
@@ -644,9 +642,9 @@ LJ_int LJ_strVSPrint( LJ_char* const to, const LJ_uint maxLen, const LJ_char* co
 
 LJ_int LJ_strSPrint( LJ_char* const to, const LJ_uint maxLength, const LJ_char* const format, ... )
 {
-	CoreVAList args;
-	CORE_VA_START( args, format );
-	return LJ_strVSPrint( to, maxLength, format, args );
+	LJ_valist args;
+	LJ_VA_START( args, format );
+	return LJ_strVSPrint( to, maxLength, format, &args );
 }
 
 LJ_uint LJ_strGetLength( const LJ_char* const string )
@@ -1182,7 +1180,8 @@ LJ_uint LJ_strReadUTF8( const LJ_char** c )
 		return utf8;
 	}
 
-	CoreAssert(0); // not a valid UTF-8 escape sequence at all
+	//TODO: implement LJ_Assert function
+	//LJ_Assert(0); // not a valid UTF-8 escape sequence at all
 	return 0;
 }
 

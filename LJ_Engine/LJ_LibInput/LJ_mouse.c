@@ -1,3 +1,5 @@
+#include "LJ_LibCommon/LJ_LibCommon.h"
+
 #include "LJ_mouse.h"
 
 #include "LJ_internal_mouse.h"

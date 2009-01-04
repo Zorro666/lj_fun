@@ -1,11 +1,13 @@
 // LJ_debugVar.c 
-//
+
+#include "LJ_LibCommon/LJ_LibCommon.h"
+
 #include "LJ_debugVar.h"
 
-#include <math.h>
+#include "LJ_debugVar.h"
+
 #include <string.h>
 #include <stdio.h>
-#include <malloc.h>
 
 typedef struct LJ_debugVarDef_s
 {
@@ -337,7 +339,8 @@ void LJ_debugVarSort( void )
 				LJ_char scopeJ[LJ_DEBUG_VAR_MAX_NAME_LENGTH];
 				LJ_debugVarGetScope( debugVarI->name, d, scopeI, LJ_DEBUG_VAR_MAX_NAME_LENGTH, 0 );
 				LJ_debugVarGetScope( debugVarJ->name, d, scopeJ, LJ_DEBUG_VAR_MAX_NAME_LENGTH, 0 );
-				scopeMatch = strcmp( scopeI, scopeJ );
+				//scopeMatch = strcmp( scopeI, scopeJ );
+				scopeMatch = LJ_strCompare( scopeI, scopeJ );
 #if DEBUGVAR_SORT_DEBUG
 				printf( "I Var[%d/%d] Scope[%d/%d] '%s'\n", i, numVars, d, depthI, scopeI );
 				printf( "J Var[%d/%d] Scope[%d/%d] '%s'\n", j, numVars, d, depthJ, scopeJ );
