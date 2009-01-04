@@ -64,7 +64,7 @@ LJ_bool LJ_strSkipString( const LJ_char** string, const LJ_char* const stringToS
 LJ_bool LJ_strSkipStringIgnoreCase( const LJ_char** string, const LJ_char* const stringToSkip );
 
 //character comparisons
-LJ_bool LJ_strIsSlash( const LJ_char c );				//is either slash?
+extern inline LJ_bool LJ_strIsSlash( const LJ_char c );				//is either slash?
 LJ_bool LJ_strIsAlpha( const LJ_char c );				//is a-z or A-Z
 LJ_bool LJ_strIsUpper( const LJ_char c );				//is uppercase A-Z?
 LJ_bool LJ_strIsLower( const LJ_char c );				//is lowercase a-z?
@@ -110,8 +110,8 @@ LJ_bool LJ_strHasSlash( const LJ_char* const string );
 //
 /////////////////////////////////////////////////////////////////////////////////////////////////
 
-//is either slash?
-extern inline LJ_bool LJ_strIsSlash( const LJ_char c )
+// is either slash?
+static inline LJ_bool LJ_strIsSlash( const LJ_char c )
 {
 	return( (c == '\\') || (c == '/') );
 }

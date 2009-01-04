@@ -66,7 +66,6 @@ void LJ_engineInit( LJ_int argc, LJ_char* argv[] )
 
 	LJ_inputInit();
 
-	printf( "%d\n", LJ_strCompare( "jake", "bob" ) );
 }
 
 //	long lastTick = SDL_GetTicks();

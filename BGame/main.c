@@ -8,6 +8,8 @@
 #include "LJ_LibDebug/LJ_LibDebug.h"
 #include "LJ_LibInput/LJ_LibInput.h"
 
+#include <stdio.h>
+
 LJ_float s_cameraFoV = 60.0f;
 LJ_float s_cameraX = 0.0f;
 LJ_float s_cameraY = 0.0f;
@@ -67,6 +69,9 @@ void gameSingleLoop()
 
 void gameInit( void )
 {
+	LJ_typesInit();
+	printf( "%d\n", LJ_strCompare( "jake", "bob" ) );
+
 	// Game init
     LJ_debugVarInit( 64 );
     LJ_debugVarRegister( "Camera:x", LJ_DEBUG_VAR_FLOAT, &s_cameraX, 0 );

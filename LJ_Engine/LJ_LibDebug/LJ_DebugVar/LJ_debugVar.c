@@ -4,8 +4,6 @@
 
 #include "LJ_debugVar.h"
 
-#include "LJ_debugVar.h"
-
 #include <string.h>
 #include <stdio.h>
 
@@ -339,7 +337,6 @@ void LJ_debugVarSort( void )
 				LJ_char scopeJ[LJ_DEBUG_VAR_MAX_NAME_LENGTH];
 				LJ_debugVarGetScope( debugVarI->name, d, scopeI, LJ_DEBUG_VAR_MAX_NAME_LENGTH, 0 );
 				LJ_debugVarGetScope( debugVarJ->name, d, scopeJ, LJ_DEBUG_VAR_MAX_NAME_LENGTH, 0 );
-				//scopeMatch = strcmp( scopeI, scopeJ );
 				scopeMatch = LJ_strCompare( scopeI, scopeJ );
 #if DEBUGVAR_SORT_DEBUG
 				printf( "I Var[%d/%d] Scope[%d/%d] '%s'\n", i, numVars, d, depthI, scopeI );
@@ -431,14 +428,14 @@ LJ_debugVarDef* LJ_debugVarFindVar( const LJ_debugVarDef* const currentVar,
 		// Get the parent scope of this variable
 		LJ_debugVarGetScope( debugVar->name, (depth-1), varParentScope, LJ_DEBUG_VAR_MAX_NAME_LENGTH, 1 );
         // Only consider things with the same parent scope
-        if ( strcmp( parentScope, varParentScope ) == 0 )
+        if ( LJ_strCompare( parentScope, varParentScope ) == 0 )
         {
             LJ_char varScope[LJ_DEBUG_VAR_MAX_NAME_LENGTH];
 			// Get the current scope of this variable
             if ( LJ_debugVarGetScope( debugVar->name, depth, varScope, LJ_DEBUG_VAR_MAX_NAME_LENGTH, 0 ) == 1 )
             {
 				// Only consider things with a different current scope
-            	if ( strcmp( testScope, varScope ) != 0 )
+            	if ( LJ_strCompare( testScope, varScope ) != 0 )
                	{
 					// If going down in the list need to find the first occurance of the new scope
 					if ( direction > 0 )
@@ -647,12 +644,12 @@ void LJ_debugVarRender( void )
 					continue;
 				}
 				// Ignore things with the wrong parent scope
-				if ( strcmp( parentScope, varParentScope ) == 0 )
+				if ( LJ_strCompare( parentScope, varParentScope ) == 0 )
 				{
 					LJ_char varScope[LJ_DEBUG_VAR_MAX_NAME_LENGTH];
 					if ( LJ_debugVarGetScope( debugVar->name, depth, varScope, LJ_DEBUG_VAR_MAX_NAME_LENGTH, 0 ) == 1 )
 					{
-						if ( strcmp( currentScope, varScope ) != 0 )
+						if ( LJ_strCompare( currentScope, varScope ) != 0 )
 						{
 							LJ_uint colour = 0x909090FF;
 							LJ_char outputString[256];
@@ -663,7 +660,7 @@ void LJ_debugVarRender( void )
 							LJ_float endX = 0.0f;
 
 							strncpy( currentScope, varScope, LJ_DEBUG_VAR_MAX_NAME_LENGTH );
-							if ( strcmp( selectedScope, varScope ) == 0 )
+							if ( LJ_strCompare( selectedScope, varScope ) == 0 )
 							{
 								selected = 1;
 								g_menuSelectedPlace = ( y - yStart );
