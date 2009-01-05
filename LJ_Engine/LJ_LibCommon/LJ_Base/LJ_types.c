@@ -1,14 +1,38 @@
 #include "LJ_types.h"
+#include "LJ_assert.h"
 
 #include <stdio.h>
 
 void LJ_typesInit( void )
 {
-	printf( "sizeof(LJ_int) = %d\n", sizeof( LJ_int ) );
-	printf( "sizeof(LJ_uint) = %d\n", sizeof( LJ_uint ) );
-	printf( "sizeof(LJ_long) = %d\n", sizeof( LJ_long ) );
-	printf( "sizeof(LJ_ulong) = %d\n", sizeof( LJ_ulong ) );
-	printf( "sizeof(LJ_float) = %d\n", sizeof( LJ_float ) );
-	printf( "sizeof(LJ_double) = %d\n", sizeof( LJ_double ) );
+	LJ_COMPILE_TIME_ASSERT( sizeof(LJ_char) >= 1 );
+	LJ_COMPILE_TIME_ASSERT( sizeof(LJ_uchar) >= 1 );
+
+	LJ_COMPILE_TIME_ASSERT( sizeof(LJ_short) >= 2 );
+	LJ_COMPILE_TIME_ASSERT( sizeof(LJ_ushort) >= 2 );
+
+	LJ_COMPILE_TIME_ASSERT( sizeof(LJ_int) >= 4 );
+	LJ_COMPILE_TIME_ASSERT( sizeof(LJ_uint) >= 4 );
+
+	LJ_COMPILE_TIME_ASSERT( sizeof(LJ_long) >= 8 );
+	LJ_COMPILE_TIME_ASSERT( sizeof(LJ_ulong) >= 8 );
+
+	LJ_COMPILE_TIME_ASSERT( sizeof(LJ_int8) == 1 );
+	LJ_COMPILE_TIME_ASSERT( sizeof(LJ_uint8) == 1 );
+
+	LJ_COMPILE_TIME_ASSERT( sizeof(LJ_int16) == 2 );
+	LJ_COMPILE_TIME_ASSERT( sizeof(LJ_uint16) == 2 );
+
+	LJ_COMPILE_TIME_ASSERT( sizeof(LJ_int32) == 4 );
+	LJ_COMPILE_TIME_ASSERT( sizeof(LJ_uint32) == 4 );
+
+	LJ_COMPILE_TIME_ASSERT( sizeof(LJ_int64) == 8 );
+	LJ_COMPILE_TIME_ASSERT( sizeof(LJ_uint64) == 8 );
+
+	LJ_COMPILE_TIME_ASSERT( sizeof(LJ_float) >= 4 );
+	LJ_COMPILE_TIME_ASSERT( sizeof(LJ_double) >= 8 );
+
+	LJ_COMPILE_TIME_ASSERT( sizeof(LJ_float32) == 4 );
+	LJ_COMPILE_TIME_ASSERT( sizeof(LJ_float64) == 8 );
 }
 

@@ -76,6 +76,13 @@ typedef struct LJ_floatInt
 	union 
 	{
 		LJ_float floatVal;
+
+		LJ_uchar ucharVal[4];
+		LJ_char charVal[4];
+
+		LJ_ushort ushortVal[2];
+		LJ_short shortVal[2];
+
 		LJ_uint uintVal;
 		LJ_int intVal;
 	};

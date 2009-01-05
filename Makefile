@@ -1,6 +1,6 @@
 #! /bin/make
 
-.PHONY: debug clean release cleanrelease rebuildrelease gold cleangold rebuildgold tags cleantags rebuildtags rebuildall
+.PHONY: all debug cleandebug release cleanrelease rebuildrelease gold cleangold rebuildgold tags cleantags rebuildtags rebuildall
 
 BASE_DIR:=$(shell cd .. ; pwd )
 BUILDROOT:=Build
@@ -55,7 +55,10 @@ updateexe:
 	@cp -v --preserve=all $(BUILD_DIR)/$(PROJECT)/a.out $(PROJECT_DIR)/$(EXE_NAME)
 	@ls -lh $(PROJECT_DIR)/$(EXE_NAME)
 
-all: debug 
+all: 
+	@$(MAKE) --no-print-directory debug
+	@$(MAKE) --no-print-directory release
+	@$(MAKE) --no-print-directory gold
 
 rebuild: rebuilddebug
 
