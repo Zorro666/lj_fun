@@ -64,8 +64,8 @@ void LJ_engineInit( LJ_int argc, LJ_char* argv[] )
 	gluQuadricNormals( s_quadratic, GLU_SMOOTH );
 	gluQuadricTexture( s_quadratic, GL_TRUE );
 
+	LJ_typesInit();
 	LJ_inputInit();
-
 }
 
 //	long lastTick = SDL_GetTicks();
@@ -282,7 +282,7 @@ void LJ_engineInputUpdate( void )
 	}
 	if ( LJ_inputMouseButtonClicked( LJ_MOUSE_BUTTON_RIGHT ) )
 	{
-		printf( "Right button clicked\n" );
+		LJ_outputPrintDebug( ( "Right button clicked\n" ) );
 		s_debugVarEnabled ^= 1;
 	}
 /*

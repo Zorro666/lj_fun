@@ -4,9 +4,6 @@
 
 #include "LJ_debugVar.h"
 
-#include <string.h>
-#include <stdio.h>
-
 typedef struct LJ_debugVarDef_s
 {
     const LJ_char* name;
@@ -31,12 +28,12 @@ typedef struct LJ_debugVarValue_s
 // Private data
 //
 
-LJ_debugVarDef* g_debugVarArray = NULL;
+LJ_debugVarDef* g_debugVarArray = LJ_NULL;
 LJ_float* g_debugVarMenuScrollStart;
 LJ_int g_debugVarNum = 0;
 LJ_int g_debugVarMaxNum = 0;
 
-LJ_debugVarDef* g_selectedItem = NULL;
+LJ_debugVarDef* g_selectedItem = LJ_NULL;
 LJ_int g_selectedDepth = 0;
 
 LJ_int g_editingMode = 0;
@@ -54,15 +51,15 @@ void LJ_debugVarGetValue( const LJ_debugVarDef* const var, LJ_debugVarValue* con
 {
 	if ( var->flags & LJ_DEBUG_VAR_BOOL )
 	{
-		memcpy( &value->iVal, var->dataPtr, sizeof( LJ_int ) );
+		LJ_memCopy( &value->iVal, var->dataPtr, sizeof( LJ_int ) );
 	}
 	else if ( var->flags & LJ_DEBUG_VAR_INT )
 	{
-		memcpy( &value->iVal, var->dataPtr, sizeof( LJ_int ) );
+		LJ_memCopy( &value->iVal, var->dataPtr, sizeof( LJ_int ) );
 	}
 	else if ( var->flags & LJ_DEBUG_VAR_FLOAT )
 	{
-		memcpy( &value->fVal, var->dataPtr, sizeof( LJ_float ) );
+		LJ_memCopy( &value->fVal, var->dataPtr, sizeof( LJ_float ) );
 	}
 }
 
@@ -70,15 +67,15 @@ void LJ_debugVarSetValue( const LJ_debugVarValue* const value, LJ_debugVarDef* c
 {
 	if ( var->flags & LJ_DEBUG_VAR_BOOL )
 	{
-		memcpy( var->dataPtr, &value->iVal, sizeof( LJ_int ) );
+		LJ_memCopy( var->dataPtr, &value->iVal, sizeof( LJ_int ) );
 	}
 	else if ( var->flags & LJ_DEBUG_VAR_INT )
 	{
-		memcpy( var->dataPtr, &value->iVal, sizeof( LJ_int ) );
+		LJ_memCopy( var->dataPtr, &value->iVal, sizeof( LJ_int ) );
 	}
 	else if ( var->flags & LJ_DEBUG_VAR_FLOAT )
 	{
-		memcpy( var->dataPtr, &value->fVal, sizeof( LJ_float ) );
+		LJ_memCopy( var->dataPtr, &value->fVal, sizeof( LJ_float ) );
 	}
 }
 
@@ -86,15 +83,15 @@ void LJ_debugVarPrintValue( const LJ_int flags, const LJ_debugVarValue* const va
 {
 	if ( flags & LJ_DEBUG_VAR_BOOL )
 	{
-		sprintf( output, "%s", ( value->iVal == 1 ) ? "TRUE" : "FALSE" );
+		LJ_strSPrint( output, 16, "%s", ( value->iVal == 1 ) ? "TRUE" : "FALSE" );
 	}
 	else if ( flags & LJ_DEBUG_VAR_INT )
 	{
-		sprintf( output, "%d", value->iVal );
+		LJ_strSPrint( output, 16, "%d", value->iVal );
 	}
 	else if ( flags & LJ_DEBUG_VAR_FLOAT )
 	{
-		sprintf( output, "%f", value->fVal );
+		LJ_strSPrint( output, 16, "%f", value->fVal );
 	}
 }
 
@@ -166,7 +163,7 @@ void LJ_debugVarStartEditMode()
 	g_editingMode = 1;
 	LJ_debugVarGetValue( g_selectedItem, &g_variableSavedValue );
 	LJ_debugVarPrintValue( g_selectedItem->flags, &g_variableSavedValue, output );
-	printf( "StartEditMode old Value %s\n", output );
+	LJ_outputPrintRelease( ( "StartEditMode old Value %s\n", output ) );
 }
 
 void LJ_debugVarEndEditMode( const LJ_int cancel )
@@ -177,11 +174,11 @@ void LJ_debugVarEndEditMode( const LJ_int cancel )
 	if ( cancel == 1 )
 	{
 		LJ_debugVarSetValue( &g_variableSavedValue, g_selectedItem );
-		printf( "cancel\n" );
+		LJ_outputPrintRelease( ( "cancel\n" ) );
 	}
 	LJ_debugVarGetValue( g_selectedItem, &tempValue );
 	LJ_debugVarPrintValue( g_selectedItem->flags, &tempValue, output );
-	printf( "EndEditMode new Value %s\n", output );
+	LJ_outputPrintRelease( ( "EndEditMode new Value %s\n", output ) );
 }
 
 // increment can be +1, -1, +10, -10 e.g. normal, fast
@@ -210,13 +207,14 @@ LJ_int LJ_debugVarCountDepth( const LJ_char* const name )
 {
 	const LJ_char* delimPtr = name;
 	LJ_int count = 0;
-    while ( delimPtr != NULL )
+	int index = 0;
+    while ( index != -1 )
 	{
-        delimPtr = strchr( delimPtr, LJ_DEBUG_VAR_DELIMETER_CHAR );
-		if ( delimPtr != NULL )
+		index = LJ_strFindChar( delimPtr, LJ_DEBUG_VAR_DELIMETER_CHAR );
+		if ( index != -1 )
 		{
 			count++;
-			delimPtr++;
+			delimPtr = delimPtr + index + 1;
 		}
 	}
 	return count;
@@ -237,10 +235,10 @@ LJ_int LJ_debugVarGetScope( const LJ_char* const name, const LJ_int depth, LJ_ch
     // Try to find the n'th delimeter in this string
     while ( delimCount < depth )
     {
-        const LJ_char* delimPtr = strchr( scopeString, LJ_DEBUG_VAR_DELIMETER_CHAR );
-        if ( delimPtr != NULL )
+		const int index = LJ_strFindChar( scopeString, LJ_DEBUG_VAR_DELIMETER_CHAR );
+        if ( index != -1 )
         {
-            scopeString = delimPtr + 1;
+            scopeString = scopeString + index + 1;
 			delimCount++;
         }
         else
@@ -299,14 +297,14 @@ void LJ_debugVarSort( void )
 	LJ_int j;
     const LJ_int numVars = g_debugVarNum;
 #if DEBUGVAR_SORT_DEBUG
-	printf( "---------------------------------------\n" );
-	printf( "debugVarSort %d\n", numVars );
+	LJ_outputPrintRelease( ( "---------------------------------------\n" ) );
+	LJ_outputPrintRelease( ( "debugVarSort %d\n", numVars ) );
     for ( i = 0; i < numVars; i++ )
     {
 		LJ_debugVarDef* const debugVarI = &g_debugVarArray[i];
-		printf( "Var[%d/%d] '%s'\n", i, numVars, debugVarI->name );
+		LJ_outputPrintRelease( ( "Var[%d/%d] '%s'\n", i, numVars, debugVarI->name ) );
 	}
-	printf( "---------------------------------------\n" );
+	LJ_outputPrintRelease( ( "---------------------------------------\n" ) );
 #endif // #if DEBUGVAR_SORT_DEBUG
     for ( i = 0; i < ( numVars - 1 ); i++ )
     {
@@ -325,10 +323,10 @@ void LJ_debugVarSort( void )
 			LJ_int swap = 0;
 			LJ_int d;
 #if DEBUGVAR_SORT_DEBUG
-			printf( "---------------------------------------\n" );
-			printf( "DepthI %d Var '%s'\n", depthI, debugVarI->name );
-			printf( "DepthJ %d Var '%s'\n", depthJ, debugVarJ->name );
-			printf( "minDepth %d\n", minDepth );
+			LJ_outputPrintRelease( ( "---------------------------------------\n" ) );
+			LJ_outputPrintRelease( ( "DepthI %d Var '%s'\n", depthI, debugVarI->name ) );
+			LJ_outputPrintRelease( ( "DepthJ %d Var '%s'\n", depthJ, debugVarJ->name ) );
+			LJ_outputPrintRelease( ( "minDepth %d\n", minDepth ) );
 #endif // #if DEBUGVAR_SORT_DEBUG
 			for ( d = 0; d <= minDepth; d++ )
 			{
@@ -339,22 +337,22 @@ void LJ_debugVarSort( void )
 				LJ_debugVarGetScope( debugVarJ->name, d, scopeJ, LJ_DEBUG_VAR_MAX_NAME_LENGTH, 0 );
 				scopeMatch = LJ_strCompare( scopeI, scopeJ );
 #if DEBUGVAR_SORT_DEBUG
-				printf( "I Var[%d/%d] Scope[%d/%d] '%s'\n", i, numVars, d, depthI, scopeI );
-				printf( "J Var[%d/%d] Scope[%d/%d] '%s'\n", j, numVars, d, depthJ, scopeJ );
-				printf( "ScopeMatch %d\n", scopeMatch );
+				LJ_outputPrintRelease( ( "I Var[%d/%d] Scope[%d/%d] '%s'\n", i, numVars, d, depthI, scopeI ) );
+				LJ_outputPrintRelease( ( "J Var[%d/%d] Scope[%d/%d] '%s'\n", j, numVars, d, depthJ, scopeJ ) );
+				LJ_outputPrintRelease( ( "ScopeMatch %d\n", scopeMatch ) );
 #endif // #if DEBUGVAR_SORT_DEBUG
             	if ( scopeMatch > 0 )
             	{
 					swap = 1;
 #if DEBUGVAR_SORT_DEBUG
-					printf( "1 Swap 1\n" );
+					LJ_outputPrintRelease( ( "1 Swap 1\n" ) );
 #endif // #if DEBUGVAR_SORT_DEBUG
 					// Don't use this result if I has more depth than J and we at the end of J's Depth
 					if ( ( depthI > depthJ ) && ( d == depthJ ) )
 					{
 						swap = 0;
 #if DEBUGVAR_SORT_DEBUG
-						printf( "1 Swap 0\n" );
+						LJ_outputPrintRelease( ( "1 Swap 0\n" ) );
 #endif // #if DEBUGVAR_SORT_DEBUG
 						d = minDepth+1;
 						continue;
@@ -372,7 +370,7 @@ void LJ_debugVarSort( void )
 					{
 						swap = 1;
 #if DEBUGVAR_SORT_DEBUG
-						printf( "2 Swap 1\n" );
+						LJ_outputPrintRelease( ( "2 Swap 1\n" ) );
 #endif // #if DEBUGVAR_SORT_DEBUG
 						d = minDepth+1;
 						continue;
@@ -391,19 +389,19 @@ void LJ_debugVarSort( void )
                	*debugVarI = *debugVarJ;
                	*debugVarJ = temp;
 #if DEBUGVAR_SORT_DEBUG
-				printf( "Do the swap\n" );
+				LJ_outputPrintRelease( ( "Do the swap\n" ) );
 #endif // #if DEBUGVAR_SORT_DEBUG
            	}
         }
     }
 #if DEBUGVAR_SORT_DEBUG
-	printf( "---------------------------------------\n" );
+	LJ_outputPrintRelease( ( "---------------------------------------\n" ) );
     for ( i = 0; i < numVars; i++ )
     {
 		LJ_debugVarDef* const debugVarI = &g_debugVarArray[i];
-		printf( "Var[%d/%d] '%s'\n", i, numVars, debugVarI->name );
+		LJ_outputPrintRelease( ( "Var[%d/%d] '%s'\n", i, numVars, debugVarI->name ) );
 	}
-	printf( "***************************************\n" );
+	LJ_outputPrintRelease( ( "***************************************\n" ) );
 #endif // #if DEBUGVAR_SORT_DEBUG
 }
 
@@ -414,12 +412,12 @@ LJ_debugVarDef* LJ_debugVarFindVar( const LJ_debugVarDef* const currentVar,
 	const LJ_int startIndex = currentVar - g_debugVarArray;
 	const LJ_int numVars = g_debugVarNum;
 	const LJ_int endIndex = ( direction > 0 ) ? numVars : -1; 
-	LJ_debugVarDef* newScopeVar = NULL;
+	LJ_debugVarDef* newScopeVar = LJ_NULL;
 	LJ_char testScope[LJ_DEBUG_VAR_MAX_NAME_LENGTH];
 	LJ_int i;
-	LJ_debugVarDef* lastVar = NULL;
+	LJ_debugVarDef* lastVar = LJ_NULL;
 
-	strncpy( testScope, currentScope, LJ_DEBUG_VAR_MAX_NAME_LENGTH );
+	LJ_strNCopy( testScope, currentScope, LJ_DEBUG_VAR_MAX_NAME_LENGTH );
 
 	for ( i = startIndex; i != endIndex; i+= direction )
 	{
@@ -444,11 +442,11 @@ LJ_debugVarDef* LJ_debugVarFindVar( const LJ_debugVarDef* const currentVar,
 						lastVar = newScopeVar;
 					}
 					// If going up in the list need to find the last occurance of the new scope
-					if ( newScopeVar == NULL )
+					if ( newScopeVar == LJ_NULL )
 					{
 						newScopeVar = debugVar;
 						lastVar = newScopeVar;
-						strncpy( testScope, varScope, LJ_DEBUG_VAR_MAX_NAME_LENGTH );
+						LJ_strNCopy( testScope, varScope, LJ_DEBUG_VAR_MAX_NAME_LENGTH );
 					}
 					else
 					{
@@ -468,17 +466,17 @@ LJ_debugVarDef* LJ_debugVarFindVarAtScope( const LJ_debugVarDef* const currentVa
     LJ_char currentScopeString[LJ_DEBUG_VAR_MAX_NAME_LENGTH];
 
     LJ_debugVarGetScope( currentVar->name, (depth-1), parentScopeString, LJ_DEBUG_VAR_MAX_NAME_LENGTH, 1 );
-    //printf( "parentScopeString : %s\n", parentScopeString );
+    //LJ_outputPrintRelease( ( "parentScopeString : %s\n", parentScopeString ) );
     LJ_debugVarGetScope( currentVar->name, depth, currentScopeString, LJ_DEBUG_VAR_MAX_NAME_LENGTH, 0 );
-    //printf( "currentScopeString : %s\n", currentScopeString );
+    //LJ_outputPrintRelease( ( "currentScopeString : %s\n", currentScopeString ) );
 	return LJ_debugVarFindVar( currentVar, parentScopeString, currentScopeString, depth, direction );
 }
 
 // Public functions
 void LJ_debugVarInit( const LJ_int maxNumVars )
 {
-	g_debugVarMenuScrollStart = NULL;
-	g_debugVarArray = NULL;
+	g_debugVarMenuScrollStart = LJ_NULL;
+	g_debugVarArray = LJ_NULL;
 	g_debugVarNum = 0;
 	g_debugVarMaxNum = maxNumVars;
 
@@ -496,7 +494,7 @@ void LJ_debugVarReset( void )
 	g_selectedDepth = 0;
 	g_editingMode = 0;
 	g_selectedItem = g_debugVarArray;
-	if ( g_debugVarMenuScrollStart != NULL )
+	if ( g_debugVarMenuScrollStart != LJ_NULL )
 	{
 		LJ_int d;
 		for ( d = 0; d < LJ_DEBUG_VAR_MAX_DEPTH; d++ )
@@ -548,8 +546,8 @@ void LJ_debugVarRender( void )
 	const LJ_int maxDepth = LJ_debugVarCountDepth( g_selectedItem->name );
 	LJ_float xLen = 0.0f;
 #if DEBUGVAR_RENDER_DEBUG
-    printf( "-------------------------------\n" );
-    printf( "SelectedIndex: %d SelectedDepth %d/%d\n", ( g_selectedItem - g_debugVarArray ), g_selectedDepth, maxDepth );
+    LJ_outputPrintRelease( ( "-------------------------------\n" ) );
+    LJ_outputPrintRelease( ( "SelectedIndex: %d SelectedDepth %d/%d\n", ( g_selectedItem - g_debugVarArray ), g_selectedDepth, maxDepth ) );
 #endif // #if DEBUGVAR_RENDER_DEBUG
 
 	tempString[0] = '\0';
@@ -560,15 +558,15 @@ void LJ_debugVarRender( void )
 		// Get the length
 		if ( g_selectedItem->flags & LJ_DEBUG_VAR_BOOL )
 		{
-			sprintf( tempString, "Edit Mode: BOOL value" );
+			LJ_strSPrint( tempString, LJ_DEBUG_VAR_MAX_NAME_LENGTH, "Edit Mode: BOOL value" );
 		}
 		else if ( g_selectedItem->flags & LJ_DEBUG_VAR_INT )
 		{
-			sprintf( tempString, "Edit Mode: SELECT to accept, CANCEL to abort: Inc: %d", g_intVariableAlterAmount );
+			LJ_strSPrint( tempString, LJ_DEBUG_VAR_MAX_NAME_LENGTH, "Edit Mode: SELECT to accept, CANCEL to abort: Inc: %d", g_intVariableAlterAmount );
 		}
 		else if ( g_selectedItem->flags & LJ_DEBUG_VAR_FLOAT )
 		{
-			sprintf( tempString, "Edit Mode: SELECT to accept, CANCEL to abort: Inc: %f", g_floatVariableAlterAmount );
+			LJ_strSPrint( tempString, LJ_DEBUG_VAR_MAX_NAME_LENGTH, "Edit Mode: SELECT to accept, CANCEL to abort: Inc: %f", g_floatVariableAlterAmount );
 		}
 		xLen = LJ_debugVarRenderText( 0, x0, y0, infoTextColour, tempString );
 	}
@@ -578,20 +576,20 @@ void LJ_debugVarRender( void )
 		{
 			if ( g_selectedItem->flags & LJ_DEBUG_VAR_BOOL )
 			{
-				sprintf( tempString, "Menu Mode : SELECT to toggle BOOL variable" );
+				LJ_strSPrint( tempString, LJ_DEBUG_VAR_MAX_NAME_LENGTH, "Menu Mode : SELECT to toggle BOOL variable" );
 			}
 			else
 			{
-				sprintf( tempString, "Menu Mode : Press SELECT to enter edit mode" );
+				LJ_strSPrint( tempString, LJ_DEBUG_VAR_MAX_NAME_LENGTH, "Menu Mode : Press SELECT to enter edit mode" );
 			}
 			if ( g_selectedItem->flags & LJ_DEBUG_VAR_READ_ONLY )
 			{
-				sprintf( tempString, "Menu Mode : READ ONLY value     " );
+				LJ_strSPrint( tempString, LJ_DEBUG_VAR_MAX_NAME_LENGTH, "Menu Mode : READ ONLY value     " );
 			}
 		}
 		else
 		{
-			sprintf( tempString, "Menu Mode    " );
+			LJ_strSPrint( tempString, LJ_DEBUG_VAR_MAX_NAME_LENGTH, "Menu Mode    " );
 		}
 		xLen = LJ_debugVarRenderText( 0, x0, y0, infoTextColour, tempString );
 	}
@@ -629,8 +627,8 @@ void LJ_debugVarRender( void )
 			LJ_debugVarGetScope( g_selectedItem->name, (depth), selectedScope, LJ_DEBUG_VAR_MAX_NAME_LENGTH, 0 );
 
 #if DEBUGVAR_RENDER_DEBUG
-			printf( "Parent Scope: %s\n", parentScope );
-			printf( "Selected Scope: %s\n", selectedScope );
+			LJ_outputPrintRelease( ( "Parent Scope: %s\n", parentScope ) );
+			LJ_outputPrintRelease( ( "Selected Scope: %s\n", selectedScope ) );
 #endif // #if DEBUGVAR_RENDER_DEBUG
 			for ( i = 0; i < numVars; i++ )
 			{
@@ -659,7 +657,7 @@ void LJ_debugVarRender( void )
 							const LJ_int varMaxDepth = LJ_debugVarCountDepth( debugVar->name );
 							LJ_float endX = 0.0f;
 
-							strncpy( currentScope, varScope, LJ_DEBUG_VAR_MAX_NAME_LENGTH );
+							LJ_strNCopy( currentScope, varScope, LJ_DEBUG_VAR_MAX_NAME_LENGTH );
 							if ( LJ_strCompare( selectedScope, varScope ) == 0 )
 							{
 								selected = 1;
@@ -675,15 +673,15 @@ void LJ_debugVarRender( void )
 
 							if ( ( selected == 1 ) && ( depth < varMaxDepth ) )
 							{
-								sprintf( outputString, "> %s", varScope );
+								LJ_strSPrint( outputString, 256, "> %s", varScope );
 							}
 							else
 							{
-								sprintf( outputString, "%s", varScope );
+								LJ_strSPrint( outputString, 256, "%s", varScope );
 							}
 #if DEBUGVAR_RENDER_DEBUG
-			printf( "Var Scope: %s\n", varScope);
-			printf( "OutputString: %s\n", outputString );
+							LJ_outputPrintRelease( ( "Var Scope: %s\n", varScope) );
+							LJ_outputPrintRelease( ( "OutputString: %s\n", outputString ) );
 #endif // #if DEBUGVAR_RENDER_DEBUG
 							if ( depth == varMaxDepth )
 							{
@@ -691,7 +689,7 @@ void LJ_debugVarRender( void )
 								LJ_debugVarValue tempValue;
 								LJ_debugVarGetValue( debugVar, &tempValue );
 								LJ_debugVarPrintValue( debugVar->flags, &tempValue, outputValue );
-								sprintf( finalOutputString, "%s: %s", outputString, outputValue );
+								LJ_strSPrint( finalOutputString, 256, "%s: %s", outputString, outputValue );
 								if ( selected == 1 )
 								{
 									if ( g_editingMode == 1 )
@@ -710,7 +708,7 @@ void LJ_debugVarRender( void )
 							}
 							else
 							{
-								strcpy(finalOutputString,outputString);
+								LJ_strCopy( finalOutputString, outputString );
 							}
 							if ( selected == 1 )
 							{
@@ -723,7 +721,7 @@ void LJ_debugVarRender( void )
 							if ( yCount >= yMenuStart )
 							{
 #if DEBUGVAR_RENDER_DEBUG
-			printf( "finalOutputString: %d %s\n", p, finalOutputString );
+								LJ_outputPrintRelease( ( "finalOutputString: %d %s\n", p, finalOutputString ) );
 #endif // #if DEBUGVAR_RENDER_DEBUG
 								endX = LJ_debugVarRenderText( p, x0+0.8f, y, colour, finalOutputString ) + 2.9f;
 								if ( endX > maxX )
@@ -745,13 +743,13 @@ void LJ_debugVarRender( void )
 			}
 		}
 #if DEBUGVAR_DEBUG_MENU_POS
-		sprintf( tempString, "start %3.1f", g_debugVarMenuScrollStart[depth] );
+		LJ_strSPrint( tempString, LJ_DEBUG_VAR_MAX_NAME_LENGTH, "start %3.1f", g_debugVarMenuScrollStart[depth] );
 		LJ_debugVarRenderText( 1, x0, y1+5.0f, 0xFFFFFFFF, tempString );
 #endif // #if DEBUGVAR_DEBUG_MENU_POS
         depth++;
     };
 #if DEBUGVAR_DEBUG_MENU_POS
-	sprintf( tempString, "g_menuSelectedPlace %f", g_menuSelectedPlace );
+	LJ_strSPrint( tempString, LJ_DEBUG_VAR_MAX_NAME_LENGTH, "g_menuSelectedPlace %f", g_menuSelectedPlace );
 	LJ_debugVarRenderText( 1, 0.0f, 12.0f, 0xFFFFFFFF, tempString );
 #endif // #if DEBUGVAR_DEBUG_MENU_POS
 }
@@ -865,7 +863,7 @@ void LJ_debugVarInput( const LJ_int debugInputKey )
 	{
 		const LJ_debugVarDef* const currentVar = g_selectedItem;
 		LJ_debugVarDef* const newVar = LJ_debugVarFindVarAtScope( currentVar, g_selectedDepth, newVarDirection );
-		if ( newVar != NULL )
+		if ( newVar != LJ_NULL )
 		{
         	g_selectedItem = newVar;
 			if ( newVar != currentVar )

@@ -6,13 +6,20 @@ Find_Package ( GLUT REQUIRED )
 Find_Package ( SDL_image REQUIRED ) # if using SDL_image
 
 # Workaround for the non-working REQUIRED flag
-if ( NOT SDL_FOUND )
-   message ( FATAL_ERROR "SDL not found!" )
-endif ( NOT SDL_FOUND )
+IF ( NOT SDL_FOUND )
+   MESSAGE( FATAL_ERROR "SDL not found!" )
+ENDIF ( NOT SDL_FOUND )
+
+MESSAGE( "CMAKE_BUILD_TYPE = ${CMAKE_BUILD_TYPE}" )
+
+SET( CMAKE_C_FLAGS_DEBUG "-DLJ_DEBUG" )
+SET( CMAKE_C_FLAGS_RELWITHDEBINFO "-DLJ_NDEBUG" )
+SET( CMAKE_C_FLAGS_RELEASE "-DLJ_GOLD -DLJ_NDEBUG" )
 
 # Global definitions
 SET( GLOBAL_CFLAGS -Wextra -Wall -Werror -Wdeclaration-after-statement -fstrict-aliasing )
 SET( GLOBAL_DEFINITIONS ${GLOBAL_CFLAGS} ${CONFIG_CFLAGS} )
+
 
 SET( GLOBAL_INCLUDE_DIRECTORIES )
 SET( GLOBAL_INCLUDE_DIRECTORIES ${GLOBAL_INCLUDE_DIRECTORIES} ${BGAME_SOURCE_DIR}/LJ_Engine )

@@ -3,8 +3,6 @@
 #include "LJ_key.h"
 #include "LJ_internal_key.h"
 
-#include <stdio.h>
-
 #define LJ_NUM_KEYS (LJ_KEY_FINISH - LJ_KEY_START + 1)
 
 typedef struct LJ_keyPrivateData
@@ -236,7 +234,7 @@ void LJ_keyUp( const LJ_inputKeyEnum key, const LJ_int modifier )
 
 	// TODO: Include modifiers up and down
 
-	printf( "Key Up %d '%s'\n", key, LJ_keyGetKeyName( key ) );
+	LJ_outputPrintRelease( ( "Key Up %d '%s'\n", key, LJ_keyGetKeyName( key ) ) );
 }
  
 void LJ_keyDown( const LJ_inputKeyEnum key, const LJ_int modifier )
@@ -248,7 +246,7 @@ void LJ_keyDown( const LJ_inputKeyEnum key, const LJ_int modifier )
 
 	// TODO: Include modifiers up and down
 
-	printf( "Key Down %d '%s'\n", key, LJ_keyGetKeyName( key ) );
+	LJ_outputPrintRelease( ( "Key Down %d '%s'\n", key, LJ_keyGetKeyName( key ) ) );
 }
  
 LJ_inputKeyStateEnum LJ_keyGetKeyThisState( const LJ_inputKeyEnum key )

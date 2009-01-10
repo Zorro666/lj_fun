@@ -1,8 +1,6 @@
 #include "LJ_types.h"
 #include "LJ_assert.h"
 
-#include <stdio.h>
-
 void LJ_typesInit( void )
 {
 	LJ_COMPILE_TIME_ASSERT( sizeof(LJ_char) >= 1 );

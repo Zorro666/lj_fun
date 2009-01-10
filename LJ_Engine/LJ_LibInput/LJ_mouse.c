@@ -4,8 +4,6 @@
 
 #include "LJ_internal_mouse.h"
 
-#include <stdio.h>
-
 #define LJ_NUM_MOUSE_BUTTONS (LJ_MOUSE_BUTTON_FINISH - LJ_MOUSE_BUTTON_START + 1)
 
 typedef struct LJ_mousePrivateData
@@ -98,7 +96,7 @@ void LJ_mouseButtonUp( const LJ_inputMouseButtonEnum button )
 	s_mousePrivateData.mouseButtonPrevState[button] = s_mousePrivateData.mouseButtonThisState[button];
 	s_mousePrivateData.mouseButtonThisState[button] = LJ_MOUSE_BUTTON_STATE_RELEASED;
 
-	printf( "Button Up %d '%s'\n", button, LJ_mouseGetButtonName( button ) );
+	LJ_outputPrintRelease( ( "Button Up %d '%s'\n", button, LJ_mouseGetButtonName( button ) ) );
 }
 
 void LJ_mouseButtonDown( const LJ_inputMouseButtonEnum button )
@@ -107,7 +105,7 @@ void LJ_mouseButtonDown( const LJ_inputMouseButtonEnum button )
 	s_mousePrivateData.mouseButtonPrevState[button] = s_mousePrivateData.mouseButtonThisState[button];
 	s_mousePrivateData.mouseButtonThisState[button] = LJ_MOUSE_BUTTON_STATE_PRESSED;
 
-	printf( "Button Down %d '%s'\n", button, LJ_mouseGetButtonName( button ) );
+	LJ_outputPrintRelease( ( "Button Down %d '%s'\n", button, LJ_mouseGetButtonName( button ) ) );
 }
 
 void LJ_mouseSetPosition( const LJ_int x, const LJ_int y, const LJ_int xDelta, const LJ_int yDelta )
@@ -117,7 +115,7 @@ void LJ_mouseSetPosition( const LJ_int x, const LJ_int y, const LJ_int xDelta, c
 	s_mousePrivateData.mouseDeltaX = xDelta;
 	s_mousePrivateData.mouseDeltaY = yDelta;
 
-	printf( "Pos %d %d\n", x, y );
+	LJ_outputPrintRelease( ( "Pos %d %d\n", x, y ) );
 }
 
 void LJ_mouseGetPosition( LJ_int* const x, LJ_int* const y )

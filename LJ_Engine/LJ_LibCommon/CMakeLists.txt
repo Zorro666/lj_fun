@@ -5,5 +5,6 @@ INCLUDE_DIRECTORIES( ${GLOBAL_INCLUDE_DIRECTORIES} )
 SET( CMAKE_VERBOSE_MAKEFILE OFF )
 
 # list all source files here
-ADD_LIBRARY( LJ_LibCommon LJ_Base/LJ_types.c LJ_Base/LJ_str.c )
+SET( LJ_BASE_SRC LJ_Base/LJ_types.c LJ_Base/LJ_str.c LJ_Base/LJ_mem.c LJ_Base/LJ_output.c )
+ADD_LIBRARY( LJ_LibCommon SHARED ${LJ_BASE_SRC} )
 
