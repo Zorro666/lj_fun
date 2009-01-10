@@ -1,3 +1,5 @@
+#include "LJ.h"
+
 #include "LJ_output.h"
 #include "LJ_str.h"
 

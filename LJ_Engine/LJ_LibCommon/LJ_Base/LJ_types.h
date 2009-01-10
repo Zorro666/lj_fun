@@ -88,5 +88,10 @@ typedef struct LJ_floatInt
 	};
 } LJ_floatInt;
 
+// Compiler dependent preprocessor macros
+#define LJ_SOURCE_FILE 		__FILE__
+#define LJ_SOURCE_LINE 		__LINE__
+#define LJ_SOURCE_FUNCTION 	__PRETTY_FUNCTION__
+
 #endif // #ifndef LJ_TYPES_H
 

@@ -1,3 +1,5 @@
+#include "LJ.h"
+
 #include "LJ_str.h"
 
 // For atoi, atof

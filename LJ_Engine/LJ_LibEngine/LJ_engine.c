@@ -1,3 +1,5 @@
+#include "LJ.h"
+
 #include "LJ_LibCommon/LJ_LibCommon.h"
 
 #include "LJ_LibEngine/LJ_LibEngine.h"

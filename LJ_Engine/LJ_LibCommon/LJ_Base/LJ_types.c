@@ -1,3 +1,5 @@
+#include "LJ.h"
+
 #include "LJ_types.h"
 #include "LJ_assert.h"
 

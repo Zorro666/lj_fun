@@ -1,5 +1,7 @@
 // LJ_debugVar.c 
 
+#include "LJ.h"
+
 #include "LJ_LibCommon/LJ_LibCommon.h"
 
 #include "LJ_debugVar.h"
