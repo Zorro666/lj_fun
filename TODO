@@ -1,10 +1,10 @@
 To be done:
 
 ** Tasks
-* implement a base LJ_LibCommon (string, memory, printf)
-** add basic string functions (test and use them in debug var code)
-** add basic mem functions: copy, zero
-** add own printf function
+* add basic wrapper for assert (just #define) - LJ_assert (with va args #define trick using extra brackets)
+* add a unit test layer 
+** unit test the basic string functions 
+** unit test basic mem functions: copy, zero, set
 * sort out debug var interface to engine - its own input handling, toggle on/off
 * add debug graphics layer to LJ_LibDebug (just like good old CoreDebug yeah rose tinted glasses)
 * implement a base LJ_LibGraphics (2D graphics, texture handling)
