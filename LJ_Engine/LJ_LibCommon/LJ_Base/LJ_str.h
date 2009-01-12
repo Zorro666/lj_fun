@@ -65,11 +65,11 @@ LJ_bool LJ_strSkipStringIgnoreCase( const LJ_char** string, const LJ_char* const
 
 //character comparisons
 extern inline LJ_bool LJ_strIsSlash( const LJ_char c );				//is either slash?
-LJ_bool LJ_strIsAlpha( const LJ_char c );				//is a-z or A-Z
-LJ_bool LJ_strIsUpper( const LJ_char c );				//is uppercase A-Z?
-LJ_bool LJ_strIsLower( const LJ_char c );				//is lowercase a-z?
-LJ_bool LJ_strIsDigit( const LJ_char c );				//is 0-9
-LJ_bool LJ_strIsHexDigit( const LJ_char c );			//is 0-9 or A-F
+extern inline LJ_bool LJ_strIsAlpha( const LJ_char c );				//is a-z or A-Z
+extern inline LJ_bool LJ_strIsUpper( const LJ_char c );				//is uppercase A-Z?
+extern inline LJ_bool LJ_strIsLower( const LJ_char c );				//is lowercase a-z?
+extern inline LJ_bool LJ_strIsDigit( const LJ_char c );				//is 0-9
+extern inline LJ_bool LJ_strIsHexDigit( const LJ_char c );			//is 0-9 or A-F
 
 LJ_char LJ_strGetLastChar( const LJ_char* const string );
 void LJ_strSetLastChar( LJ_char* const string, const LJ_char c );
@@ -116,28 +116,28 @@ static inline LJ_bool LJ_strIsSlash( const LJ_char c )
 	return( (c == '\\') || (c == '/') );
 }
 
-extern inline LJ_bool LJ_strIsAlpha( const LJ_char c )
+static inline LJ_bool LJ_strIsAlpha( const LJ_char c )
 {
 	return( ((c >= 'A') && (c <= 'Z')) ||
 			((c >= 'a') && (c <= 'z')) );
 }
 
-extern inline LJ_bool LJ_strIsUpper( const LJ_char c )
+static inline LJ_bool LJ_strIsUpper( const LJ_char c )
 {
 	return( (c >= 'A') && (c <= 'Z') );
 }
 
-extern inline LJ_bool LJ_strIsLower( const LJ_char c )
+static inline LJ_bool LJ_strIsLower( const LJ_char c )
 {
 	return( (c >= 'a') && (c <= 'z') );
 }
 
-extern inline LJ_bool LJ_strIsDigit( const LJ_char c )
+static inline LJ_bool LJ_strIsDigit( const LJ_char c )
 {
 	return( (c >= '0') && (c <= '9') );
 }
 
-extern inline LJ_bool LJ_strIsHexDigit( const LJ_char c )
+static inline LJ_bool LJ_strIsHexDigit( const LJ_char c )
 {
 	return( ((c >= '0') && (c <= '9')) ||
 			((c >= 'A') && (c <= 'F')) ||

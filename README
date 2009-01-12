@@ -17,8 +17,8 @@ Some Code Style Suggestions
 2. all game directories/files/structs/enums/functions start with the game prefix e.g. BG_
 3. all directories start with capital letter (the bit after the prefix)
 4. all files start with lowercase letter (the bit after the prefix)
-5. assert is not a swear word so lets use it ;)
-6. lets not use libc directly but wrap it ourselves in the engine (an ongoing task)
+5. LJ_assert is not a swear word so lets use it ;)
+6. do not use libc directly but wrap it ourselves in the engine (an ongoing task)
 
 Notes
 1. the print and assert functions are macros so need extra brackets around their args to make variable args macro substitution work in a cross-compiler manner e.g. LJ_outputPrintDebug( ( "Wow it works %d\n", 10 ) );

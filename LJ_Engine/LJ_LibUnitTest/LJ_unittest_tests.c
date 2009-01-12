@@ -7,11 +7,25 @@
 
 void LJ_unittestRegisterExternalTests( void )
 {
+	// Do these first because all other tests rely on them
+	// LJ_unittest.h API tests
 	LJ_UNITTEST_REGISTER( unittest, macros );
-	LJ_UNITTEST_REGISTER( str, basic );
+
+	// Do the mem tests before str tests because the str tests rely on the LJ_mem functions
+	// LJ_mem.h API tests
 	LJ_UNITTEST_REGISTER( mem, LJ_memSet );
 	LJ_UNITTEST_REGISTER( mem, LJ_memZero );
 	LJ_UNITTEST_REGISTER( mem, LJ_memCopy );
+
+	// LJ_str.h API tests
+	LJ_UNITTEST_REGISTER( str, fundamental );
+	LJ_UNITTEST_REGISTER( str, compare );
+	LJ_UNITTEST_REGISTER( str, find );
+	LJ_UNITTEST_REGISTER( str, convert );
+	LJ_UNITTEST_REGISTER( str, utf8 )
+	LJ_UNITTEST_REGISTER( str, misc )
+	LJ_UNITTEST_REGISTER( str, character )
+	LJ_UNITTEST_REGISTER( str, slash )
 }
 
 // Unittest unittests (uses itself to test things)

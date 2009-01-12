@@ -1,6 +1,4 @@
-// main.c : defines the entry point for the console application.
-//
-// Test commit for RSS feed into Thunderbird
+// BG_main.c : main file for the BGame project
 
 #include "LJ.h"
 #include "LJ_LibCommon/LJ_LibCommon.h"

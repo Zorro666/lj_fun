@@ -1,6 +1,7 @@
 #include "LJ.h"
 
 #include "LJ_str.h"
+#include "LJ_output.h"
 
 // For atoi, atof
 #include <stdlib.h>
@@ -993,7 +994,7 @@ LJ_bool LJ_strIsInt( const LJ_char* const string, LJ_int* const val )
 		index++;
 	}
 
-	while ( string[0] != 0 )
+	while ( string[index] != 0 )
 	{
 		LJ_char c = LJ_strToUpperChar( string[index] );
 		LJ_int digit = LJ_strFindChar( "0123456789", c );
