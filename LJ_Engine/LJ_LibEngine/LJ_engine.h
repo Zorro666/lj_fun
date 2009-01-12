@@ -3,12 +3,10 @@
 
 #include "LJ_LibCommon/LJ_LibCommon.h"
 
-void LJ_engineInit( LJ_int argc, LJ_char* argv[] );
-
+void LJ_engineEarlyInit( LJ_int argc, LJ_char* argv[] );
+void LJ_engineLateInit( void );
 void LJ_engineReset( void );
-
 void LJ_engineShutdown( void );
-
 void LJ_engineTick( void );
 
 void LJ_engineStartRendering( void );

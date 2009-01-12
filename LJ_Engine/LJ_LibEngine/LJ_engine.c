@@ -5,6 +5,7 @@
 #include "LJ_LibEngine/LJ_LibEngine.h"
 #include "LJ_LibDebug/LJ_LibDebug.h"
 #include "LJ_LibInput/LJ_LibInput.h"
+#include "LJ_LibUnitTest/LJ_LibUnittest.h"
 
 #include <SDL/SDL.h>
 #include <SDL/SDL_opengl.h>
@@ -39,7 +40,7 @@ void renderBitmapString( LJ_float x, LJ_float y, LJ_float z, void *font, const L
 // TODO: this is very hacky
 void LJ_engineInputUpdate( void );
 
-void LJ_engineInit( LJ_int argc, LJ_char* argv[] )
+void LJ_engineEarlyInit( LJ_int argc, LJ_char* argv[] )
 {
 	// Initialize SDL
 	SDL_Init( SDL_INIT_EVERYTHING );
@@ -67,17 +68,30 @@ void LJ_engineInit( LJ_int argc, LJ_char* argv[] )
 	gluQuadricTexture( s_quadratic, GL_TRUE );
 
 	LJ_typesInit();
+	LJ_unittestInit();
+	LJ_debugVarInit( LJ_DEBUGVAR_MAX_NUM );
 	LJ_inputInit();
+}
+
+void LJ_engineLateInit( void )
+{
+	// Run the unittests
+	LJ_unittestTick();
 }
 
 //	long lastTick = SDL_GetTicks();
 
 void LJ_engineReset( void )
 {
+	LJ_unittestReset();
+	LJ_debugVarReset();
+	LJ_inputReset();
 }
 
 void LJ_engineShutdown( void )
 {
+	LJ_inputShutdown();
+	LJ_debugVarShutdown();
 	SDL_Quit();
 }
 

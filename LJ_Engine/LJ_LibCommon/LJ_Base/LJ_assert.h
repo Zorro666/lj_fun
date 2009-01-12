@@ -11,7 +11,9 @@
 
 #if LJ_USE_ASSERT
 
-LJ_int LJ_internalAssert( 
+#define LJ_debugBreak() (void)(0)
+
+LJ_int LJ_internalAssert( LJ_int* const ignoreThisPtr,
 						  const LJ_char* exprStr, 
 						  const LJ_char* const file, const LJ_uint line, const LJ_char* const func,
 						  const LJ_char* const format, ... 
@@ -20,12 +22,15 @@ LJ_int LJ_internalAssert(
 #define LJ_assert( expr, format ) \
 	do \
 	{ \
-		if ( !(int)( expr ) ) \
+		if ( !(int)( (expr) ) ) \
 		{ \
-			static LJ_uint8 __ignoreThis = 0; \
-			if ( __ignoreThis == 0 ) \
+			static LJ_int __ignoreThisAssert = 0; \
+			if ( __ignoreThisAssert == 0 ) \
 			{ \
-				__ignoreThis = LJ_internalAssert( #expr, LJ_SOURCE_FILE, LJ_SOURCE_LINE, LJ_SOURCE_FUNCTION, format ); \
+				if ( LJ_internalAssert( &__ignoreThisAssert, #expr, LJ_SOURCE_FILE, LJ_SOURCE_LINE, LJ_SOURCE_FUNCTION, format ) ) \
+				{ \
+					LJ_debugBreak(); \
+				} \
 			} \
 		} \
 	} while ( 0 )

@@ -3,6 +3,10 @@
 
 #include "LJ_LibCommon/LJ_LibCommon.h"
 
+#ifndef LJ_DEBUGVAR_MAX_NUM
+#define LJ_DEBUGVAR_MAX_NUM 64
+#endif // #ifndef LJ_DEBUGVAR_MAX_NUM
+
 struct LJ_debugVarDef_s;
 
 enum LJ_debugVarInputEnum

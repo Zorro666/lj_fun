@@ -69,7 +69,6 @@ void gameSingleLoop()
 void gameInit( void )
 {
 	// Game init
-    LJ_debugVarInit( 64 );
     LJ_debugVarRegister( "Camera:x", LJ_DEBUG_VAR_FLOAT, &s_cameraX, 0 );
     LJ_debugVarRegister( "Camera:y", LJ_DEBUG_VAR_FLOAT, &s_cameraY, 0 );
     LJ_debugVarRegister( "Camera:z", LJ_DEBUG_VAR_FLOAT, &s_cameraZ, 0 );
@@ -79,18 +78,17 @@ void gameInit( void )
 
 void gameReset( void )
 {
-	LJ_debugVarReset();
 }
 
 void gameShutdown( void )
 {
-    LJ_debugVarShutdown();
 }
 
 LJ_int main(LJ_int argc, LJ_char* argv[])
 {
-    LJ_engineInit( argc, argv );
+    LJ_engineEarlyInit( argc, argv );
 	gameInit();
+	LJ_engineLateInit();
 
 	while ( !s_quit )
 	{

@@ -2,6 +2,8 @@
 #include "LJ_assert.h"
 #include "LJ_output.h"
 
+#if LJ_USE_ASSERT
+
 #include <stdlib.h>
 
 ///////////////////////////////////////////////////////////////////////////////////
@@ -10,9 +12,7 @@
 //
 ///////////////////////////////////////////////////////////////////////////////////
 
-#if LJ_USE_ASSERT
-
-LJ_int LJ_internalAssert( 
+LJ_int LJ_internalAssert( LJ_int* const ignoreThisPtr,
 						  const LJ_char* exprStr, 
 						  const LJ_char* const file, const LJ_uint line, const LJ_char* const function,
 						  const LJ_char* const format, ... 
@@ -29,6 +29,11 @@ LJ_int LJ_internalAssert(
 	LJ_outputPrint( format, &args );
 	LJ_outputPrint( "\n" );
 	LJ_outputPrint( "******************************************************************************\n" );
+
+	// Ignore future occurrences of this assert
+	*ignoreThisPtr = 1;
+
+	// return 1 or 0 to cause a debug break
 	return 1;
 }
 

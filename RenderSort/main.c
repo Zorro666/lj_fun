@@ -1,5 +1,10 @@
 // main.c : defines the entry point for the console application.
-//
+
+#include "LJ.h"
+
+#include "LJ_LibCommon/LJ_LibCommon.h"
+#include "LJ_LibDebug/LJ_LibDebug.h"
+#include "renderSort.h"
 
 #include <GL/gl.h>
 #include <GL/glu.h>
@@ -8,8 +13,6 @@
 #include <SDL/SDL.h>
 #include <SDL/SDL_opengl.h>
 
-#include "LJ_LibDebug/LJ_LibDebug.h"
-#include "renderSort.h"
 
 #include <stdlib.h>
 #include <stdio.h>

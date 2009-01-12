@@ -10,6 +10,6 @@ INCLUDE_DIRECTORIES( ${GLOBAL_INCLUDE_DIRECTORIES} )
 ADD_EXECUTABLE( a.out main.c )
 
 # need to link to some other libraries ? just add them here
-SET( ENGINE_LIBS LJ_LibCommon LJ_LibDebug LJ_LibInput LJ_LibEngine )
+SET( ENGINE_LIBS LJ_LibCommon LJ_LibDebug LJ_LibInput LJ_LibEngine LJ_LibUnitTest )
 TARGET_LINK_LIBRARIES( a.out ${ENGINE_LIBS} GL glut ${SDL_LIBRARY} )
 

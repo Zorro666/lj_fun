@@ -1,10 +1,11 @@
 To be done:
 
 ** Tasks
-* add basic wrapper for assert (just #define) - LJ_assert (with va args #define trick using extra brackets)
 * add a unit test layer 
+** unit test for the unit test layer
 ** unit test the basic string functions 
-** unit test basic mem functions: copy, zero, set
+* need a memory allocation layer : LJ_memAlloc, LJ_memFree + support for fixed size pools, stacks, random pools
+* need a maths layer : LJ_maths
 * sort out debug var interface to engine - its own input handling, toggle on/off
 * add debug graphics layer to LJ_LibDebug (just like good old CoreDebug yeah rose tinted glasses)
 * implement a base LJ_LibGraphics (2D graphics, texture handling)
