@@ -1,10 +1,10 @@
-To compile a project from the project's dir type:
+To compile a project from the project's directory type:
 
 make <target> 
 
 where:
 
-<target> = {debug,release,gold,clean,cleanrelease,cleangold,tags,cleantags} : DEFAULT=debug
+<target> = {debug,release,gold,clean,cleanrelease,cleangold,tags,cleantags,rebuildall} : DEFAULT=debug
 
 e.g.
 
@@ -23,3 +23,4 @@ Some Code Style Suggestions
 Notes
 1. the print and assert functions are macros so need extra brackets around their args to make variable args macro substitution work in a cross-compiler manner e.g. LJ_outputPrintDebug( ( "Wow it works %d\n", 10 ) );
 2. don't use the stdc library use the functions in LJ_LibCommon e.g. LJ_mem*, LJ_str*, LJ_output* functions
+
