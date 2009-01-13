@@ -1,17 +1,22 @@
 To be done:
 
-** Tasks
-** unit tests for the unit test layer
-** unit tests the basic string functions 
-* need a memory allocation layer : LJ_memAlloc, LJ_memFree + support for fixed size pools, stacks, random pools
-** unit tests for the memory allocation layer
-* need a maths layer : LJ_maths
-** unit tests for the maths layer
-* sort out debug var interface to engine - its own input handling, toggle on/off
-* add debug graphics layer to LJ_LibDebug (just like good old CoreDebug yeah rose tinted glasses)
-* implement a base LJ_LibGraphics (2D graphics, texture handling)
+* Tasks
 
-** Building Process
+** unit tests
+*** unit tests for the unit test layer
+*** unit tests the basic string functions 
+
+** need a memory allocation layer : LJ_memAlloc, LJ_memFree + support for fixed size pools, stacks, random pools
+*** unit tests for the memory allocation layer
+
+** need a maths layer : LJ_maths
+*** unit tests for the maths layer
+
+** sort out debug var interface to engine - its own input handling, toggle on/off
+** add debug graphics layer to LJ_LibDebug (just like good old CoreDebug yeah rose tinted glasses)
+** implement a base LJ_LibGraphics (2D graphics, texture handling)
+
+* Building Process
 
 ** Code Intentions
 * should LJ_LibEngine be all the engine libs compiled into a behemoth (kind of defeats the purpose but might be nice)
