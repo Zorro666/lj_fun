@@ -149,11 +149,72 @@ LJ_UNITTEST_FUNCTION_END( str, convert )
 
 LJ_UNITTEST_FUNCTION_START( str, utf8 )
 {
-	LJ_UNITTEST_TRUE( LJ_FALSE );
-#if 0
-LJ_uint LJ_strReadUTF8( const LJ_char** c );
-LJ_uint LJ_strWriteUTF8( LJ_char** c, const LJ_uint unicode );
-#endif // #if 0
+	LJ_char utf8str1[16];
+	const LJ_char* utf8ptr1;
+
+	LJ_char utf8str2[16];
+	LJ_char* utf8ptr2;
+
+	LJ_memZero( utf8str1, 16 );
+	LJ_memZero( utf8str2, 16 );
+
+	utf8str1[0] = 'A';
+	utf8ptr1 = utf8str1;
+	LJ_UNITTEST_EQUALS( LJ_strReadUTF8( &utf8ptr1 ), 'A' );
+
+	utf8str1[0] = 0xC2;
+	utf8str1[1] = 0xA2;
+	utf8ptr1 = utf8str1;
+	LJ_UNITTEST_EQUALS( LJ_strReadUTF8( &utf8ptr1 ), 0xA2 );
+
+	utf8str1[0] = 0xE2;
+	utf8str1[1] = 0x82;
+	utf8str1[2] = 0xAC;
+	utf8ptr1 = utf8str1;
+	LJ_UNITTEST_EQUALS( LJ_strReadUTF8( &utf8ptr1 ), 0x20AC );
+
+	utf8str1[0] = 0xF4;
+	utf8str1[1] = 0x8A;
+	utf8str1[2] = 0xAF;
+	utf8str1[3] = 0x8D;
+	utf8ptr1 = utf8str1;
+	LJ_UNITTEST_EQUALS( LJ_strReadUTF8( &utf8ptr1 ), 0x10ABCD );
+
+	utf8str1[0] = 'A';
+	utf8str1[1] = '\0';
+	utf8ptr2 = utf8str2;
+	LJ_UNITTEST_EQUALS( LJ_strWriteUTF8( &utf8ptr2, 'A' ), 1 );
+	utf8str1[1] = '\0';
+	LJ_UNITTEST_TRUE( LJ_strIsSame( utf8str1, utf8str2 ) );
+
+	utf8str1[0] = 0xC2;
+	utf8str1[1] = 0xA2;
+	utf8str1[2] = '\0';
+	utf8ptr2 = utf8str2;
+	LJ_UNITTEST_EQUALS( LJ_strWriteUTF8( &utf8ptr2, 0xA2 ), 2 );
+	utf8str2[2] = '\0';
+	LJ_UNITTEST_TRUE( LJ_strIsSame( utf8str1, utf8str2 ) );
+
+	utf8str1[0] = 0xE2;
+	utf8str1[1] = 0x82;
+	utf8str1[2] = 0xAC;
+	utf8str1[3] = '\0';
+	utf8ptr2 = utf8str2;
+	LJ_UNITTEST_EQUALS( LJ_strWriteUTF8( &utf8ptr2, 0x20AC ), 3 );
+	utf8str2[3] = '\0';
+	LJ_UNITTEST_TRUE( LJ_strIsSame( utf8str1, utf8str2 ) );
+
+	utf8str1[0] = 0xF4;
+	utf8str1[1] = 0x8A;
+	utf8str1[2] = 0xAF;
+	utf8str1[3] = 0x8D;
+	utf8str1[4] = '\0';
+	utf8ptr2 = utf8str2;
+	LJ_UNITTEST_EQUALS( LJ_strWriteUTF8( &utf8ptr2, 0x10ABCD ), 4 );
+	utf8str2[4] = '\0';
+	LJ_UNITTEST_TRUE( LJ_strIsSame( utf8str1, utf8str2 ) );
+
+	// In principal should test 5 and 6 byte utf8 codes but can't find any simple examples
 }
 LJ_UNITTEST_FUNCTION_END( str, utf8 )
 
