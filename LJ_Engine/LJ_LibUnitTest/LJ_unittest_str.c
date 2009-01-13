@@ -220,19 +220,38 @@ LJ_UNITTEST_FUNCTION_END( str, utf8 )
 
 LJ_UNITTEST_FUNCTION_START( str, misc )
 {
-	LJ_UNITTEST_TRUE( LJ_FALSE );
-#if 0
-// copy the rest of string to buffer if the start matches compare, returns LJ_TRUE if it does match
-LJ_bool LJ_strCopyAfterMatchIgnoreCase( const LJ_char* const string, const LJ_char* const compare, LJ_char* const buffer );
+	LJ_char buffer1[LJ_UNITTEST_STR_MAX_LEN];
+	LJ_char buffer2[LJ_UNITTEST_STR_MAX_LEN];
+	const LJ_char* bufferPtr1;
 
-// is the first of string the same as the whole of compare
-LJ_bool LJ_strIsFirstPartSame( const LJ_char* const string, const LJ_char* const compare );
-LJ_bool LJ_strIsFirstPartSameIgnoreCase( const LJ_char* const string, const LJ_char* const compare );
+	LJ_COMPILE_TIME_ASSERT( LJ_UNITTEST_STR_MAX_LEN > 21 );
 
-// if the first part of string matches stringToSkip, skip past it
-LJ_bool LJ_strSkipString( const LJ_char** string, const LJ_char* const stringToSkip );
-LJ_bool LJ_strSkipStringIgnoreCase( const LJ_char** string, const LJ_char* const stringToSkip );
-#endif // #if 0
+	// The LJ_mem tests have already been done so I can trust the LJ_mem functions
+	LJ_memZero( buffer1, LJ_UNITTEST_STR_MAX_LEN );
+	LJ_memZero( buffer2, LJ_UNITTEST_STR_MAX_LEN );
+
+	LJ_strCopy( buffer1, "ABCDEFGHIJKLMNOPQRST" );
+
+	LJ_UNITTEST_TRUE( LJ_strCopyAfterMatchIgnoreCase( buffer1, "aBcDeF", buffer2 ) );
+	LJ_UNITTEST_TRUE( LJ_strIsSame( buffer2, "GHIJKLMNOPQRST" ) );
+
+	LJ_UNITTEST_TRUE( LJ_strCopyAfterMatchIgnoreCase( buffer1, "JAKE", buffer2 ) == LJ_FALSE );
+
+	LJ_UNITTEST_TRUE( LJ_strIsFirstPartSame( buffer1, "ABCDEF" ) );
+	LJ_UNITTEST_TRUE( LJ_strIsFirstPartSame( buffer1, "Mufasa" ) == LJ_FALSE );
+
+	LJ_UNITTEST_TRUE( LJ_strIsFirstPartSameIgnoreCase( buffer1, "aBcdEF" ) );
+	LJ_UNITTEST_TRUE( LJ_strIsFirstPartSameIgnoreCase( buffer1, "Double" ) == LJ_FALSE );
+
+	bufferPtr1 = buffer1;
+	LJ_UNITTEST_TRUE( LJ_strSkipString( &bufferPtr1, "ABCDEF" ) );
+	LJ_UNITTEST_TRUE( LJ_strIsSame( bufferPtr1, "GHIJKLMNOPQRST" ) );
+	LJ_UNITTEST_TRUE( LJ_strSkipString( &bufferPtr1, "abcdef" ) == LJ_FALSE );
+
+	bufferPtr1 = buffer1;
+	LJ_UNITTEST_TRUE( LJ_strSkipStringIgnoreCase( &bufferPtr1, "aBcDeF" ) );
+	LJ_UNITTEST_TRUE( LJ_strIsSame( bufferPtr1, "GHIJKLMNOPQRST" ) );
+	LJ_UNITTEST_TRUE( LJ_strSkipStringIgnoreCase( &bufferPtr1, "Single" ) == LJ_FALSE );
 }
 LJ_UNITTEST_FUNCTION_END( str, misc )
 
@@ -280,37 +299,93 @@ LJ_UNITTEST_FUNCTION_END( str, character )
 
 LJ_UNITTEST_FUNCTION_START( str, slash )
 {
-	LJ_UNITTEST_TRUE( LJ_FALSE );
-#if 0
-// is the last character of the string a slash
-LJ_bool LJ_strIsLastCharSlash( const LJ_char* const string );
+	LJ_char buffer1[LJ_UNITTEST_STR_MAX_LEN];
+	LJ_char* bufferPtr1;
 
-// return '/' or '\\', depending on which is used by the string.
-// if neither or both are used, returns defaultSlash
-LJ_char LJ_strGetSlashToUse( const LJ_char* const string, const LJ_char defaultSlash );
+	LJ_COMPILE_TIME_ASSERT( LJ_UNITTEST_STR_MAX_LEN > 21 );
 
-// convert slashes
-LJ_int LJ_strConvertSlashes( LJ_char* const string, const LJ_char slash );
+	// The LJ_mem tests have already been done so I can trust the LJ_mem functions
+	LJ_memZero( buffer1, LJ_UNITTEST_STR_MAX_LEN );
 
-// skip slashes
-LJ_char* LJ_strSkipSlashes( const LJ_char* const string );
+	LJ_strCopy( buffer1, "ABCDEFGHIJKLMNOPQRST" );
 
-// remove slashes from the end of the string
-void LJ_strRemoveSlashesFromEnd( LJ_char* const string );
+	LJ_UNITTEST_TRUE( LJ_strIsLastCharSlash( "OhYesItIs/" ) );
+	LJ_UNITTEST_TRUE( LJ_strIsLastCharSlash( "OhYesItIs\\" ) );
+	LJ_UNITTEST_TRUE( LJ_strIsLastCharSlash( "OhNoItsNot/No" ) == LJ_FALSE );
 
-// make sure there is a slash on the end of the string
-void LJ_strMakeSureEndsWithSlash( LJ_char* const string, const LJ_char slash );
+	LJ_UNITTEST_EQUALS( LJ_strGetSlashToUse( "OhNoItsNot/No", '/' ), '/' );
+	LJ_UNITTEST_EQUALS( LJ_strGetSlashToUse( "OhNoItsNot", '/' ), '/' );
+	LJ_UNITTEST_EQUALS( LJ_strGetSlashToUse( "OhNoItsNot\\Jake", '/' ), '\\' );
+	LJ_UNITTEST_EQUALS( LJ_strGetSlashToUse( "OhNo/ItsNot\\Jake", '\\' ), '\\' );
+	LJ_UNITTEST_EQUALS( LJ_strGetSlashToUse( "OhNo/ItsNot\\Jake", '/' ), '/' );
 
-// find the first / last slash, returns LJ_NULL if no slashes
-LJ_char* LJ_strFindFirstSlash( const LJ_char* const string );
-LJ_char* LJ_strFindLastSlash( const LJ_char* const string );
+	LJ_strCopy( buffer1, "OhNoJake" );
+	LJ_UNITTEST_EQUALS( LJ_strConvertSlashes( buffer1, '/' ), 0 );
+	LJ_strCopy( buffer1, "OhN\\oJake" );
+	LJ_UNITTEST_EQUALS( LJ_strConvertSlashes( buffer1, '/' ), 1 );
+	LJ_UNITTEST_TRUE( LJ_strIsSame( buffer1, "OhN/oJake" ) );
+	LJ_strCopy( buffer1, "OhN/oJ/ak\\e" );
+	LJ_UNITTEST_EQUALS( LJ_strConvertSlashes( buffer1, '/' ), 3 );
+	LJ_UNITTEST_TRUE( LJ_strIsSame( buffer1, "OhN/oJ/ak/e" ) );
 
-// remove the rest of the string after the last slash, returns LJ_TRUE if anything removed
-LJ_bool LJ_strRemoveAfterLastSlash( LJ_char* const string );
+	LJ_strCopy( buffer1, "\\OhN\\oJake" );
+	bufferPtr1 = LJ_strSkipSlashes( buffer1 );
+	LJ_UNITTEST_TRUE( LJ_strIsSame( bufferPtr1, "OhN\\oJake" ) );
 
-// does the string contain a slash
-LJ_bool LJ_strHasSlash( const LJ_char* const string );
-#endif
+	LJ_strCopy( buffer1, "\\OhN\\oJake//\\" );
+	LJ_strRemoveSlashesFromEnd( buffer1 );
+	LJ_UNITTEST_TRUE( LJ_strIsSame( buffer1, "\\OhN\\oJake" ) );
+
+	LJ_strCopy( buffer1, "\\OhN\\oJake" );
+	LJ_strMakeSureEndsWithSlash( buffer1, '/' );
+	LJ_UNITTEST_TRUE( LJ_strIsSame( buffer1, "\\OhN\\oJake/" ) );
+
+	LJ_strCopy( buffer1, "\\OhN\\oJake" );
+	LJ_strMakeSureEndsWithSlash( buffer1, '\\' );
+	LJ_UNITTEST_TRUE( LJ_strIsSame( buffer1, "\\OhN\\oJake\\" ) );
+
+	LJ_strCopy( buffer1, "\\OhN\\oJake" );
+	LJ_strMakeSureEndsWithSlash( buffer1, '#' );
+	LJ_UNITTEST_TRUE( LJ_strIsSame( buffer1, "\\OhN\\oJake#" ) );
+
+	LJ_strCopy( buffer1, "OhN\\oJake" );
+	bufferPtr1 = LJ_strFindFirstSlash( buffer1 );
+	LJ_UNITTEST_TRUE( LJ_strIsSame( bufferPtr1, "\\oJake" ) );
+
+	LJ_strCopy( buffer1, "/OhN\\oJake" );
+	bufferPtr1 = LJ_strFindFirstSlash( buffer1 );
+	LJ_UNITTEST_TRUE( LJ_strIsSame( bufferPtr1, "/OhN\\oJake" ) );
+
+	LJ_strCopy( buffer1, "OhNoJake" );
+	bufferPtr1 = LJ_strFindFirstSlash( buffer1 );
+	LJ_UNITTEST_EQUALS( bufferPtr1, LJ_NULL );
+
+	LJ_strCopy( buffer1, "OhN\\oJak/e" );
+	bufferPtr1 = LJ_strFindLastSlash( buffer1 );
+	LJ_UNITTEST_TRUE( LJ_strIsSame( bufferPtr1, "/e" ) );
+
+	LJ_strCopy( buffer1, "/OhN\\oJake" );
+	bufferPtr1 = LJ_strFindLastSlash( buffer1 );
+	LJ_UNITTEST_TRUE( LJ_strIsSame( bufferPtr1, "\\oJake" ) );
+
+	LJ_strCopy( buffer1, "OhNoJake" );
+	bufferPtr1 = LJ_strFindLastSlash( buffer1 );
+	LJ_UNITTEST_EQUALS( bufferPtr1, LJ_NULL );
+
+	LJ_strCopy( buffer1, "/OhN/oJake" );
+	LJ_UNITTEST_TRUE( LJ_strRemoveAfterLastSlash( buffer1 ) );
+	LJ_UNITTEST_TRUE( LJ_strIsSame( buffer1, "/OhN/" ) );
+
+	LJ_strCopy( buffer1, "/OhNr\\oJake" );
+	LJ_UNITTEST_TRUE( LJ_strRemoveAfterLastSlash( buffer1 ) );
+	LJ_UNITTEST_TRUE( LJ_strIsSame( buffer1, "/OhNr\\" ) );
+
+	LJ_strCopy( buffer1, "OhNoJake" );
+	LJ_UNITTEST_TRUE( LJ_strHasSlash( buffer1 ) == LJ_FALSE );
+	LJ_strCopy( buffer1, "OhN\\oJake" );
+	LJ_UNITTEST_TRUE( LJ_strHasSlash( buffer1 ) );
+	LJ_strCopy( buffer1, "OhN/oJ/ak\\e" );
+	LJ_UNITTEST_TRUE( LJ_strHasSlash( buffer1 ) );
 }
 LJ_UNITTEST_FUNCTION_END( str, slash )
 

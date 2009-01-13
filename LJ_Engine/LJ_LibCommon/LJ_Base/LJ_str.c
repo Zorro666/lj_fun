@@ -1350,13 +1350,13 @@ LJ_bool LJ_strSkipString( const LJ_char** string, const LJ_char* const stringToS
 	LJ_int index = 0;
 	while ( stringToSkip[index] != 0 )
 	{
-		if ( *string[index] != stringToSkip[index] )
+		if ( (*string)[index] != stringToSkip[index] )
 		{
 			return LJ_FALSE;
 		}
 		index++;
 	}
-	*string += index;
+	(*string) += index;
 	return LJ_TRUE;
 }
 
@@ -1365,13 +1365,13 @@ LJ_bool LJ_strSkipStringIgnoreCase( const LJ_char** string, const LJ_char* const
 	LJ_int index = 0;
 	while ( stringToSkip[index] != 0 )
 	{
-		if ( LJ_strToUpperChar( *string[index] ) != LJ_strToUpperChar( stringToSkip[index] ) )
+		if ( LJ_strToUpperChar( (*string)[index] ) != LJ_strToUpperChar( stringToSkip[index] ) )
 		{
 			return LJ_FALSE;
 		}
 		index++;
 	}
-	*string += index;
+	(*string) += index;
 	return LJ_TRUE;
 }
 

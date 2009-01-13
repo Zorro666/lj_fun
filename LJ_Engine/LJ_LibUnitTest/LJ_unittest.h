@@ -49,7 +49,7 @@ void LJ_unittestRegisterExternalTests( void );
 		LJ_bool __LJ_unittest_result__ = LJ_TRUE; \
 		const LJ_char* const __LJ_unittest_groupName__ = #group; \
 		const LJ_char* const __LJ_unittest_testName__ = #test; \
-		LJ_outputPrintDebug( ( "LJ_unittest: Running[%s:%s]\n", __LJ_unittest_groupName__, __LJ_unittest_testName__ ) );
+		LJ_outputPrintGold( ( "LJ_unittest: Running[%s:%s]\n", __LJ_unittest_groupName__, __LJ_unittest_testName__ ) );
 
 #define LJ_UNITTEST_FUNCTION_END( group, test ) \
 		return __LJ_unittest_result__; \
