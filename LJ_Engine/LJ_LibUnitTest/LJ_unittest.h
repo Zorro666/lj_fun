@@ -76,7 +76,7 @@ void LJ_unittestRegisterExternalTests( void );
 #define LJ_UNITTEST_EQUALS( lhs, rhs ) \
 	if ( ( lhs ) != ( rhs ) ) \
 	{ \
-		LJ_unittestFailure( __LJ_unittest_groupName__, __LJ_unittest_testName__, #lhs "==" #rhs, LJ_SOURCE_FILE, LJ_SOURCE_LINE ); \
+		LJ_unittestFailure( __LJ_unittest_groupName__, __LJ_unittest_testName__, #lhs " == " #rhs, LJ_SOURCE_FILE, LJ_SOURCE_LINE ); \
 		__LJ_unittest_result__ = LJ_FALSE; \
 		LJ_UNITTEST_FAILED(); \
 	} 
@@ -84,7 +84,7 @@ void LJ_unittestRegisterExternalTests( void );
 #define LJ_UNITTEST_FLOAT_EQUALS( lhs, rhs, tolerance ) \
 	if ( fabsf( ( lhs ) - ( rhs ) ) > tolerance ) \
 	{ \
-		LJ_unittestFailure( __LJ_unittest_groupName__, __LJ_unittest_testName__, #lhs "==" #rhs, LJ_SOURCE_FILE, LJ_SOURCE_LINE ); \
+		LJ_unittestFailure( __LJ_unittest_groupName__, __LJ_unittest_testName__, #lhs " == " #rhs, LJ_SOURCE_FILE, LJ_SOURCE_LINE ); \
 		__LJ_unittest_result__ = LJ_FALSE; \
 		LJ_UNITTEST_FAILED(); \
 	} 
