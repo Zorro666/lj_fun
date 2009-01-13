@@ -38,8 +38,8 @@ void LJ_unittestTick( void )
 	const LJ_char* groupName = "__SENTINEL__";
 	LJ_uint numFailedTestsGroup = 0;
 	LJ_uint numTestsGroup = 0;
-	LJ_outputPrintRelease( ( "\n" ) );
-	LJ_outputPrintRelease( ( "LJ_unittest: Starting\n" ) );
+	LJ_outputPrintGold( ( "\n" ) );
+	LJ_outputPrintGold( ( "LJ_unittest: Starting\n" ) );
 	while ( test != LJ_NULL )
 	{
 		if ( LJ_strIsSameIgnoreCase( groupName, test->groupName ) == LJ_FALSE )
@@ -49,12 +49,12 @@ void LJ_unittestTick( void )
 			{
 				if ( numFailedTestsGroup != 0 )
 				{
-					LJ_outputPrintRelease( ( "LJ_unittest: Finished group[%s] %d out of %d tests failed\n", 
+					LJ_outputPrintGold( ( "LJ_unittest: Finished group[%s] %d out of %d tests failed\n", 
 									   	   test->groupName, numFailedTestsGroup, numTestsGroup ) );
 				}
 				else
 				{
-					LJ_outputPrintRelease( ( "LJ_unittest: Finished group[%s] %d tests passed successfully\n", 
+					LJ_outputPrintGold( ( "LJ_unittest: Finished group[%s] %d tests passed successfully\n", 
 								   		   prevTest->groupName, numTestsGroup ) );
 				}
 			}
@@ -62,8 +62,8 @@ void LJ_unittestTick( void )
 			numTestsGroup = 0;
 			prevTest = test;
 			groupName = prevTest->groupName;
-			LJ_outputPrintRelease( ( "\n" ) );
-			LJ_outputPrintRelease( ( "LJ_unittest: Starting group[%s]\n", test->groupName ) );
+			LJ_outputPrintGold( ( "\n" ) );
+			LJ_outputPrintGold( ( "LJ_unittest: Starting group[%s]\n", test->groupName ) );
 		}
 
 		// Run this test
@@ -81,26 +81,26 @@ void LJ_unittestTick( void )
 	{
 		if ( numFailedTestsGroup != 0 )
 		{
-			LJ_outputPrintRelease( ( "LJ_unittest: Finished group[%s] %d out of %d tests failed\n", 
+			LJ_outputPrintGold( ( "LJ_unittest: Finished group[%s] %d out of %d tests failed\n", 
 							   	   prevTest->groupName, numFailedTestsGroup, numTestsGroup ) );
 		}
 		else
 		{
-			LJ_outputPrintRelease( ( "LJ_unittest: Finished group[%s] %d tests passed successfully\n", 
+			LJ_outputPrintGold( ( "LJ_unittest: Finished group[%s] %d tests passed successfully\n", 
 								   prevTest->groupName, numTestsGroup ) );
 		}
 	}
 
-	LJ_outputPrintRelease( ( "\n" ) );
+	LJ_outputPrintGold( ( "\n" ) );
 	if ( numFailedTests > 0 )
 	{
-		LJ_outputPrintRelease( ( "LJ_unittest: Finished %d out of %d tests failed\n", numFailedTests, numTests ) );
+		LJ_outputPrintGold( ( "LJ_unittest: Finished %d out of %d tests failed\n", numFailedTests, numTests ) );
 	}
 	else
 	{
-		LJ_outputPrintRelease( ( "LJ_unittest: Finished All %d tests passed successfully\n", numTests ) );
+		LJ_outputPrintGold( ( "LJ_unittest: Finished All %d tests passed successfully\n", numTests ) );
 	}
-	LJ_outputPrintRelease( ( "\n" ) );
+	LJ_outputPrintGold( ( "\n" ) );
 }
 
 LJ_int LJ_unittestRegister( LJ_unittestTest* const testData, 
@@ -116,7 +116,7 @@ LJ_int LJ_unittestRegister( LJ_unittestTest* const testData,
     testData->func = testFunc;
     s_unittestTestsTailPtr = testData;
 	
-	LJ_outputPrintDebug( ( "LJ_unittest: Registering[%s:%s] data:0x%X func:0x%X\n", 
+	LJ_outputPrintGold( ( "LJ_unittest: Registering[%s:%s] data:0x%X func:0x%X\n", 
 						 groupName, testName, (LJ_uint)testData, (LJ_uint)testFunc ) );
 	return 0;
 }
@@ -124,7 +124,7 @@ LJ_int LJ_unittestRegister( LJ_unittestTest* const testData,
 void LJ_unittestFailure( const LJ_char* const groupName, const LJ_char* const testName, 
 						 const LJ_char* const expr, const LJ_char* const file, const LJ_uint line )
 {
-	LJ_outputPrint( "LJ_unittest: Error [%s:%s] '%s' failed %s:%d\n", groupName, testName, expr, file, line );
+	LJ_outputPrintGold( ( "LJ_unittest: Error [%s:%s] '%s' failed %s:%d\n", groupName, testName, expr, file, line ) );
 }
 
 #endif // #if LJ_USE_UNITTEST
