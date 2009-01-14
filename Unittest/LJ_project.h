@@ -12,6 +12,7 @@
 #define LJ_USE_ASSERT 				1
 #define LJ_USE_UNITTEST 			1
 
-// Should make the unittest failure define be an error/crash for this project
+// To make the unittest failure define be an error/crash for this project
+#define LJ_UNITTEST_FAILED()		{ *((LJ_int*)LJ_NULL) = 0; }
 
 #endif // #ifndef LJ_PROJECT_HH

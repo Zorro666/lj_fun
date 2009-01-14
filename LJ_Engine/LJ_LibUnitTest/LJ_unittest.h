@@ -63,7 +63,9 @@ void LJ_unittestRegisterExternalTests( void );
 		LJ_unittestRegister( &s_LJ_unittestTests_##group_##test, #group, #test, &LJ_unittestTestsFunc_##group_##test ); \
 	} while ( 0 );
 
+#ifndef LJ_UNITTEST_FAILED
 #define LJ_UNITTEST_FAILED() (void)(0)
+#endif // #ifndef LJ_UNITTEST_FAILED
 
 #define LJ_UNITTEST_TRUE( expr ) \
 	if ( !( expr ) ) \
