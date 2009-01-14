@@ -122,9 +122,15 @@ LJ_int LJ_unittestRegister( LJ_unittestTest* const testData,
 }
 
 void LJ_unittestFailure( const LJ_char* const groupName, const LJ_char* const testName, 
-						 const LJ_char* const expr, const LJ_char* const file, const LJ_uint line )
+						 const LJ_char* const file, const LJ_uint line,
+						 const LJ_char* const expr, ... )
 {
-	LJ_outputPrintGold( ( "LJ_unittest: Error [%s:%s] '%s' failed %s:%d\n", groupName, testName, expr, file, line ) );
+	#define LJ_UNITTEST_MAX_BUFFER 1024
+	LJ_char output[LJ_UNITTEST_MAX_BUFFER];
+	LJ_valist args;
+	LJ_VA_START( args, expr );
+	LJ_strVSPrint( output, LJ_UNITTEST_MAX_BUFFER, expr, &args );
+	LJ_outputPrintGold( ( "LJ_unittest: Error [%s:%s] %s File:%s:%d\n", groupName, testName, output, file, line ) );
 }
 
 #endif // #if LJ_USE_UNITTEST
