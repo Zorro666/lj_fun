@@ -2,7 +2,6 @@
 
 #include "LJ_str.h"
 #include "LJ_output.h"
-#include "LJ_assert.h"
 
 // For atoi, atof
 #include <stdlib.h>
@@ -247,11 +246,11 @@ static LJ_uint LJ_strAppendFloat( LJ_char* const to, const LJ_uint currentLength
 	LJ_ulong mantissa;
 
 	// get LJ_float as its binary representation
-	LJ_floatInt noAliasingTemp;
+	LJ_floatIntUnion noAliasingTemp;
 	LJ_uint binary;
 
-	noAliasingTemp.floatVal = value;
-	binary = noAliasingTemp.uintVal;
+	noAliasingTemp.data.floatVal = value;
+	binary = noAliasingTemp.data.uintVal;
 
 	// extract component parts
 	sign = ( binary & 0x80000000 );
@@ -331,7 +330,7 @@ static LJ_uint LJ_strAppendFloat( LJ_char* const to, const LJ_uint currentLength
 
 	while ( digit > endDigit )
 	{
-		const LJ_uint number = mantissa / DIV_DECIMAL;
+		const LJ_uint number = (LJ_uint)( mantissa / DIV_DECIMAL );
 
 		// output number
 		output[index++] = '0' + (LJ_char)number;
@@ -370,7 +369,7 @@ static LJ_uint LJ_strAppendBinary( LJ_char* const to, const LJ_uint currentLengt
 		// look for the first non-zero character to start doing output (unless doing default output)
 		if ( bit != 0 || doOutput == LJ_TRUE )
 		{
-			output[index++] = '0' + bit;
+			output[index++] = (LJ_char)( '0' + bit );
 			doOutput = LJ_TRUE;
 		}
 	}
@@ -1121,8 +1120,7 @@ LJ_uint LJ_strReadUTF8( const LJ_char** c )
 {
 	// TODO: huge amount of error checking that could be done to verify this is a valid UTF-8 sequence
 
-	LJ_uint utf8 = *(*c);
-	(*c)++;
+	LJ_uint utf8 = *(*c++);
 	if ( ( utf8 & 0x80 ) == 0 )
 	{
 		// simple ASCII character
@@ -1134,8 +1132,7 @@ LJ_uint LJ_strReadUTF8( const LJ_char** c )
 		// 2 bytes per character
 		utf8 &= 0x1F;
 		utf8 <<= 6;
-		utf8 += ( *(*c) & 0x3F );
-		(*c)++;
+		utf8 += *(*c++) & 0x3F;
 		return utf8;
 	}
 
@@ -1144,11 +1141,9 @@ LJ_uint LJ_strReadUTF8( const LJ_char** c )
 		// 3 bytes per character
 		utf8 &= 0x0F;
 		utf8 <<= 6;
-		utf8 += *(*c) & 0x3F;
-		(*c)++;
+		utf8 += *(*c++) & 0x3F;
 		utf8 <<= 6;
-		utf8 += *(*c) & 0x3F;
-		(*c)++;
+		utf8 += *(*c++) & 0x3F;
 		return utf8;
 	}
 
@@ -1157,14 +1152,11 @@ LJ_uint LJ_strReadUTF8( const LJ_char** c )
 		// 4 bytes per character
 		utf8 &= 0x07;
 		utf8 <<= 6;
-		utf8 += *(*c) & 0x3F;
-		(*c)++;
-		utf8 <<= 6;
-		utf8 += *(*c) & 0x3F;
-		(*c)++;
+		utf8 += *(*c++) & 0x3F;
 		utf8 <<= 6;
 		utf8 += *(*c++) & 0x3F;
-		(*c)++;
+		utf8 <<= 6;
+		utf8 += *(*c++) & 0x3F;
 		return utf8;
 	}
 
@@ -1173,17 +1165,13 @@ LJ_uint LJ_strReadUTF8( const LJ_char** c )
 		// 5 bytes per character
 		utf8 &= 0x03;
 		utf8 <<= 6;
-		utf8 += *(*c) & 0x3F;
-		(*c)++;
+		utf8 += *(*c++) & 0x3F;
 		utf8 <<= 6;
-		utf8 += *(*c) & 0x3F;
-		(*c)++;
+		utf8 += *(*c++) & 0x3F;
 		utf8 <<= 6;
-		utf8 += *(*c) & 0x3F;
-		(*c)++;
+		utf8 += *(*c++) & 0x3F;
 		utf8 <<= 6;
-		utf8 += *(*c) & 0x3F;
-		(*c)++;
+		utf8 += *(*c++) & 0x3F;
 		return utf8;
 	}
 
@@ -1192,24 +1180,20 @@ LJ_uint LJ_strReadUTF8( const LJ_char** c )
 		// 6 bytes per character
 		utf8 &= 0x01;
 		utf8 <<= 6;
-		utf8 += *(*c) & 0x3F;
-		(*c)++;
+		utf8 += *(*c++) & 0x3F;
 		utf8 <<= 6;
-		utf8 += *(*c) & 0x3F;
-		(*c)++;
+		utf8 += *(*c++) & 0x3F;
 		utf8 <<= 6;
-		utf8 += *(*c) & 0x3F;
-		(*c)++;
+		utf8 += *(*c++) & 0x3F;
 		utf8 <<= 6;
-		utf8 += *(*c) & 0x3F;
-		(*c)++;
+		utf8 += *(*c++) & 0x3F;
 		utf8 <<= 6;
-		utf8 += *(*c) & 0x3F;
-		(*c)++;
+		utf8 += *(*c++) & 0x3F;
 		return utf8;
 	}
 
-	LJ_assert( LJ_FALSE, ( "Unknown UTF8 sequence" ) );
+	//TODO: implement LJ_Assert function
+	//LJ_Assert(0); // not a valid UTF-8 escape sequence at all
 	return 0;
 }
 
@@ -1218,76 +1202,55 @@ LJ_uint LJ_strWriteUTF8( LJ_char** c, const LJ_uint unicode )
 	if ( unicode < 0x80 )
 	{
 		// simple ASCII character
-		*(*c) = unicode;
-		(*c)++;
+		*(*c++) = (LJ_char)( unicode );
 		return 1;
 	}
 
 	if ( unicode < 0x800 )
 	{
 		// 2 bytes
-		*(*c) = 0xC0 + ( ( unicode >> 6 ) & 0x1F );
-		(*c)++;
-		*(*c) = 0x80 + ( unicode & 0x3F );
-		(*c)++;
+		*(*c++) = (LJ_char)( 0xC0 + ( ( unicode >> 6 ) & 0x1F ) );
+		*(*c++) = (LJ_char)( 0x80 + ( unicode & 0x3F ) );
 		return 2;
 	}
 
 	if ( unicode < 0x10000 )
 	{
 		// 3 bytes
-		*(*c) = 0xE0 + ( ( unicode >> 12 ) & 0x0F );
-		(*c)++;
-		*(*c) = 0x80 + ( ( unicode >> 6 ) & 0x3F );
-		(*c)++;
-		*(*c) = 0x80 + ( unicode & 0x3F );
-		(*c)++;
+		*(*c++) = (LJ_char)( 0xE0 + ( ( unicode >> 12 ) & 0x0F ) );
+		*(*c++) = (LJ_char)( 0x80 + ( ( unicode >> 6 ) & 0x3F ) );
+		*(*c++) = (LJ_char)( 0x80 + ( unicode & 0x3F ) );
 		return 3;
 	}
 
 	if ( unicode < 0x200000 )
 	{
 		// 4 bytes
-		*(*c) = 0xF0 + ( ( unicode >> 18 ) & 0x07 );
-		(*c)++;
-		*(*c) = 0x80 + ( ( unicode >> 12 ) & 0x3F );
-		(*c)++;
-		*(*c) = 0x80 + ( ( unicode >> 6 ) & 0x3F );
-		(*c)++;
-		*(*c) = 0x80 + ( unicode & 0x3F );
-		(*c)++;
+		*(*c++) = (LJ_char)( 0xF0 + ( ( unicode >> 18 ) & 0x07 ) );
+		*(*c++) = (LJ_char)( 0x80 + ( ( unicode >> 12 ) & 0x3F ) );
+		*(*c++) = (LJ_char)( 0x80 + ( ( unicode >> 6 ) & 0x3F ) );
+		*(*c++) = (LJ_char)( 0x80 + ( unicode & 0x3F ) );
 		return 4;
 	}
 
 	if ( unicode < 0x4000000 )
 	{
 		// 5 bytes
-		*(*c) = 0xF8 + ( ( unicode >> 24 ) & 0x03 );
-		(*c)++;
-		*(*c) = 0x80 + ( ( unicode >> 18 ) & 0x3F );
-		(*c)++;
-		*(*c) = 0x80 + ( ( unicode >> 12 ) & 0x3F );
-		(*c)++;
-		*(*c) = 0x80 + ( ( unicode >> 6 ) & 0x3F );
-		(*c)++;
-		*(*c) = 0x80 + ( unicode & 0x3F );
-		(*c)++;
+		*(*c++) = (LJ_char)( 0xF8 + ( ( unicode >> 24 ) & 0x03 ) );
+		*(*c++) = (LJ_char)( 0x80 + ( ( unicode >> 18 ) & 0x3F ) );
+		*(*c++) = (LJ_char)( 0x80 + ( ( unicode >> 12 ) & 0x3F ) );
+		*(*c++) = (LJ_char)( 0x80 + ( ( unicode >> 6 ) & 0x3F ) );
+		*(*c++) = (LJ_char)( 0x80 + ( unicode & 0x3F ) );
 		return 5;
 	}
 
 	// 6 bytes
-	*(*c) = 0xFC + ( ( unicode >> 30 ) & 0x01 );
-	(*c)++;
-	*(*c) = 0x80 + ( ( unicode >> 24 ) & 0x3F );
-	(*c)++;
-	*(*c) = 0x80 + ( ( unicode >> 18 ) & 0x3F );
-	(*c)++;
-	*(*c) = 0x80 + ( ( unicode >> 12 ) & 0x3F );
-	(*c)++;
-	*(*c) = 0x80 + ( ( unicode >> 6 ) & 0x3F );
-	(*c)++;
-	*(*c) = 0x80 + ( unicode & 0x3F );
-	(*c)++;
+	*(*c++) = (LJ_char)( 0xFC + ( ( unicode >> 30 ) & 0x01 ) );
+	*(*c++) = (LJ_char)( 0x80 + ( ( unicode >> 24 ) & 0x3F ) );
+	*(*c++) = (LJ_char)( 0x80 + ( ( unicode >> 18 ) & 0x3F ) );
+	*(*c++) = (LJ_char)( 0x80 + ( ( unicode >> 12 ) & 0x3F ) );
+	*(*c++) = (LJ_char)( 0x80 + ( ( unicode >> 6 ) & 0x3F ) );
+	*(*c++) = (LJ_char)( 0x80 + ( unicode & 0x3F ) );
 	return 6;
 }
 
@@ -1350,13 +1313,13 @@ LJ_bool LJ_strSkipString( const LJ_char** string, const LJ_char* const stringToS
 	LJ_int index = 0;
 	while ( stringToSkip[index] != 0 )
 	{
-		if ( (*string)[index] != stringToSkip[index] )
+		if ( *string[index] != stringToSkip[index] )
 		{
 			return LJ_FALSE;
 		}
 		index++;
 	}
-	(*string) += index;
+	*string += index;
 	return LJ_TRUE;
 }
 
@@ -1365,13 +1328,13 @@ LJ_bool LJ_strSkipStringIgnoreCase( const LJ_char** string, const LJ_char* const
 	LJ_int index = 0;
 	while ( stringToSkip[index] != 0 )
 	{
-		if ( LJ_strToUpperChar( (*string)[index] ) != LJ_strToUpperChar( stringToSkip[index] ) )
+		if ( LJ_strToUpperChar( *string[index] ) != LJ_strToUpperChar( stringToSkip[index] ) )
 		{
 			return LJ_FALSE;
 		}
 		index++;
 	}
-	(*string) += index;
+	*string += index;
 	return LJ_TRUE;
 }
 

@@ -1,7 +1,7 @@
 #! /bin/make
 
 PROJECT:=BGame
-EXE_NAME:=bgame
+EXE_NAME=$(PROJECT)
 
-include ../Makefile
+include ../makefile.project
 

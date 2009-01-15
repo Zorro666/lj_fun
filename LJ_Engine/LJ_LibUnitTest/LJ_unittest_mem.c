@@ -59,7 +59,7 @@ LJ_UNITTEST_FUNCTION_START( mem, LJ_memCopy )
 	LJ_int badIndex = -1;
 	for ( i = 0; i < LJ_MEM_TEST_SIZE; i++ )
 	{
-		buffer1[i] = ( i & 0xFF );
+		buffer1[i] = (LJ_char)( i & 0xFF );
 	}
 	LJ_memCopy( buffer2, buffer1, LJ_MEM_TEST_SIZE );
 	for ( i = 0; i < LJ_MEM_TEST_SIZE; i++ )

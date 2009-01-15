@@ -13,14 +13,7 @@ typedef struct LJ_debugVarDef_s
     void* dataPtr;
 } LJ_debugVarDef;
 
-typedef struct LJ_debugVarValue_s
-{
-	union 
-	{
-		LJ_int iVal;
-		LJ_float fVal;
-	};
-} LJ_debugVarValue;
+typedef LJ_floatIntUnion LJ_debugVarValue;
 
 #define LJ_DEBUG_VAR_MAX_NAME_LENGTH (256)
 #define LJ_DEBUG_VAR_MAX_DEPTH (16)
@@ -53,15 +46,15 @@ void LJ_debugVarGetValue( const LJ_debugVarDef* const var, LJ_debugVarValue* con
 {
 	if ( var->flags & LJ_DEBUG_VAR_BOOL )
 	{
-		LJ_memCopy( &value->iVal, var->dataPtr, sizeof( LJ_int ) );
+		LJ_memCopy( &value->data.intVal, var->dataPtr, sizeof( LJ_int ) );
 	}
 	else if ( var->flags & LJ_DEBUG_VAR_INT )
 	{
-		LJ_memCopy( &value->iVal, var->dataPtr, sizeof( LJ_int ) );
+		LJ_memCopy( &value->data.intVal, var->dataPtr, sizeof( LJ_int ) );
 	}
 	else if ( var->flags & LJ_DEBUG_VAR_FLOAT )
 	{
-		LJ_memCopy( &value->fVal, var->dataPtr, sizeof( LJ_float ) );
+		LJ_memCopy( &value->data.floatVal, var->dataPtr, sizeof( LJ_float ) );
 	}
 }
 
@@ -69,15 +62,15 @@ void LJ_debugVarSetValue( const LJ_debugVarValue* const value, LJ_debugVarDef* c
 {
 	if ( var->flags & LJ_DEBUG_VAR_BOOL )
 	{
-		LJ_memCopy( var->dataPtr, &value->iVal, sizeof( LJ_int ) );
+		LJ_memCopy( var->dataPtr, &value->data.intVal, sizeof( LJ_int ) );
 	}
 	else if ( var->flags & LJ_DEBUG_VAR_INT )
 	{
-		LJ_memCopy( var->dataPtr, &value->iVal, sizeof( LJ_int ) );
+		LJ_memCopy( var->dataPtr, &value->data.intVal, sizeof( LJ_int ) );
 	}
 	else if ( var->flags & LJ_DEBUG_VAR_FLOAT )
 	{
-		LJ_memCopy( var->dataPtr, &value->fVal, sizeof( LJ_float ) );
+		LJ_memCopy( var->dataPtr, &value->data.floatVal, sizeof( LJ_float ) );
 	}
 }
 
@@ -85,15 +78,15 @@ void LJ_debugVarPrintValue( const LJ_int flags, const LJ_debugVarValue* const va
 {
 	if ( flags & LJ_DEBUG_VAR_BOOL )
 	{
-		LJ_strSPrint( output, 16, "%s", ( value->iVal == 1 ) ? "TRUE" : "FALSE" );
+		LJ_strSPrint( output, 16, "%s", ( value->data.intVal == 1 ) ? "TRUE" : "FALSE" );
 	}
 	else if ( flags & LJ_DEBUG_VAR_INT )
 	{
-		LJ_strSPrint( output, 16, "%d", value->iVal );
+		LJ_strSPrint( output, 16, "%d", value->data.intVal );
 	}
 	else if ( flags & LJ_DEBUG_VAR_FLOAT )
 	{
-		LJ_strSPrint( output, 16, "%f", value->fVal );
+		LJ_strSPrint( output, 16, "%f", value->data.floatVal );
 	}
 }
 
@@ -191,15 +184,15 @@ void LJ_debugVarAlterValue( const LJ_int increment, LJ_debugVarDef* const var )
 	if ( var->flags & LJ_DEBUG_VAR_BOOL )
 	{
 		// For bool's just change true<->false
-		variableValue.iVal ^= 1;
+		variableValue.data.intVal ^= 1;
 	}
 	else if ( var->flags & LJ_DEBUG_VAR_INT )
 	{
-		variableValue.iVal += increment * g_intVariableAlterAmount;
+		variableValue.data.intVal += increment * g_intVariableAlterAmount;
 	}
 	else if ( var->flags & LJ_DEBUG_VAR_FLOAT )
 	{
-		variableValue.fVal += (LJ_float)increment * g_floatVariableAlterAmount;
+		variableValue.data.floatVal += (LJ_float)increment * g_floatVariableAlterAmount;
 	}
 	LJ_debugVarSetValue( &variableValue, var );
 }
