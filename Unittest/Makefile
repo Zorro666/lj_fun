@@ -1,7 +1,7 @@
 #! /bin/make
 
 PROJECT:=Unittest
-EXE_NAME:=unittest
+EXE_NAME:=$(shell echo $(PROJECT) | tr "[:upper:]" [":lower:]" )
 
-include ../Makefile
+include ../makefile.project
 
