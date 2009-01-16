@@ -4,7 +4,7 @@
 #include "LJ_output.h"
 #include "LJ_assert.h"
 
-// For atoi, atof
+// For atof
 #include <stdlib.h>
 
 //*******************************************************************
@@ -132,15 +132,15 @@ static LJ_uint LJ_strAppendString( LJ_char* const to, const LJ_uint currentLengt
 }
 
 static LJ_uint LJ_strAppendNumber( LJ_char* const to, const LJ_uint currentLength, const LJ_uint maxLen, 
-							 	   const LJ_long value, const LJ_strFormatFlags* const flags )
+							 	   const LJ_long value, const LJ_strFormatFlags* const flags, const int base )
 {
 	// temporary output buffer
-	LJ_char output[16];
+	LJ_char output[32];
 	LJ_uint index = 0;
 
 	LJ_ulong mantissa;
 
-	if (value < 0)
+	if ( value < 0 )
 	{
 		// -ve number; make +ve and output sign
 		mantissa = -value;
@@ -157,6 +157,10 @@ static LJ_uint LJ_strAppendNumber( LJ_char* const to, const LJ_uint currentLengt
 			output[index++] = '+';
 		}
 	}
+	if ( base == 8 )
+	{
+		output[index++] = '0';
+	}
 
 	if ( mantissa == 0 )
 	{
@@ -166,14 +170,13 @@ static LJ_uint LJ_strAppendNumber( LJ_char* const to, const LJ_uint currentLengt
 	else
 	{
 		// set divider to maximum digit possible
-		// LJ_uint divider = 1000000000;
 		//LJ_ulong divider = 1000000000000000000ULL;
-		LJ_ulong divider = 1000000000UL;
+		LJ_ulong divider = ( base == 10 ) ? 1000000000UL : 1073741824UL;
 
 		// find first digit
 		while ( divider > mantissa )
 		{
-			divider /= 10;
+			divider /= base;
 		}
 
 		// output digits
@@ -184,7 +187,7 @@ static LJ_uint LJ_strAppendNumber( LJ_char* const to, const LJ_uint currentLengt
 			output[index++] = '0' + (LJ_char)number;
 
 			mantissa -= ( number * divider );
-			divider /= 10;
+			divider /= base;
 		}
 	}
 
@@ -600,13 +603,20 @@ LJ_int LJ_strVSPrint( LJ_char* const to, const LJ_uint maxLen, const LJ_char* co
 					break;
 				}
 
+				case 'o':
+					{
+						// octal integer
+						const LJ_long value = ( flags.longSize == LJ_FALSE ) ? LJ_VA_ARG( *list, LJ_int ) : LJ_VA_ARG( *list, LJ_long );
+						length = LJ_strAppendNumber( to, length, maxLength, value, &flags, 8 );
+						break;
+					}
 				case 'd':
 				case 'i':
 				case 'u':
 					{
-						// integer
+						// decimal integer
 						const LJ_long value = ( flags.longSize == LJ_FALSE ) ? LJ_VA_ARG( *list, LJ_int ) : LJ_VA_ARG( *list, LJ_long );
-						length = LJ_strAppendNumber( to, length, maxLength, value, &flags );
+						length = LJ_strAppendNumber( to, length, maxLength, value, &flags, 10 );
 						break;
 					}
 
@@ -833,7 +843,92 @@ LJ_float LJ_strToFloat( const LJ_char* const string )
 
 LJ_int LJ_strToInt( const LJ_char* const string )
 {
-	return (LJ_int)( atoi( string ) );
+	// Algorithm is:
+	// 1. eat white space
+	// 2. + or -
+	// 3. 0x -> means hex
+	// 4. 0 -> means octal
+	// 5. otherwise decimal
+	// 6. convert string -> number of correct base until a non-valid digit is found
+
+	LJ_int value = 0;
+	LJ_int base = 0;
+	LJ_int maxDigit;
+	LJ_int maxAlpha;
+	LJ_int negMult = +1;
+	LJ_bool validChar = LJ_FALSE;
+
+	// 1. eat white space
+	const LJ_char* stringBuffer = LJ_strEatWhiteSpace( string );
+
+	// 2. + or -
+	if ( stringBuffer[0] == '-' )
+	{
+		negMult = -1;
+		stringBuffer++;
+	}
+	else if ( stringBuffer[0] == '+' )
+	{
+		negMult = +1;
+		stringBuffer++;
+	}
+
+	// 3. 0x -> means hex
+	if ( ( stringBuffer[0] == '0' ) && ( stringBuffer[1] == 'x' ) )
+	{
+		base = 16;
+		stringBuffer += 2;
+	}
+	// 4. 0 -> means octal
+	else if ( stringBuffer[0] == '0' )
+	{
+		base = 8;
+		stringBuffer++;
+	}
+	// 5. otherwise decimal
+	else
+	{
+		base = 10;
+	}
+
+	maxDigit = ( base > 9 ) ? 9 : base;
+	maxAlpha = ( base < 11 ) ? -1 : ( base - 11 );
+
+	// 6. convert string -> number of correct base until a non-valid digit is found
+	do 
+	{
+		int charValue = -1;
+		const LJ_char c = stringBuffer[0];
+		// '0' -> '9'
+		int digitValue = c - '0';
+		// 'A' -> 'Z'
+		int alphaValue = LJ_strToUpperChar( c ) - 'A';
+
+		validChar = LJ_FALSE;
+		if ( ( digitValue < 0 ) || ( digitValue > maxDigit ) )
+		{
+			digitValue = -1;
+		}
+		if ( ( alphaValue < 0 ) || ( alphaValue > maxAlpha ) )
+		{
+			alphaValue = -1;
+		}
+		if ( ( digitValue >= 0 ) || ( alphaValue >= 0 ) )
+		{
+			charValue = ( digitValue >= 0 ) ? digitValue : ( alphaValue + 10 );
+		}
+
+		if ( ( charValue >= 0 ) && ( charValue < base ) )
+		{
+			value *= base;
+			value += charValue;
+			validChar = LJ_TRUE;
+			stringBuffer++;
+		}
+	} while ( validChar == LJ_TRUE );
+
+	value *= negMult;
+	return value;
 }
 
 LJ_bool LJ_strIsSameIgnoreCase( const LJ_char* const string, const LJ_char* const compare )
@@ -992,6 +1087,11 @@ LJ_bool LJ_strIsInt( const LJ_char* const string, LJ_int* const val )
 	if ( string[0] == '-' )
 	{
 		isNegative = LJ_TRUE;
+		index++;
+	}
+	else if ( string[0] == '+' )
+	{
+		isNegative = LJ_FALSE;
 		index++;
 	}
 
@@ -1558,6 +1658,17 @@ LJ_bool LJ_strRemoveAfterLastSlash( LJ_char* const string )
 LJ_bool LJ_strHasSlash(const LJ_char* const string)
 {
 	return ( LJ_strFindFirstSlash( string ) != LJ_NULL );
+}
+
+// remove the whitespace from the start of the string and return the ptr 
+LJ_char* LJ_strEatWhiteSpace( const LJ_char* const string )
+{
+	LJ_char* returnString = (LJ_char*)string;
+	while ( LJ_strIsWhiteSpace( returnString[0] ) )
+	{
+		returnString++;
+	}
+	return returnString;
 }
 
 

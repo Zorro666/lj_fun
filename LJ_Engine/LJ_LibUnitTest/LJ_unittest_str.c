@@ -133,11 +133,21 @@ LJ_UNITTEST_FUNCTION_START( str, convert )
 
 	LJ_UNITTEST_EQUALS( LJ_strToLowerChar( 'A' ), 'a' );
 	LJ_UNITTEST_FLOAT_EQUALS( LJ_strToFloat( "0.123456" ), 0.123456f, 1.0e-8f );
-	LJ_UNITTEST_EQUALS( LJ_strToInt( "123456" ), 123456 );
-	LJ_UNITTEST_EQUALS( LJ_strToInt( "-123456" ), -123456 );
+
+	LJ_UNITTEST_EQUALS( LJ_strToInt( "    123456" ), +123456 );
+	LJ_UNITTEST_EQUALS( LJ_strToInt( "    +123456" ), +123456 );
+	LJ_UNITTEST_EQUALS( LJ_strToInt( "    -123456" ), -123456 );
+	LJ_UNITTEST_EQUALS( LJ_strToInt( "    +0xABCD" ), +0xABCD );
+	LJ_UNITTEST_EQUALS( LJ_strToInt( "    -0xABCD" ), -0xABCD );
+	LJ_UNITTEST_EQUALS( LJ_strToInt( "    0123" ), 0123 );
+	LJ_UNITTEST_EQUALS( LJ_strToInt( "    -0123" ), -0123 );
+	LJ_UNITTEST_EQUALS( LJ_strToInt( "-0123" ), -0123 );
+	LJ_UNITTEST_EQUALS( LJ_strToInt( "   +03201" ), 03201 );
+
 	LJ_UNITTEST_TRUE( LJ_strIsHex( "0xDEADBEAF", &hexVal ) );
 	LJ_UNITTEST_EQUALS( hexVal, 0xDEADBEAF );
 	LJ_UNITTEST_TRUE( LJ_strIsInt( "123456", &intVal ) );
+	LJ_UNITTEST_TRUE( LJ_strIsInt( "+123456", &intVal ) );
 	LJ_UNITTEST_EQUALS( intVal, 123456 );
 	LJ_UNITTEST_TRUE( LJ_strIsInt( "-123456", &intVal ) );
 	LJ_UNITTEST_EQUALS( intVal, -123456 );
@@ -258,12 +268,22 @@ LJ_UNITTEST_FUNCTION_END( str, misc )
 LJ_UNITTEST_FUNCTION_START( str, character )
 {
 	LJ_char buffer1[LJ_UNITTEST_STR_MAX_LEN];
+	LJ_char* bufferPtr1;
 
 	LJ_COMPILE_TIME_ASSERT( LJ_UNITTEST_STR_MAX_LEN > 21 );
 
 	// The LJ_mem tests have already been done so I can trust the LJ_mem functions
 	LJ_memZero( buffer1, LJ_UNITTEST_STR_MAX_LEN );
 	LJ_strCopy( buffer1, "jake" );
+
+	LJ_UNITTEST_TRUE( LJ_strIsWhiteSpace( ' ' ) );
+	LJ_UNITTEST_TRUE( LJ_strIsWhiteSpace( '\t' ) );
+	LJ_UNITTEST_TRUE( LJ_strIsWhiteSpace( '\n' ) );
+	LJ_UNITTEST_TRUE( LJ_strIsWhiteSpace( '\r' ) );
+	LJ_UNITTEST_TRUE( ( LJ_strIsWhiteSpace( 'A' ) == LJ_FALSE ) );
+	LJ_UNITTEST_TRUE( ( LJ_strIsWhiteSpace( '0' ) == LJ_FALSE ) );
+	LJ_UNITTEST_TRUE( ( LJ_strIsWhiteSpace( 'a' ) == LJ_FALSE ) );
+	LJ_UNITTEST_TRUE( ( LJ_strIsWhiteSpace( 'g' ) == LJ_FALSE ) );
 
 	LJ_UNITTEST_TRUE( LJ_strIsSlash( '/' ) );
 	LJ_UNITTEST_TRUE( LJ_strIsSlash( '\\' ) );
@@ -294,6 +314,14 @@ LJ_UNITTEST_FUNCTION_START( str, character )
 	LJ_UNITTEST_TRUE( ( LJ_strGetLastChar( buffer1 ) == '*' ) );
 	LJ_strAppendChar( buffer1, '@' );
 	LJ_UNITTEST_TRUE( ( LJ_strGetLastChar( buffer1 ) == '@' ) );
+
+	LJ_strCopy( buffer1, "OhNoJake" );
+	bufferPtr1 = LJ_strEatWhiteSpace( buffer1 );
+	LJ_UNITTEST_TRUE( ( LJ_strIsSame( bufferPtr1, "OhNoJake" ) ) );
+
+	LJ_strCopy( buffer1, "  	\n\r	OhNo Jake" );
+	bufferPtr1 = LJ_strEatWhiteSpace( buffer1 );
+	LJ_UNITTEST_TRUE( ( LJ_strIsSame( bufferPtr1, "OhNo Jake" ) ) );
 }
 LJ_UNITTEST_FUNCTION_END( str, character )
 

@@ -64,12 +64,13 @@ LJ_bool LJ_strSkipString( const LJ_char** string, const LJ_char* const stringToS
 LJ_bool LJ_strSkipStringIgnoreCase( const LJ_char** string, const LJ_char* const stringToSkip );
 
 //character comparisons
+LJ_EXTERN_INLINE LJ_bool LJ_strIsWhiteSpace( const LJ_char c );			// is a whitespace character <SPACE> or <TAB> or <CR> or <LF>
 LJ_EXTERN_INLINE LJ_bool LJ_strIsSlash( const LJ_char c );				// is either slash?
 LJ_EXTERN_INLINE LJ_bool LJ_strIsAlpha( const LJ_char c );				// is a-z or A-Z
 LJ_EXTERN_INLINE LJ_bool LJ_strIsUpper( const LJ_char c );				// is uppercase A-Z?
 LJ_EXTERN_INLINE LJ_bool LJ_strIsLower( const LJ_char c );				// is lowercase a-z?
 LJ_EXTERN_INLINE LJ_bool LJ_strIsDigit( const LJ_char c );				// is 0-9
-LJ_EXTERN_INLINE LJ_bool LJ_strIsHexDigit( const LJ_char c );				// is 0-9 or A-F
+LJ_EXTERN_INLINE LJ_bool LJ_strIsHexDigit( const LJ_char c );			// is 0-9 or A-F
 
 LJ_char LJ_strGetLastChar( const LJ_char* const string );
 void LJ_strSetLastChar( LJ_char* const string, const LJ_char c );
@@ -104,44 +105,54 @@ LJ_bool LJ_strRemoveAfterLastSlash( LJ_char* const string );
 // does the string contain a slash
 LJ_bool LJ_strHasSlash( const LJ_char* const string );
 
+// remove the whitespace from the start of the string and return the ptr 
+LJ_char* LJ_strEatWhiteSpace( const LJ_char* const string );
+
 /////////////////////////////////////////////////////////////////////////////////////////////////
 //
 // Inline functions
 //
 /////////////////////////////////////////////////////////////////////////////////////////////////
 
+// is a whitespace character <SPACE> or <TAB> or <CR> or <LF>
+LJ_EXTERN_INLINE LJ_bool LJ_strIsWhiteSpace( const LJ_char c )
+{
+	return ( ( c == ' ' ) || ( c == '\t' ) ||
+		     ( c == '\n' ) || ( c == '\r' ) );
+}
+
 // is either slash?
 LJ_EXTERN_INLINE LJ_bool LJ_strIsSlash( const LJ_char c )
 {
-	return( (c == '\\') || (c == '/') );
+	return ( ( c == '\\' ) || ( c == '/' ) );
 }
 
 LJ_EXTERN_INLINE LJ_bool LJ_strIsAlpha( const LJ_char c )
 {
-	return( ((c >= 'A') && (c <= 'Z')) ||
-			((c >= 'a') && (c <= 'z')) );
+	return ( ( ( c >= 'A' ) && ( c <= 'Z' ) ) ||
+			 ( ( c >= 'a' ) && ( c <= 'z' ) ) );
 }
 
 LJ_EXTERN_INLINE LJ_bool LJ_strIsUpper( const LJ_char c )
 {
-	return( (c >= 'A') && (c <= 'Z') );
+	return ( ( c >= 'A') && ( c <= 'Z' ) );
 }
 
 LJ_EXTERN_INLINE LJ_bool LJ_strIsLower( const LJ_char c )
 {
-	return( (c >= 'a') && (c <= 'z') );
+	return ( ( c >= 'a') && ( c <= 'z' ) );
 }
 
 LJ_EXTERN_INLINE LJ_bool LJ_strIsDigit( const LJ_char c )
 {
-	return( (c >= '0') && (c <= '9') );
+	return ( ( c >= '0') && ( c <= '9' ) );
 }
 
 LJ_EXTERN_INLINE LJ_bool LJ_strIsHexDigit( const LJ_char c )
 {
-	return( ((c >= '0') && (c <= '9')) ||
-			((c >= 'A') && (c <= 'F')) ||
-			((c >= 'a') && (c <= 'f')) );
+	return ( ( ( c >= '0' ) && ( c <= '9' ) ) ||
+			 ( ( c >= 'A' ) && ( c <= 'F' ) ) ||
+			 ( ( c >= 'a' ) && ( c <= 'f' ) ) );
 }
 
 #endif // #ifndef LJ_STR_H
