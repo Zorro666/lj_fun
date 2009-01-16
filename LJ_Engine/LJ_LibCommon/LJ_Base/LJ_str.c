@@ -1218,7 +1218,7 @@ LJ_uint LJ_strWriteUTF8( LJ_char** c, const LJ_uint unicode )
 	if ( unicode < 0x80 )
 	{
 		// simple ASCII character
-		*(*c) = unicode;
+		*(*c) = (LJ_char)( unicode );
 		(*c)++;
 		return 1;
 	}
@@ -1226,9 +1226,9 @@ LJ_uint LJ_strWriteUTF8( LJ_char** c, const LJ_uint unicode )
 	if ( unicode < 0x800 )
 	{
 		// 2 bytes
-		*(*c) = 0xC0 + ( ( unicode >> 6 ) & 0x1F );
+		*(*c) = (LJ_char)( 0xC0 + ( ( unicode >> 6 ) & 0x1F ) );
 		(*c)++;
-		*(*c) = 0x80 + ( unicode & 0x3F );
+		*(*c) = (LJ_char)( 0x80 + ( unicode & 0x3F ) );
 		(*c)++;
 		return 2;
 	}
@@ -1236,11 +1236,11 @@ LJ_uint LJ_strWriteUTF8( LJ_char** c, const LJ_uint unicode )
 	if ( unicode < 0x10000 )
 	{
 		// 3 bytes
-		*(*c) = 0xE0 + ( ( unicode >> 12 ) & 0x0F );
+		*(*c) = (LJ_char)( 0xE0 + ( ( unicode >> 12 ) & 0x0F ) );
 		(*c)++;
-		*(*c) = 0x80 + ( ( unicode >> 6 ) & 0x3F );
+		*(*c) = (LJ_char)( 0x80 + ( ( unicode >> 6 ) & 0x3F ) );
 		(*c)++;
-		*(*c) = 0x80 + ( unicode & 0x3F );
+		*(*c) = (LJ_char)( 0x80 + ( unicode & 0x3F ) );
 		(*c)++;
 		return 3;
 	}
@@ -1248,13 +1248,13 @@ LJ_uint LJ_strWriteUTF8( LJ_char** c, const LJ_uint unicode )
 	if ( unicode < 0x200000 )
 	{
 		// 4 bytes
-		*(*c) = 0xF0 + ( ( unicode >> 18 ) & 0x07 );
+		*(*c) = (LJ_char)( 0xF0 + ( ( unicode >> 18 ) & 0x07 ) );
 		(*c)++;
-		*(*c) = 0x80 + ( ( unicode >> 12 ) & 0x3F );
+		*(*c) = (LJ_char)( 0x80 + ( ( unicode >> 12 ) & 0x3F ) );
 		(*c)++;
-		*(*c) = 0x80 + ( ( unicode >> 6 ) & 0x3F );
+		*(*c) = (LJ_char)( 0x80 + ( ( unicode >> 6 ) & 0x3F ) );
 		(*c)++;
-		*(*c) = 0x80 + ( unicode & 0x3F );
+		*(*c) = (LJ_char)( 0x80 + ( unicode & 0x3F ) );
 		(*c)++;
 		return 4;
 	}
@@ -1262,31 +1262,31 @@ LJ_uint LJ_strWriteUTF8( LJ_char** c, const LJ_uint unicode )
 	if ( unicode < 0x4000000 )
 	{
 		// 5 bytes
-		*(*c) = 0xF8 + ( ( unicode >> 24 ) & 0x03 );
+		*(*c) = (LJ_char)( 0xF8 + ( ( unicode >> 24 ) & 0x03 ) );
 		(*c)++;
-		*(*c) = 0x80 + ( ( unicode >> 18 ) & 0x3F );
+		*(*c) = (LJ_char)( 0x80 + ( ( unicode >> 18 ) & 0x3F ) );
 		(*c)++;
-		*(*c) = 0x80 + ( ( unicode >> 12 ) & 0x3F );
+		*(*c) = (LJ_char)( 0x80 + ( ( unicode >> 12 ) & 0x3F ) );
 		(*c)++;
-		*(*c) = 0x80 + ( ( unicode >> 6 ) & 0x3F );
+		*(*c) = (LJ_char)( 0x80 + ( ( unicode >> 6 ) & 0x3F ) );
 		(*c)++;
-		*(*c) = 0x80 + ( unicode & 0x3F );
+		*(*c) = (LJ_char)( 0x80 + ( unicode & 0x3F ) );
 		(*c)++;
 		return 5;
 	}
 
 	// 6 bytes
-	*(*c) = 0xFC + ( ( unicode >> 30 ) & 0x01 );
+	*(*c) = (LJ_char)( 0xFC + ( ( unicode >> 30 ) & 0x01 ) );
 	(*c)++;
-	*(*c) = 0x80 + ( ( unicode >> 24 ) & 0x3F );
+	*(*c) = (LJ_char)( 0x80 + ( ( unicode >> 24 ) & 0x3F ) );
 	(*c)++;
-	*(*c) = 0x80 + ( ( unicode >> 18 ) & 0x3F );
+	*(*c) = (LJ_char)( 0x80 + ( ( unicode >> 18 ) & 0x3F ) );
 	(*c)++;
-	*(*c) = 0x80 + ( ( unicode >> 12 ) & 0x3F );
+	*(*c) = (LJ_char)( 0x80 + ( ( unicode >> 12 ) & 0x3F ) );
 	(*c)++;
-	*(*c) = 0x80 + ( ( unicode >> 6 ) & 0x3F );
+	*(*c) = (LJ_char)( 0x80 + ( ( unicode >> 6 ) & 0x3F ) );
 	(*c)++;
-	*(*c) = 0x80 + ( unicode & 0x3F );
+	*(*c) = (LJ_char)( 0x80 + ( unicode & 0x3F ) );
 	(*c)++;
 	return 6;
 }

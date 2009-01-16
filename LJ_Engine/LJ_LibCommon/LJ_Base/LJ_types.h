@@ -120,7 +120,7 @@ typedef char* LJ_valist;
 // Compiler dependent preprocessor macros
 #define LJ_SOURCE_FILE 		__FILE__
 #define LJ_SOURCE_LINE 		__LINE__
-#define LJ_SOURCE_FUNCTION 	__PRETTY_FUNCTION__
+#define LJ_SOURCE_FUNCTION 	__FUNCTION__
 
 #define LJ_EXTERN_INLINE extern __inline
 

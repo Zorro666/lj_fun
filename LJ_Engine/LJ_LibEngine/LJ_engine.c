@@ -304,7 +304,7 @@ void LJ_engineInputUpdate( void )
 	}
 	if ( LJ_inputMouseButtonClicked( LJ_MOUSE_BUTTON_RIGHT ) )
 	{
-		LJ_outputPrintDebug( ( "Right button clicked\n" ) );
+		LJ_outputPrintDebug( ( "Right button clicked - outputDebug\n" ) );
 		s_debugVarEnabled ^= 1;
 	}
 /*
