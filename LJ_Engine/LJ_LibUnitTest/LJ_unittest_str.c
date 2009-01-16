@@ -132,7 +132,7 @@ LJ_UNITTEST_FUNCTION_START( str, convert )
 	LJ_UNITTEST_EQUALS( LJ_strToLowerChar( 'A' ), 'a' );
 
 	LJ_UNITTEST_EQUALS( LJ_strToLowerChar( 'A' ), 'a' );
-	LJ_UNITTEST_FLOAT_EQUALS( LJ_strToFloat( "0.123456" ), 0.123456f, 0.0f );
+	LJ_UNITTEST_FLOAT_EQUALS( LJ_strToFloat( "0.123456" ), 0.123456f, 1.0e-8f );
 	LJ_UNITTEST_EQUALS( LJ_strToInt( "123456" ), 123456 );
 	LJ_UNITTEST_EQUALS( LJ_strToInt( "-123456" ), -123456 );
 	LJ_UNITTEST_TRUE( LJ_strIsHex( "0xDEADBEAF", &hexVal ) );
