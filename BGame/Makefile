@@ -1,7 +1,7 @@
 #! /bin/make
 
 PROJECT:=BGame
-EXE_NAME:=bgame
+EXE_NAME:=$(shell echo $(PROJECT) | tr "[:upper:]" [":lower:]" )
 
-include ../Makefile
+include ../makefile.project
 

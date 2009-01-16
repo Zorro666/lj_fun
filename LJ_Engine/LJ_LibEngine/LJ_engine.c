@@ -7,8 +7,8 @@
 #include "LJ_LibInput/LJ_LibInput.h"
 #include "LJ_LibUnitTest/LJ_LibUnittest.h"
 
-#include <SDL/SDL.h>
-#include <SDL/SDL_opengl.h>
+#include <SDL.h>
+#include <SDL_opengl.h>
 #include <GL/gl.h>
 #include <GL/glu.h>
 #include <GL/glut.h>
@@ -97,6 +97,11 @@ void LJ_engineShutdown( void )
 
 void LJ_engineTick( void )
 {
+#if PLATFORM_PC
+	Sleep( s_sleepTime );
+#endif // #if PLATFORM_PC
+
+#if PLATFORM_LINUX
 	struct timespec rqtp;
 	struct timespec rmtp;
 #define MILLISECONDS (1000*1000)
@@ -104,6 +109,7 @@ void LJ_engineTick( void )
 	rqtp.tv_nsec = s_sleepTime * MILLISECONDS;
 #undef MILLISECONDS
 	nanosleep( &rqtp, &rmtp );
+#endif	// #if PLATFORM_LINUX
 
 	// Handle mouse and keyboard input
 	LJ_inputTick();

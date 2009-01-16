@@ -8,7 +8,7 @@
 #include "LJ_internal_key.h"
 #include "LJ_internal_mouse.h"
 
-#include <SDL/SDL.h>
+#include <SDL.h>
 
 ///////////////////////////////////////////////////////////////////////////////////
 //

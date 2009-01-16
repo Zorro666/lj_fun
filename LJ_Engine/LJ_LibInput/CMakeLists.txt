@@ -5,5 +5,5 @@ INCLUDE_DIRECTORIES( ${GLOBAL_INCLUDE_DIRECTORIES} )
 SET( CMAKE_VERBOSE_MAKEFILE OFF )
 
 # list all source files here
-ADD_LIBRARY( LJ_LibInput SHARED LJ_input.c LJ_key.c LJ_mouse.c )
+ADD_LIBRARY( LJ_LibInput STATIC LJ_input.c LJ_key.c LJ_mouse.c )
 

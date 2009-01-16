@@ -247,11 +247,11 @@ static LJ_uint LJ_strAppendFloat( LJ_char* const to, const LJ_uint currentLength
 	LJ_ulong mantissa;
 
 	// get LJ_float as its binary representation
-	LJ_floatInt noAliasingTemp;
+	LJ_floatIntUnion noAliasingTemp;
 	LJ_uint binary;
 
-	noAliasingTemp.floatVal = value;
-	binary = noAliasingTemp.uintVal;
+	noAliasingTemp.data.floatVal = value;
+	binary = noAliasingTemp.data.uintVal;
 
 	// extract component parts
 	sign = ( binary & 0x80000000 );
@@ -331,7 +331,7 @@ static LJ_uint LJ_strAppendFloat( LJ_char* const to, const LJ_uint currentLength
 
 	while ( digit > endDigit )
 	{
-		const LJ_uint number = mantissa / DIV_DECIMAL;
+		const LJ_uint number = (LJ_uint)( mantissa / DIV_DECIMAL );
 
 		// output number
 		output[index++] = '0' + (LJ_char)number;
@@ -370,7 +370,7 @@ static LJ_uint LJ_strAppendBinary( LJ_char* const to, const LJ_uint currentLengt
 		// look for the first non-zero character to start doing output (unless doing default output)
 		if ( bit != 0 || doOutput == LJ_TRUE )
 		{
-			output[index++] = '0' + bit;
+			output[index++] = (LJ_char)( '0' + bit );
 			doOutput = LJ_TRUE;
 		}
 	}

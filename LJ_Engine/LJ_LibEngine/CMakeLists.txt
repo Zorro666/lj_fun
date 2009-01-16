@@ -5,5 +5,5 @@ INCLUDE_DIRECTORIES( ${GLOBAL_INCLUDE_DIRECTORIES} )
 SET( CMAKE_VERBOSE_MAKEFILE OFF )
 
 #list all source files here
-ADD_LIBRARY( LJ_LibEngine SHARED LJ_engine.c )
+ADD_LIBRARY( LJ_LibEngine STATIC LJ_engine.c )
 
