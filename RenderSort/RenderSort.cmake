@@ -1,30 +1,15 @@
 CMAKE_MINIMUM_REQUIRED( VERSION 2.6 )
-
 PROJECT( RENDERSORT )
 
-Find_Package ( SDL REQUIRED )
-Find_Package ( SDL_image REQUIRED ) # if using SDL_image
+INCLUDE ( LJ_Engine/LJ_ROOT.cmake )
 
-# Workaround for the non-working REQUIRED flag
-if ( NOT SDL_FOUND )
-   message ( FATAL_ERROR "SDL not found!" )
-endif ( NOT SDL_FOUND )
-
-#Global definitions
-SET( GLOBAL_CFLAGS -Wall -Werror -Wdeclaration-after-statement )
-SET( GLOBAL_DEFINITIONS ${GLOBAL_CFLAGS} ${CONFIG_CFLAGS} )
-
-SET( GLOBAL_INCLUDE_DIRECTORIES )
 SET( GLOBAL_INCLUDE_DIRECTORIES ${GLOBAL_INCLUDE_DIRECTORIES} ${RENDERSORT_SOURCE_DIR}/LJ_Engine ${RENDERSORT_SOURCE_DIR}/RenderSort )
-
-SET( GLOBAL_LINK_DIRECTORIES )
-SET( GLOBAL_LINK_DIRECTORIES ${GLOBAL_LINK_DIRECTORIES} )
-
-#if you don't want the full compiler output, remove the following line
+ 
+# if you don't want the full compiler output, remove the following line
 SET( CMAKE_VERBOSE_MAKEFILE OFF )
 
-ADD_SUBDIRECTORY( LJ_Engine/LJ_LibEngine )
 ADD_SUBDIRECTORY( LJ_Engine/LJ_LibCommon )
 ADD_SUBDIRECTORY( LJ_Engine/LJ_LibDebug )
 ADD_SUBDIRECTORY( LJ_Engine/LJ_LibInput )
-ADD_SUBDIRECTORY( RenderSort )
+ADD_SUBDIRECTORY( LJ_Engine/LJ_LibEngine )
+ADD_SUBDIRECTORY( RenderSort ) 

@@ -209,24 +209,6 @@ void init()
 
 }
 
-void specialKeyPressed(int key, int x, int y)
-{
-	const int modKey = glutGetModifiers(); 
-	int fastKey = 0;
-	if ( modKey == GLUT_ACTIVE_CTRL )
-	{
-		fastKey = LJ_DEBUG_VAR_INPUT_FAST;
-	}
-	switch ( key )
-   	{
-		default:
-		{
-			printf( "Unhandled key %d 0x%X\n", key, key );
-			break;
-		}
-	}
-}
-
 void keyboard( SDL_KeyboardEvent* const keyEvent )
 {
 	const SDLMod modifier = keyEvent->keysym.mod;
@@ -333,6 +315,7 @@ void WindowInactive( void )
  
 void KeyUp( SDL_KeyboardEvent* const keyEvent )
 {
+	(void)(keyEvent);
 }
  
 void KeyDown( SDL_KeyboardEvent* const keyEvent )
@@ -342,14 +325,28 @@ void KeyDown( SDL_KeyboardEvent* const keyEvent )
  
 void MouseMoved( const int x, const int y, const int relX, const int relY )
 {
+	(void)( x );
+	(void)( y );
+	(void)( relX );
+	(void)( relY );
 }
  
 void MouseButtonUp( const int button, const int x, const int y, const int relX, const int relY )
 {
+	(void)( button );
+	(void)( x );
+	(void)( y );
+	(void)( relX );
+	(void)( relY );
 }
 
 void MouseButtonDown( const int button, const int x, const int y, const int relX, const int relY )
 {
+	(void)( button );
+	(void)( x );
+	(void)( y );
+	(void)( relX );
+	(void)( relY );
 }
  
 void HandleInput( void )

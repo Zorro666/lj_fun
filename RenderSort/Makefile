@@ -1,7 +1,7 @@
 #! /bin/make
 
 PROJECT:=RenderSort
-EXE_NAME:=renderSort
+EXE_NAME:=$(shell echo $(PROJECT) | tr "[:upper:]" [":lower:]" )
 
-include ../Makefile
+include ../makefile.project
 
