@@ -8,9 +8,9 @@ INCLUDE_DIRECTORIES( ${GLOBAL_INCLUDE_DIRECTORIES} )
 LINK_DIRECTORIES( ${GLOBAL_LINK_DIRECTORIES} )
 
 # list all source files here
-ADD_EXECUTABLE( a.out UN_main.c )
+ADD_EXECUTABLE( unittest UN_main.c )
 
 # need to link to some other libraries ? just add them here
 SET( ENGINE_LIBS LJ_LibEngine LJ_LibUnitTest LJ_LibDebug LJ_LibInput LJ_LibCommon )
-TARGET_LINK_LIBRARIES( a.out ${ENGINE_LIBS} ${OPENGL_LIBRARY} ${GLUT_glut_LIBRARY} ${SDL_LIBRARY} )
+TARGET_LINK_LIBRARIES( unittest ${ENGINE_LIBS} ${OPENGL_LIBRARY} ${GLUT_glut_LIBRARY} ${SDL_LIBRARY} )
 

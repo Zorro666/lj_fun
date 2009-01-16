@@ -6,6 +6,7 @@
 .PHONY: rebuilddebug rebuildrelease rebuildgold
 .PHONY: tags cleantags rebuildtags
 .PHONY: all cleanall rebuildall
+.PHONY: runall
 
 BASE_DIR:=$(shell cd .. ; pwd )
 ROOT_DIR:=$(shell cd $(BASE_DIR)/.. ; pwd )
@@ -83,9 +84,9 @@ TARGET_EXE_NAME = $(PROJECT_DIR)/$(EXE_NAME)_$(TARGET)$(EXE_EXTENSION)
 
 updateexe:
 ifdef WINDIR
-	@cp -v $(BUILD_DIR)/$(PROJECT)/$(CONFIG)/a.out$(EXE_EXTENSION) $(BASE_EXE_NAME)
+	@cp -v $(BUILD_DIR)/$(PROJECT)/$(CONFIG)/$(EXE_NAME)$(EXE_EXTENSION) $(BASE_EXE_NAME)
 else
-	@cp -v $(BUILD_DIR)/$(PROJECT)/a.out $(BASE_EXE_NAME)
+	@cp -v $(BUILD_DIR)/$(PROJECT)/$(EXE_NAME) $(BASE_EXE_NAME)
 endif
 	@cp -v $(BASE_EXE_NAME) $(TARGET_EXE_NAME)
 	@ls -lh $(BASE_EXE_NAME)
@@ -137,4 +138,9 @@ test:
 	@echo "EXE_NAME=$(EXE_NAME)"
 	@echo "RPOJECT_DIR=$(PROJECT_DIR)"
 	@echo "ROOT_DIR=$(ROOT_DIR)"
+
+runall: all
+	$(EXE_NAME)_debug
+	$(EXE_NAME)_release
+	$(EXE_NAME)_gold
 
