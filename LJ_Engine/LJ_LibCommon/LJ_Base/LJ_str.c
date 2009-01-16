@@ -1144,10 +1144,10 @@ LJ_uint LJ_strReadUTF8( const LJ_char** c )
 		// 3 bytes per character
 		utf8 &= 0x0F;
 		utf8 <<= 6;
-		utf8 += *(*c) & 0x3F;
+		utf8 += ( *(*c) & 0x3F );
 		(*c)++;
 		utf8 <<= 6;
-		utf8 += *(*c) & 0x3F;
+		utf8 += ( *(*c) & 0x3F );
 		(*c)++;
 		return utf8;
 	}
@@ -1157,13 +1157,13 @@ LJ_uint LJ_strReadUTF8( const LJ_char** c )
 		// 4 bytes per character
 		utf8 &= 0x07;
 		utf8 <<= 6;
-		utf8 += *(*c) & 0x3F;
+		utf8 += ( *(*c) & 0x3F );
 		(*c)++;
 		utf8 <<= 6;
-		utf8 += *(*c) & 0x3F;
+		utf8 += ( *(*c) & 0x3F );
 		(*c)++;
 		utf8 <<= 6;
-		utf8 += *(*c++) & 0x3F;
+		utf8 += ( *(*c) & 0x3F );
 		(*c)++;
 		return utf8;
 	}
@@ -1173,16 +1173,16 @@ LJ_uint LJ_strReadUTF8( const LJ_char** c )
 		// 5 bytes per character
 		utf8 &= 0x03;
 		utf8 <<= 6;
-		utf8 += *(*c) & 0x3F;
+		utf8 += ( *(*c) & 0x3F );
 		(*c)++;
 		utf8 <<= 6;
-		utf8 += *(*c) & 0x3F;
+		utf8 += ( *(*c) & 0x3F );
 		(*c)++;
 		utf8 <<= 6;
-		utf8 += *(*c) & 0x3F;
+		utf8 += ( *(*c) & 0x3F );
 		(*c)++;
 		utf8 <<= 6;
-		utf8 += *(*c) & 0x3F;
+		utf8 += ( *(*c) & 0x3F );
 		(*c)++;
 		return utf8;
 	}
@@ -1192,19 +1192,19 @@ LJ_uint LJ_strReadUTF8( const LJ_char** c )
 		// 6 bytes per character
 		utf8 &= 0x01;
 		utf8 <<= 6;
-		utf8 += *(*c) & 0x3F;
+		utf8 += ( *(*c) & 0x3F );
 		(*c)++;
 		utf8 <<= 6;
-		utf8 += *(*c) & 0x3F;
+		utf8 += ( *(*c) & 0x3F );
 		(*c)++;
 		utf8 <<= 6;
-		utf8 += *(*c) & 0x3F;
+		utf8 += ( *(*c) & 0x3F );
 		(*c)++;
 		utf8 <<= 6;
-		utf8 += *(*c) & 0x3F;
+		utf8 += ( *(*c) & 0x3F );
 		(*c)++;
 		utf8 <<= 6;
-		utf8 += *(*c) & 0x3F;
+		utf8 += ( *(*c) & 0x3F );
 		(*c)++;
 		return utf8;
 	}
