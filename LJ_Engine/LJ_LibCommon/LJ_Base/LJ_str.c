@@ -838,6 +838,14 @@ void LJ_strNCat( LJ_char* const to, const LJ_char* const from, const LJ_uint max
 
 LJ_float LJ_strToFloat( const LJ_char* const string )
 {
+	// Algorithm is:
+	// 1. eat white space
+	// 2. + or -
+	// 3. digits 
+	// 4. optional - decimal point 
+	// 5. digits
+	// 6. optional - e/E : +/- : digits
+	// 7. optional - f
 	return (LJ_float)( atof( string ) );
 }
 
