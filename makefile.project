@@ -75,11 +75,11 @@ TARGET_EXE_NAME = $(PROJECT_DIR)/$(EXE_NAME)_$(TARGET)$(EXE_EXTENSION)
 
 updateexe:
 ifdef WINDIR
-	@cp -v --preserve=all $(BUILD_DIR)/$(PROJECT)/$(CONFIG)/a.out$(EXE_EXTENSION) $(BASE_EXE_NAME)
+	@cp -v $(BUILD_DIR)/$(PROJECT)/$(CONFIG)/a.out$(EXE_EXTENSION) $(BASE_EXE_NAME)
 else
-	@cp -v --preserve=all $(BUILD_DIR)/$(PROJECT)/a.out $(BASE_EXE_NAME)
+	@cp -v $(BUILD_DIR)/$(PROJECT)/a.out $(BASE_EXE_NAME)
 endif
-	@cp -v --preserve=all $(BASE_EXE_NAME) $(TARGET_EXE_NAME)
+	@cp -v $(BASE_EXE_NAME) $(TARGET_EXE_NAME)
 	@ls -lh $(BASE_EXE_NAME)
 	@ls -lh $(TARGET_EXE_NAME)
 
@@ -105,12 +105,13 @@ rebuildall: cleanall all
 cleandir:
 	@rm -rf $(BUILD_DIR)
 
-BACKUP_DIR:=$(BASE_DIR)/../Backup
+ROOT_DIR:=$(realpath $(BASE_DIR)/.. )
+BACKUP_DIR:=$(ROOT_DIR)/Backup
 BACKUP_TIMESTAMP:=$(shell date +%Y_%m_%d_%H_%M_%S )
 
 backup:
 	@mkdir -p $(BACKUP_DIR)
-	cd $(BASE_DIR)/.. && tar cvfz Backup/lj_fun_$(BACKUP_TIMESTAMP).tar.gz --exclude="*.swp" --exclude="*/Build" --exclude="*/Backup" lj_fun
+	cd $(ROOT_DIR) && tar cvfz Backup/lj_fun_$(BACKUP_TIMESTAMP).tar.gz --exclude="*.swp" --exclude="*.exe" --exclude="*/Build" --exclude="*_debug" --exclude="*_release" --exclude="*_gold" lj_fun
 	@ls -lh $(BACKUP_DIR)/lj_fun_$(BACKUP_TIMESTAMP).tar.gz
 	
 cleanall: 
