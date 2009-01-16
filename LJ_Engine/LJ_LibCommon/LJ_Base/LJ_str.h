@@ -69,7 +69,7 @@ LJ_EXTERN_INLINE LJ_bool LJ_strIsAlpha( const LJ_char c );				// is a-z or A-Z
 LJ_EXTERN_INLINE LJ_bool LJ_strIsUpper( const LJ_char c );				// is uppercase A-Z?
 LJ_EXTERN_INLINE LJ_bool LJ_strIsLower( const LJ_char c );				// is lowercase a-z?
 LJ_EXTERN_INLINE LJ_bool LJ_strIsDigit( const LJ_char c );				// is 0-9
-LJ_EXTERN_INLINE LJ_bool LJ_strIsHexDigit( const LJ_char c );			// is 0-9 or A-F
+LJ_EXTERN_INLINE LJ_bool LJ_strIsHexDigit( const LJ_char c );				// is 0-9 or A-F
 
 LJ_char LJ_strGetLastChar( const LJ_char* const string );
 void LJ_strSetLastChar( LJ_char* const string, const LJ_char c );
@@ -145,3 +145,4 @@ LJ_EXTERN_INLINE LJ_bool LJ_strIsHexDigit( const LJ_char c )
 }
 
 #endif // #ifndef LJ_STR_H
+

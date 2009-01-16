@@ -4,7 +4,7 @@
 
 tags:
 	@ctags -R --exclude=CMakeFiles --c++-kinds=+p --fields=+iaS --extra=+q .
-#	@cscope -R -b -q 
+#	@cscope -R -b -q
 
 clean:
 	@$(RM) -rvf tags
