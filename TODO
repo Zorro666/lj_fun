@@ -2,10 +2,9 @@ To be done:
 
 * Tasks
 
-** need to replace atoi() & atof() in LJ_str.c with our own functions
-
 ** need a maths layer : LJ_maths
-*** basic need fabfs replacement then can stop using <math.h> in unittest files
+*** basic: fabfs, powf
+*** stop using <math.h> in unittest files
 *** be useful to have some basic random functions int, float, range
 *** unit tests for the maths layer
 
