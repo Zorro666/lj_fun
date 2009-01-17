@@ -4,8 +4,22 @@
 #include "LJ_output.h"
 #include "LJ_assert.h"
 
-// For atof
-#include <stdlib.h>
+// Needed by the LJ_strToFloat function
+// Need to put this into the upcoming LJ_math.h & LJ_math.c functions
+LJ_float LJ_powf( const LJ_int base, const LJ_int exponent )
+{
+	LJ_float value = 1.0f;
+	LJ_int i;
+	for ( i = 0; i < exponent; i++ )
+	{
+		value *= base;
+	}
+	for ( i = 0; i > exponent; i-- )
+	{
+		value /= base;
+	}
+	return value;
+}
 
 //*******************************************************************
 // Constants
@@ -16,8 +30,8 @@
 #define FIXED_POINT_SHIFT	(31)
 
 #define START_DIGIT			(+8)
-#define MAX_DIGIT			(-7)
-#define END_DIGIT			(-3)
+#define MAX_DIGIT			(-8)
+#define END_DIGIT			(-6)
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -234,7 +248,7 @@ static LJ_uint LJ_strAppendFloat( LJ_char* const to, const LJ_uint currentLength
 {
 	const LJ_ulong DECIMAL_POINT = ( 1UL << FIXED_POINT_SHIFT );
 	const LJ_ulong DIV_DECIMAL = (LJ_ulong)( DECIMAL_POINT * 10000000UL );
-	const LJ_ulong MIN_DECIMAL 	= ( DECIMAL_POINT / 10000000UL );
+	const LJ_ulong MIN_DECIMAL 	= ( DECIMAL_POINT / 100000000UL );
 	const LJ_ulong MAX_DECIMAL 	= ( DIV_DECIMAL * 10UL );
 
 	LJ_int endDigit;
@@ -846,7 +860,119 @@ LJ_float LJ_strToFloat( const LJ_char* const string )
 	// 5. digits
 	// 6. optional - e/E : +/- : digits
 	// 7. optional - f
-	return (LJ_float)( atof( string ) );
+	LJ_float value = 0;
+	LJ_int realPart = 0;
+	LJ_int fractionalPart = 0;
+	LJ_int exponentPart = 0;
+	LJ_int exponentValue = 0;
+	LJ_int negMult = +1;
+	LJ_bool validChar = LJ_FALSE;
+	LJ_float fractionalValue = 0.0f;
+	LJ_float realValue = 0.0f;
+	LJ_int exponent = 0;
+
+	// 1. eat white space
+	const LJ_char* stringBuffer = LJ_strEatWhiteSpace( string );
+
+	// 2. + or -
+	if ( stringBuffer[0] == '-' )
+	{
+		negMult = -1;
+		stringBuffer++;
+	}
+	else if ( stringBuffer[0] == '+' )
+	{
+		negMult = +1;
+		stringBuffer++;
+	}
+
+	// 3. digits 
+	do 
+	{
+		const LJ_char c = stringBuffer[0];
+		// '0' -> '9'
+		const int digitValue = c - '0';
+		validChar = LJ_FALSE;
+		if ( ( digitValue >= 0 ) && ( digitValue <= 9 ) )
+		{
+			realPart *= 10;
+			realPart += digitValue;
+			validChar = LJ_TRUE;
+			stringBuffer++;
+		}
+	} while ( validChar == LJ_TRUE );
+
+	// 4. optional - decimal point 
+	if ( stringBuffer[0] == '.' )
+	{
+		stringBuffer++;
+	}
+	// 5. digits
+	do 
+	{
+		const LJ_char c = stringBuffer[0];
+		// '0' -> '9'
+		const int digitValue = c - '0';
+		validChar = LJ_FALSE;
+		if ( ( digitValue >= 0 ) && ( digitValue <= 9 ) )
+		{
+			exponentPart++;
+			fractionalPart *= 10;
+			fractionalPart += digitValue;
+			validChar = LJ_TRUE;
+			stringBuffer++;
+		}
+	} while ( validChar == LJ_TRUE );
+
+	// 6. optional - e/E : +/- : digits
+	if ( ( stringBuffer[0] == 'e' ) || ( stringBuffer[0] == 'E' ) )
+	{
+		LJ_int expSign = +1;
+		stringBuffer++;
+		// + or -
+		if ( stringBuffer[0] == '-' )
+		{
+			expSign = -1;
+			stringBuffer++;
+		}
+		else if ( stringBuffer[0] == '+' )
+		{
+			expSign = +1;
+			stringBuffer++;
+		}
+		// digits
+		do 
+		{
+			const LJ_char c = stringBuffer[0];
+			// '0' -> '9'
+			const int digitValue = c - '0';
+			validChar = LJ_FALSE;
+			if ( ( digitValue >= 0 ) && ( digitValue <= 9 ) )
+			{
+				exponentValue *= 10;
+				exponentValue += digitValue;
+				validChar = LJ_TRUE;
+				stringBuffer++;
+			}
+		} while ( validChar == LJ_TRUE );
+		exponentValue *= expSign;
+	}
+
+	// Cumulate the 2 exponent values
+	exponent = exponentValue - exponentPart;
+	fractionalValue = (LJ_float)( fractionalPart ) * LJ_powf( 10, exponent );
+	realValue = (LJ_float)( realPart ) * LJ_powf( 10, exponentValue );
+
+	value = realValue + fractionalValue;
+
+	// 7. optional - f - doesn't do anything!
+	if ( ( stringBuffer[0] == 'f' ) )
+	{
+		stringBuffer++;
+	}
+
+	value *= negMult;
+	return value;
 }
 
 LJ_int LJ_strToInt( const LJ_char* const string )
