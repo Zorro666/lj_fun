@@ -1,10 +1,9 @@
 #include "LJ.h"
-#include "LJ_assert.h"
-#include "LJ_output.h"
+
+#include "LJ_Base/LJ_assert.h"
+#include "LJ_Base/LJ_output.h"
 
 #if LJ_USE_ASSERT
-
-#include <stdlib.h>
 
 ///////////////////////////////////////////////////////////////////////////////////
 //

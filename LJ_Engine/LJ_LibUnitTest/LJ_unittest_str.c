@@ -2,8 +2,6 @@
 #include "LJ_unittest.h"
 #include "LJ_LibCommon/LJ_LibCommon.h"
 
-#include <math.h>
-
 #if LJ_USE_UNITTEST
 
 #define LJ_UNITTEST_STR_MAX_LEN 1024

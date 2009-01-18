@@ -4,7 +4,7 @@
 
 #include "LJ_LibCommon/LJ_LibCommon.h"
 #include "LJ_LibDebug/LJ_LibDebug.h"
-#include "renderSort.h"
+#include "RS_renderSort.h"
 
 #include <GL/gl.h>
 #include <GL/glu.h>

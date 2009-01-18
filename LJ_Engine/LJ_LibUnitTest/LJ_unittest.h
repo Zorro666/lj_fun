@@ -44,8 +44,8 @@ void LJ_unittestRegisterExternalTests( void );
 /////////////////////////////////////////////////////////////////////////////////////////////
 
 #define LJ_UNITTEST_FUNCTION_START( group, test ) \
-	LJ_unittestTest s_LJ_unittestTests_##group_##test; \
-	LJ_bool LJ_unittestTestsFunc_##group_##test( void ) \
+	LJ_unittestTest s_LJ_unittestTests_##group##test; \
+	LJ_bool LJ_unittestTestsFunc_##group##test( void ) \
 	{ \
 		LJ_bool __LJ_unittest_result__ = LJ_TRUE; \
 		const LJ_char* const __LJ_unittest_groupName__ = #group; \
@@ -56,12 +56,12 @@ void LJ_unittestRegisterExternalTests( void );
 		return __LJ_unittest_result__; \
 	}
 
-#define LJ_UNITTEST_REGISTER( group, test ) \
+#define LJ_UNITTEST_REGISTER( jake, test ) \
 	do \
 	{ \
-		extern LJ_unittestTest s_LJ_unittestTests_##group_##test ; \
-		extern LJ_unittestFunc LJ_unittestTestsFunc_##group_##test ; \
-		LJ_unittestRegister( &s_LJ_unittestTests_##group_##test, #group, #test, &LJ_unittestTestsFunc_##group_##test ); \
+		extern LJ_unittestTest s_LJ_unittestTests_##jake##test ; \
+		extern LJ_unittestFunc LJ_unittestTestsFunc_##jake##test ; \
+		LJ_unittestRegister( &s_LJ_unittestTests_##jake##test, #jake, #test, &LJ_unittestTestsFunc_##jake##test ); \
 	} while ( 0 );
 
 #ifndef LJ_UNITTEST_FAILED
@@ -87,7 +87,7 @@ void LJ_unittestRegisterExternalTests( void );
 	} 
 
 #define LJ_UNITTEST_FLOAT_EQUALS( lhs, rhs, tolerance ) \
-	if ( fabsf( ( lhs ) - ( rhs ) ) > tolerance ) \
+	if ( LJ_mathFabsf( ( lhs ) - ( rhs ) ) > tolerance ) \
 	{ \
 		LJ_unittestFailure( __LJ_unittest_groupName__, __LJ_unittest_testName__, LJ_SOURCE_FILE, LJ_SOURCE_LINE, \
 							"'" #lhs " == " #rhs "' failed '%f != %f'", lhs, rhs ); \

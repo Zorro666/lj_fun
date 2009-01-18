@@ -5,8 +5,8 @@
 .PHONY: cleandebug cleanrelease cleangold
 .PHONY: rebuilddebug rebuildrelease rebuildgold
 .PHONY: tags cleantags rebuildtags
-.PHONY: all cleanall rebuildall
-.PHONY: runall
+.PHONY: buildall cleanall rebuildall
+.PHONY: runall fulltest
 
 BASE_DIR:=$(shell cd .. ; pwd )
 ROOT_DIR:=$(shell cd $(BASE_DIR)/.. ; pwd )
@@ -27,34 +27,36 @@ BUILD_DIR=$(BUILD_ROOT)/$(PROJECT)_$(CONFIG)
 PROJECT_DIR:=$(BASE_DIR)/$(PROJECT)
 CLEAN=$(BUILD)
 
+default: build
+
 debug: CONFIG:=DEBUG
 debug: TARGET:=debug
 debug: CLEAN=$(BUILD)
-debug: build updateexe
+debug: compile updateexe
 
 release: CONFIG:=RELWITHDEBINFO
 release: TARGET:=release
 release: CLEAN=$(BUILD)
-release: build updateexe
+release: compile updateexe
 
 gold: CONFIG:=RELEASE
 gold: TARGET:=gold
 gold: CLEAN=$(BUILD)
-gold: build updateexe
+gold: compile updateexe
 
 cleandebug: CONFIG:=DEBUG
 cleandebug: CLEAN=clean
-cleandebug: build
+cleandebug: compile
 cleandebug: cleandir
 
 cleanrelease: CONFIG:=RELWITHDEBINFO
 cleanrelease: CLEAN=clean
-cleanrelease: build
+cleanrelease: compile
 cleanrelease: cleandir
 
 cleangold: CONFIG:=RELEASE
 cleangold: CLEAN=clean
-cleangold: build
+cleangold: compile
 cleangold: cleandir
 
 rebuilddebug:
@@ -69,7 +71,7 @@ rebuildgold:
 	@$(MAKE) --no-print-directory cleangold
 	@$(MAKE) --no-print-directory gold
 
-build:
+compile:
 	@echo ----- $(CLEAN) $(CONFIG) -----
 	@cp $(PROJECT_DIR)/$(PROJECT).cmake $(BASE_DIR)/CMakeLists.txt
 	@mkdir -p $(BUILD_DIR)
@@ -92,14 +94,13 @@ endif
 	@ls -lh $(BASE_EXE_NAME)
 	@ls -lh $(TARGET_EXE_NAME)
 
-all:
-	@$(MAKE) --no-print-directory debug
-	@$(MAKE) --no-print-directory release
-	@$(MAKE) --no-print-directory gold
-
 clean:	cleandebug
 
+build: debug
+
 rebuild: rebuilddebug
+
+run: debug rundebug
 
 tags:
 	@echo ----- tags -----
@@ -110,8 +111,6 @@ cleantags:
 	@$(MAKE) -C $(BASE_DIR) -f makefile.tags --no-print-directory clean
 
 rebuildtags: cleantags tags
-
-rebuildall: cleanall all
 
 cleandir:
 	@echo "...Removing $(BUILD_DIR)..."
@@ -130,6 +129,13 @@ cleanall:
 	@rm -rf $(BUILD_ROOT)
 	@$(MAKE) --no-print-directory cleantags
 
+buildall:
+	@$(MAKE) --no-print-directory debug
+	@$(MAKE) --no-print-directory release
+	@$(MAKE) --no-print-directory gold
+
+rebuildall: cleanall buildall
+
 test:
 	@echo "PROJECT=$(PROJECT)"
 	@echo "BUILD_ROOT=$(BUILD_ROOT)"
@@ -139,8 +145,20 @@ test:
 	@echo "RPOJECT_DIR=$(PROJECT_DIR)"
 	@echo "ROOT_DIR=$(ROOT_DIR)"
 
-runall: all
+rundebug: 
+	$(EXE_NAME)_debug
+
+runrelease: 
+	$(EXE_NAME)_release
+
+rungold: 
+	$(EXE_NAME)_gold
+
+runall: buildall
 	$(EXE_NAME)_debug
 	$(EXE_NAME)_release
 	$(EXE_NAME)_gold
+
+fulltest: rebuildall runall
+
 

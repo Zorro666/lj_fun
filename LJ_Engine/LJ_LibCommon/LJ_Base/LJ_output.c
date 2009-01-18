@@ -1,8 +1,9 @@
 #include "LJ.h"
 
-#include "LJ_output.h"
-#include "LJ_str.h"
+#include "LJ_Base/LJ_output.h"
+#include "LJ_Base/LJ_str.h"
 
+// For printf
 #include <stdio.h>
 
 #define LJ_OUTPUT_MAX_PRINT_STRING 4096

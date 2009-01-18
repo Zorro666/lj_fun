@@ -1,7 +1,5 @@
 #include "LJ.h"
 #include "LJ_unittest.h"
-#include <math.h>
-#include <stdlib.h>
 
 // Put all the engine unit test register macros in here
 #if LJ_USE_UNITTEST
@@ -9,19 +7,19 @@
 void LJ_unittestRegisterExternalTests( void )
 {
 	// Do these first because all other tests rely on them
-	// LJ_unittest.h API tests
+	// LJ_LibUnittest/LJ_unittest.h API tests
 	LJ_UNITTEST_REGISTER( unittest, macros );
 	LJ_UNITTEST_REGISTER( unittest, order1 );
 	LJ_UNITTEST_REGISTER( unittest, order2 );
 	LJ_UNITTEST_REGISTER( unittest, order3 );
 
 	// Do the mem tests before str tests because the str tests rely on the LJ_mem functions
-	// LJ_mem.h API tests
+	// LJ_LibCommon/LJ_Base/LJ_mem.h API tests
 	LJ_UNITTEST_REGISTER( mem, LJ_memSet );
 	LJ_UNITTEST_REGISTER( mem, LJ_memZero );
 	LJ_UNITTEST_REGISTER( mem, LJ_memCopy );
 
-	// LJ_str.h API tests
+	// LJ_LibCommon/LJ_Base/LJ_str.h API tests
 	LJ_UNITTEST_REGISTER( str, fundamental );
 	LJ_UNITTEST_REGISTER( str, compare );
 	LJ_UNITTEST_REGISTER( str, find );
@@ -30,6 +28,10 @@ void LJ_unittestRegisterExternalTests( void )
 	LJ_UNITTEST_REGISTER( str, misc )
 	LJ_UNITTEST_REGISTER( str, character )
 	LJ_UNITTEST_REGISTER( str, slash )
+	
+	// LJ_LibCommon/LJ_Math/LJ_math.h API tests
+	LJ_UNITTEST_REGISTER( math, basic )
+	LJ_UNITTEST_REGISTER( math, random )
 }
 
 static LJ_int s_unittestOrder = -1;
@@ -52,17 +54,17 @@ LJ_UNITTEST_FUNCTION_START( unittest, macros )
 		LJ_float rhsFloat;
 		LJ_uint rnd;
 
-		rnd = rand();
+		rnd = LJ_mathGetRand32();
 		lhsUint = rnd % LJ_UNITTEST_MAX_VALUE;
 		rhsUint = lhsUint;
 		LJ_UNITTEST_EQUALS( lhsUint, rhsUint );
 
-		rnd = rand();
+		rnd = LJ_mathGetRand32();
 		lhsInt = rnd % LJ_UNITTEST_MAX_VALUE;
 		rhsInt = lhsInt;
 		LJ_UNITTEST_EQUALS( lhsInt, rhsInt );
 
-		rnd = rand();
+		rnd = LJ_mathGetRand32();
 		lhsFloat = (LJ_float)( rnd % LJ_UNITTEST_MAX_VALUE ) / 123.0f;
 		rhsFloat = lhsFloat + ( LJ_UNITTEST_FLOAT_TOLERANCE * 0.5f );
 		LJ_UNITTEST_FLOAT_EQUALS( lhsFloat, rhsFloat, LJ_UNITTEST_FLOAT_TOLERANCE );

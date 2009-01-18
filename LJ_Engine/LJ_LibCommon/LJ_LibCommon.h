@@ -10,5 +10,7 @@
 #include "LJ_Base/LJ_output.h"
 #include "LJ_Base/LJ_assert.h"
 
+#include "LJ_Math/LJ_math.h"
+
 #endif // #ifndef LJ_LIBCOMMON_H
 

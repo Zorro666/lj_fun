@@ -4,7 +4,7 @@
 
 #include "LJ_LibCommon/LJ_LibCommon.h"
 
-#include "LJ_debugVar.h"
+#include "LJ_DebugVar/LJ_debugVar.h"
 
 typedef struct LJ_debugVarDef_s
 {

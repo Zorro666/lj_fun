@@ -1,8 +1,8 @@
-#ifndef RENDERSORT_HH
-#define RENDERSORT_HH
+#ifndef RS_RENDERSORT_HH
+#define RS_RENDERSORT_HH
 
 void renderSortInit( void );
 void renderSortTest( void );
 void renderSortDraw( void );
 
-#endif // #ifndef RENDERSORT_HH
+#endif // #ifndef RS_RENDERSORT_HH

@@ -1,7 +1,7 @@
 #include "LJ.h"
 
-#include "LJ_types.h"
-#include "LJ_assert.h"
+#include "LJ_Base/LJ_types.h"
+#include "LJ_Base/LJ_assert.h"
 
 void LJ_typesInit( void )
 {

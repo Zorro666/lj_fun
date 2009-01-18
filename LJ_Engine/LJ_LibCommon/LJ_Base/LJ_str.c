@@ -1,25 +1,9 @@
 #include "LJ.h"
 
-#include "LJ_str.h"
-#include "LJ_output.h"
-#include "LJ_assert.h"
-
-// Needed by the LJ_strToFloat function
-// Need to put this into the upcoming LJ_math.h & LJ_math.c functions
-LJ_float LJ_powf( const LJ_int base, const LJ_int exponent )
-{
-	LJ_float value = 1.0f;
-	LJ_int i;
-	for ( i = 0; i < exponent; i++ )
-	{
-		value *= base;
-	}
-	for ( i = 0; i > exponent; i-- )
-	{
-		value /= base;
-	}
-	return value;
-}
+#include "LJ_Base/LJ_str.h"
+#include "LJ_Base/LJ_output.h"
+#include "LJ_Base/LJ_assert.h"
+#include "LJ_Math/LJ_math.h"
 
 //*******************************************************************
 // Constants
@@ -960,8 +944,8 @@ LJ_float LJ_strToFloat( const LJ_char* const string )
 
 	// Cumulate the 2 exponent values
 	exponent = exponentValue - exponentPart;
-	fractionalValue = (LJ_float)( fractionalPart ) * LJ_powf( 10, exponent );
-	realValue = (LJ_float)( realPart ) * LJ_powf( 10, exponentValue );
+	fractionalValue = (LJ_float)( fractionalPart ) * LJ_mathPowf( 10, exponent );
+	realValue = (LJ_float)( realPart ) * LJ_mathPowf( 10, exponentValue );
 
 	value = realValue + fractionalValue;
 
