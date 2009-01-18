@@ -35,11 +35,11 @@ SET( GLOBAL_LINK_DIRECTORIES "" )
 # Global definitions
 IF ( MSVC )
 
-    SET( GLOBAL_CFLAGS -W4 -WX -DPLATFORM_PC )
+    SET( GLOBAL_CFLAGS -W4 -WX -DLJ_PLATFORM_WIN )
 
 ELSE ( MSVC )
 
-    SET( GLOBAL_CFLAGS -Wextra -Wall -Werror -Wdeclaration-after-statement -fstrict-aliasing -DPLATFORM_LINUX )
+    SET( GLOBAL_CFLAGS -Wextra -Wall -Werror -Wdeclaration-after-statement -fstrict-aliasing -DLJ_PLATFORM_LINUX )
 
 ENDIF ( MSVC )
 
