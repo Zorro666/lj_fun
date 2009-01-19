@@ -16,15 +16,19 @@ PROJECT_CONFIGS := $(foreach config, $(CONFIGS), $(PROJECT)_$(config) )
 .PHONY: cleanall buildall rebuildall runall testall
 .PHONY: allcleanall allbuildall allrebuildall allrunall alltestall
 .PHONY: fulltest
+.PHONY: backup
 .PHONY: $(PROJECTS)
 .PHONY: $(PROJECTS_CONFIGS)
 .PHONY: $(PROJECT_CONFIGS)
 
+GET_PROJECT = $(word 1, $(subst _, ,$@))
+GET_CONFIG = $(word 2, $(subst _, ,$@))
+
 default: build
 
 $(PROJECTS_CONFIGS): 
-	@echo "-----Making $@ Project:$(word 1, $(subst _, ,$@)) Config:$(ACTION)$(word 2, $(subst _, ,$@))-----"
-	@$(MAKE) --no-print-directory -C $(word 1, $(subst _, ,$@)) $(ACTION)$(word 2, $(subst _, ,$@))
+	@echo "-----Making $@ Project:$(GET_PROJECT) Config:$(ACTION)$(GET_CONFIG)-----"
+	@$(MAKE) --no-print-directory -C $(GET_PROJECT) $(ACTION)$(GET_CONFIG)
 
 clean:
 	$(MAKE) --no-print-directory -C $(PROJECT) clean$(CONFIG)
@@ -81,6 +85,9 @@ testall: $(PROJECT_CONFIGS)
 
 alltestall: $(PROJECTS_CONFIGS)
 	@echo $(PROJECTS_CONFIGS)
+
+backup:
+	$(MAKE) --no-print-directory -C $(PROJECT) backup
 
 $(PROJECTS):
 	@echo "-----Making $@ Config:$(CONFIG)-----"
