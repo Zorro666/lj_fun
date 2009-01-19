@@ -118,7 +118,7 @@ cleandir:
 
 backup:
 	@mkdir -p $(BACKUP_DIR)
-	cd $(ROOT_DIR) && tar cvfz Backup/lj_fun_$(BACKUP_TIMESTAMP).tar.gz --exclude="*.orig" --exclude="*.suo" --exclude="*.swp" --exclude="*.exe" --exclude="*/.git" --exclude="*/Build" --exclude="*_debug" --exclude="*_release" --exclude="*_gold" lj_fun
+	cd $(ROOT_DIR) && tar cvfz Backup/lj_fun_$(BACKUP_TIMESTAMP).tar.gz --exclude="*.orig" --exclude="*.suo" --exclude="*.swp" --exclude="*.exe" --exclude="*/Build" --exclude="*_debug" --exclude="*_release" --exclude="*_gold" lj_fun
 	@ls -lh $(BACKUP_DIR)/lj_fun_$(BACKUP_TIMESTAMP).tar.gz
 
 cleanall:
