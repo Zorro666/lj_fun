@@ -15,8 +15,6 @@ To be done:
 *** exapnding array class + unittest
 *** red black tree ? + unittest
 
-** windows build needs testing
-
 ** sort out debug var interface to engine - its own input handling, toggle on/off
 ** add debug graphics layer to LJ_LibDebug (just like good old CoreDebug yeah rose tinted glasses)
 
