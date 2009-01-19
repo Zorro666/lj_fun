@@ -11,6 +11,8 @@
 
 #define LJ_USE_ASSERT 				1
 #define LJ_USE_UNITTEST 			1
+// Unittests become quite slow especially the random number generator ones when this is enabled
+#define LJ_UNITTEST_FULLTEST			1
 
 // To make the unittest failure define be an error/crash for this project
 #define LJ_UNITTEST_FAILED()		{ *((LJ_int*)LJ_NULL) = 0; }

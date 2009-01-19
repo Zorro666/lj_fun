@@ -68,6 +68,7 @@ void LJ_engineEarlyInit( LJ_int argc, LJ_char* argv[] )
 	gluQuadricTexture( s_quadratic, GL_TRUE );
 
 	LJ_typesInit();
+	LJ_mathSeedRand( 345 );
 	LJ_unittestInit();
 	LJ_debugVarInit( LJ_DEBUGVAR_MAX_NUM );
 	LJ_inputInit();
@@ -97,9 +98,9 @@ void LJ_engineShutdown( void )
 
 void LJ_engineTick( void )
 {
-#if PLATFORM_PC
+#if PLATFORM_WIN
 	Sleep( s_sleepTime );
-#endif // #if PLATFORM_PC
+#endif // #if PLATFORM_WIN
 
 #if PLATFORM_LINUX
 	struct timespec rqtp;

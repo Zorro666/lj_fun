@@ -16,6 +16,7 @@ LJ_float LJ_mathPowf( const LJ_int base, const LJ_int exponent );
 LJ_EXTERN_INLINE LJ_float LJ_mathFabsf( const LJ_float value );
 
 // Random related functions
+#define LJ_RAND_MAX 0xFFFFFFFF
 
 // random number (32 bit) - all other Rand functions call this
 LJ_uint LJ_mathGetRand32( void );
@@ -33,7 +34,7 @@ LJ_float LJ_mathGetRandRangeFloat( const LJ_float minVal, const LJ_float maxVal 
 LJ_float LJ_mathGetRandMaxFloat( const LJ_float maxVal );
 
 // Seed the random number generator
-void LJ_mathSeedRand( const LJ_int seed );
+void LJ_mathSeedRand( const LJ_uint seed );
 
 // Inlines
 LJ_EXTERN_INLINE LJ_float LJ_mathFabsf( const LJ_float value )

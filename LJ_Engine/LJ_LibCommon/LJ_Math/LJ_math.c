@@ -2,10 +2,6 @@
 
 #include "LJ_Math/LJ_math.h"
 
-// For srand() & rand() - used to seed the random number generator
-#include <stdlib.h>
-
-
 /////////////////////////////////////////////////////////////////////////////////////////////////
 //
 // Description: Provides a suite of replacement functions for math.h functions and adds some other useful ones.
@@ -37,9 +33,6 @@ LJ_float LJ_mathPowf( const LJ_int base, const LJ_int exponent )
 	return value;
 }
 
-//#define LJ_RAND_MAX 0x7FFFFFFF
-#define LJ_RAND_MAX 0xFFFFFFFF
-
 ///////////////////////////////////////////////////////////////////
 //
 // Random number related functions
@@ -53,17 +46,7 @@ LJ_float LJ_mathPowf( const LJ_int base, const LJ_int exponent )
 #define LJ_MT_LEN 624
 
 static LJ_int s_mt_index;
-static LJ_ulong s_mt_buffer[LJ_MT_LEN];
-
-static void LJ_mt_init( void ) 
-{
-    LJ_int i;
-    for ( i = 0; i < LJ_MT_LEN; i++ )
-	{
-        s_mt_buffer[i] = rand();
-	}
-    s_mt_index = 0;
-}
+static LJ_uint s_mt_buffer[LJ_MT_LEN];
 
 #define LJ_MT_IA           		397
 #define LJ_MT_IB           		( LJ_MT_LEN - LJ_MT_IA )
@@ -75,13 +58,13 @@ static void LJ_mt_init( void )
 
 LJ_uint LJ_mathGetRand32( void )
 {
-    LJ_ulong* const buffer = s_mt_buffer;
+    LJ_uint* const buffer = s_mt_buffer;
     LJ_int index = s_mt_index;
 	LJ_uint value;
 	
-    if ( index == LJ_MT_LEN * sizeof( LJ_ulong ) )
+    if ( index == LJ_MT_LEN )
     {
-    	LJ_ulong s;
+    	LJ_uint s;
     	LJ_int i = 0;
         index = 0;
         for ( ; i < LJ_MT_IB; i++ ) 
@@ -98,13 +81,11 @@ LJ_uint LJ_mathGetRand32( void )
         s = LJ_TWIST( buffer, LJ_MT_LEN-1, 0 );
         buffer[LJ_MT_LEN-1] = buffer[LJ_MT_IA-1] ^ ( s >> 1 ) ^ LJ_MAGIC( s );
     }
-    s_mt_index = index + sizeof( LJ_ulong );
+    s_mt_index = index + 1;
 
 	// Note even though value is in a LJ_ulong the max is 2^32-1 e.g. 0xFFFFFFFF 
-	value = ((LJ_char*)buffer)[index];
-	// Convert to 31-bits e.g. LJ_RAND_MAX
-	//value = ( value >> 1 );
-	//value &= ( LJ_RAND_MAX );
+	value = (LJ_uint)( buffer[index] );
+
     return value;
 }
 
@@ -159,9 +140,22 @@ LJ_float LJ_mathGetRandMaxFloat( const LJ_float maxVal )
 
 
 // Seed the random number generator
-void LJ_mathSeedRand( const LJ_int seed )
+void LJ_mathSeedRand( const LJ_uint seed )
 {
-	srand( seed );
-	LJ_mt_init();
+    // Initialize generator state with seed
+    // See Knuth TAOCP Vol 2, 3rd Ed, p.106 for multiplier.
+    // In previous versions, most significant bits (MSBs) of the seed affect
+    // only MSBs of the state array.  Modified 9 Jan 2002 by Makoto Matsumoto.
+    LJ_uint* s = s_mt_buffer;
+    LJ_uint* r = s_mt_buffer;
+    LJ_int i = 1;
+    *s = seed & 0xFFFFFFFFUL;
+    *s++ = (LJ_uint)( (LJ_ulong)( 1812433253UL * ( *r ^ (*r >> 30) ) + i ) & 0xFFFFFFFFUL );
+    for( ; i < LJ_MT_LEN; ++i )
+    {
+	*s++ = (LJ_uint)( (LJ_ulong)( 1812433253UL * ( *r ^ (*r >> 30) ) + i ) & 0xFFFFFFFFUL );
+	r++;
+    }
+    s_mt_index = 0;
 }
 

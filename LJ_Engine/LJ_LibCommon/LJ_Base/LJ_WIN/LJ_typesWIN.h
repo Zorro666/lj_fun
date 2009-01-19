@@ -75,5 +75,8 @@ typedef char* LJ_valist;
 #pragma warning ( disable : 4127 )	// warning C4127: conditional expression is constant e.g. while ( 1 )
 #pragma warning ( disable : 4210 )	// warning C4210: nonstandard extension used : function given file scope e.g. the unittest register macros
 
+// Make sure we all use the basic version of win32
+#define WIN32_LEAN_AND_MEAN
+
 #endif // #ifndef LJ_TYPESWIN_H
 

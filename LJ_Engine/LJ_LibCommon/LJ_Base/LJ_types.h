@@ -49,5 +49,27 @@ typedef struct LJ_floatIntUnion
     } data;
 } LJ_floatIntUnion;
 
+// Default types min & max
+#define LJ_TYPES_CHAR_MAX (+127)
+#define LJ_TYPES_CHAR_MIN (-LJ_TYPES_CHAR_MAX-1)
+
+#define LJ_TYPES_UCHAR_MAX (+255U)
+#define LJ_TYPES_UCHAR_MIN (0U)
+
+#define LJ_TYPES_SHORT_MAX (+32767)
+#define LJ_TYPES_SHORT_MIN (-LJ_TYPES_SHORT_MAX-1)
+
+#define LJ_TYPES_USHORT_MAX (+65535U)
+#define LJ_TYPES_USHORT_MIN (0U)
+
+#define LJ_TYPES_INT_MAX (+2147483647)
+#define LJ_TYPES_INT_MIN (-LJ_TYPES_INT_MAX-1)
+
+#define LJ_TYPES_UINT_MAX (+4294967295U)
+#define LJ_TYPES_UINT_MIN (0U)
+
+#define LJ_TYPES_FLOAT_MAX (+1.0e+37f)
+#define LJ_TYPES_FLOAT_MIN (-LJ_TYPES_FLOAT_MAX)
+
 #endif // #ifndef LJ_TYPES_H
 

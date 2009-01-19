@@ -24,19 +24,18 @@ LJ_UNITTEST_FUNCTION_START( math, random )
 {
 	// So can't use the random function to test itself!
 	// So run it lots of times and check it stays within bounds
-#define LJ_UNITTEST_RANDOM_MAX_NUM 65536*16
+#define LJ_UNITTEST_RANDOM_MAX_NUM 1048576
 #define LJ_UNITTEST_RANDOM_AVG_DELTA_TOLERANCE 2
 	LJ_uint i;
-	LJ_uint min = 0xFFFFFFFF;
-	LJ_uint max = 0;
 	LJ_int intMin;
 	LJ_int intMax;
 	LJ_float floatMin;
 	LJ_float floatMax;
 
-	LJ_mathSeedRand( 345 );
-
-	for ( i = 0; i < LJ_UNITTEST_RANDOM_MAX_NUM; i++ )
+#if LJ_UNITTEST_FULLTEST
+	LJ_uint min = LJ_TYPES_UINT_MAX;
+	LJ_uint max = LJ_TYPES_UINT_MIN;
+	for ( i = 0; i < LJ_UNITTEST_RANDOM_MAX_NUM*16*16*3; i++ )
 	{
 		const LJ_uint value = LJ_mathGetRand32();
 		if ( value > max )
@@ -50,10 +49,11 @@ LJ_UNITTEST_FUNCTION_START( math, random )
 	}
 
 	LJ_UNITTEST_EQUALS( min, 0 );
-	LJ_UNITTEST_EQUALS( max, 0xFFFFFFFF );
+	LJ_UNITTEST_EQUALS( max, LJ_RAND_MAX );
+#endif // #if LJ_UNITTEST_FULLTEST
 	
-	intMin = 0x7FFFFFFF;
-	intMax = 0;
+	intMin = LJ_TYPES_INT_MAX;
+	intMax = LJ_TYPES_INT_MIN;
 #define LJ_UNITTEST_RANDOM_INT_MIN -100
 #define LJ_UNITTEST_RANDOM_INT_MAX +843
 	for ( i = 0; i < LJ_UNITTEST_RANDOM_MAX_NUM; i++ )
@@ -72,8 +72,8 @@ LJ_UNITTEST_FUNCTION_START( math, random )
 	LJ_UNITTEST_EQUALS( intMax, LJ_UNITTEST_RANDOM_INT_MAX );
 
 #define LJ_UNITTEST_RANDOM_INT_MAX2 +1056
-	intMin = 0x7FFFFFFF;
-	intMax = 0;
+	intMin = LJ_TYPES_INT_MAX;
+	intMax = LJ_TYPES_INT_MIN;
 	for ( i = 0; i < LJ_UNITTEST_RANDOM_MAX_NUM; i++ )
 	{
 		const LJ_int value = LJ_mathGetRandMax( LJ_UNITTEST_RANDOM_INT_MAX2 );
@@ -89,8 +89,8 @@ LJ_UNITTEST_FUNCTION_START( math, random )
 	LJ_UNITTEST_EQUALS( intMin, 0 );
 	LJ_UNITTEST_EQUALS( intMax, LJ_UNITTEST_RANDOM_INT_MAX2 );
 
-	floatMin = 0xFFFFFFFF;
-	floatMax = 0;
+	floatMin = LJ_TYPES_FLOAT_MAX;
+	floatMax = LJ_TYPES_FLOAT_MIN;
 #define LJ_UNITTEST_RANDOM_FLOAT_MIN -100.01f
 #define LJ_UNITTEST_RANDOM_FLOAT_MAX +843.56f
 	for ( i = 0; i < LJ_UNITTEST_RANDOM_MAX_NUM; i++ )
@@ -105,15 +105,15 @@ LJ_UNITTEST_FUNCTION_START( math, random )
 			floatMin = value;
 		}
 	}
-	LJ_UNITTEST_FLOAT_EQUALS( floatMin, LJ_UNITTEST_RANDOM_FLOAT_MIN, 1.0e-6f );
-	LJ_UNITTEST_FLOAT_EQUALS( floatMax, LJ_UNITTEST_RANDOM_FLOAT_MAX, 1.0e-6f );
+	LJ_UNITTEST_FLOAT_EQUALS( floatMin, LJ_UNITTEST_RANDOM_FLOAT_MIN, 1.0e-2f );
+	LJ_UNITTEST_FLOAT_EQUALS( floatMax, LJ_UNITTEST_RANDOM_FLOAT_MAX, 1.0e-2f );
 
 #define LJ_UNITTEST_RANDOM_FLOAT_MAX2 +1056.453f
-	floatMin = 0xFFFFFFFF;
-	floatMax = 0;
+	floatMin = LJ_TYPES_FLOAT_MAX;
+	floatMax = LJ_TYPES_FLOAT_MIN;
 	for ( i = 0; i < LJ_UNITTEST_RANDOM_MAX_NUM; i++ )
 	{
-		const LJ_float value = LJ_mathGetRandMax( LJ_UNITTEST_RANDOM_FLOAT_MAX2 );
+		const LJ_float value = LJ_mathGetRandMaxFloat( LJ_UNITTEST_RANDOM_FLOAT_MAX2 );
 		if ( value > floatMax )
 		{
 			floatMax = value;

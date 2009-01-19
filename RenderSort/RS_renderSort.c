@@ -4,9 +4,6 @@
 #include "RS_renderSort.h"
 #include "LJ_LibDebug/LJ_LibDebug.h"
 
-#include <stdlib.h>
-#include <stdio.h>
-
 typedef struct BatchItem_s
 {
 	int nextBatchItemIndex;
@@ -51,21 +48,10 @@ float s_instanceXRange = 5.0f;
 float s_instanceYRange = 5.0f;
 float s_instanceZRange = 5.0f;
 
-float randomf( const float minValue, const float maxValue )
-{
-#define INT_RAND_MAX (32768)
-	int valueI = rand() % INT_RAND_MAX;
-	// From 0.0f->1.0f
-	float value = (float)valueI / (float)(INT_RAND_MAX-1);
-	value = minValue + ( value * ( maxValue - minValue ) );
-	return value;
-#undef INT_RAND_MAX 
-}
-
 void addInstance( const InstanceData* const instanceData )
 {
 	s_currentInstanceData[0] = instanceData[0];
-	//printf( "%d x %f y %f z %f size %f\n", s_numInstances, instanceData->x, instanceData->y, instanceData->z, instanceData->size );
+	//LJ_outputPrintDebug( ( "%d x %f y %f z %f size %f\n", s_numInstances, instanceData->x, instanceData->y, instanceData->z, instanceData->size ) );
 	s_currentInstanceData++;
 }
 
@@ -86,7 +72,7 @@ void addBatch( const int type, const int instStartIndex, const int numInstInBatc
 		tail->nextBatchItemIndex = -1;
 		tail->instanceDataStart = instStartIndex;
 		tail->instanceDataEnd = instStartIndex + numInstInBatch;
-		//printf( "addBatch type[%d] start %d num %d current %d started from head\n", type, instStartIndex, numInstInBatch, s_numBatchItems );
+		//LJ_outputPrintDebug( ( "addBatch type[%d] start %d num %d current %d started from head\n", type, instStartIndex, numInstInBatch, s_numBatchItems ) );
 		return;
 	}
 
@@ -95,7 +81,7 @@ void addBatch( const int type, const int instStartIndex, const int numInstInBatc
 	if ( tailEndInstance == instStartIndex )
 	{
 		tail->instanceDataEnd += numInstInBatch;
-		//printf( "addBatch type[%d] start %d num %d current %d made tail longer\n", type, instStartIndex, numInstInBatch, s_numBatchItems );
+		//LJ_outputPrintDebug( ( "addBatch type[%d] start %d num %d current %d made tail longer\n", type, instStartIndex, numInstInBatch, s_numBatchItems ) );
 		return;
 	}
 
@@ -110,7 +96,7 @@ void addBatch( const int type, const int instStartIndex, const int numInstInBatc
 	// We are now the new tail
 	s_batchTails[type] = s_currentBatchItem;
 	
-	//printf( "addBatch type[%d] start %d num %d current %d\n", type, instStartIndex, numInstInBatch, s_numBatchItems );
+	//LJ_outputPrintDebug( ( "addBatch type[%d] start %d num %d current %d\n", type, instStartIndex, numInstInBatch, s_numBatchItems ) );
 	// One more batch in the list
 	s_currentBatchItem++;
 	s_numBatchItems++;
@@ -126,31 +112,32 @@ int createInstances( void )
 	const float zRange = s_instanceZRange;
 
 	// Do a random number of tiles
-	srand( 0 );
-	numTiles = rand() % s_maxNumTiles;
+	numTiles = LJ_mathGetRandMax( s_maxNumTiles );
+	LJ_outputPrintDebug( ( "numTiles = %d\n", numTiles ) );
 	for ( tile = 0; tile < numTiles; tile++ )
 	{
 		// per tile random number of types
 		int type; 
 		int numTypes; 
-		srand( tile ); 
-		numTypes = rand() % s_maxNumTypesPerTile; 
+		LJ_mathSeedRand( tile * 764 + 43243 );
+		numTypes = LJ_mathGetRandMax( s_maxNumTypesPerTile );
+		LJ_outputPrintDebug( ( "tile[%d] numTypes = %d\n", tile, numTypes ) );
 		for ( type = 0; type < numTypes; type++ )
 		{
 			// Then per type random number of instances
 			int inst;
 			int numInstInBatch = 0;
 			int instStartIndex = totalNumInstances;
-			const int numInstances = rand() % s_maxNumInstancesPerTypePerTile;
-			srand( tile * 64 + type * 32 );
+			const int numInstances = LJ_mathGetRandMax( s_maxNumInstancesPerTypePerTile );
+			LJ_mathSeedRand( tile * 373 + type * 235 + 8673 );
 			for ( inst = 0; inst < numInstances; inst++ )
 			{
 				InstanceData instanceData;
 				// A new instance
-				float x = randomf( -xRange, +xRange );
-				float y = randomf( -yRange, +yRange );
-				float z = randomf( -zRange, +zRange );
-				float size = randomf( 0.2f, 2.0f );
+				float x = LJ_mathGetRandRangeFloat( -xRange, +xRange );
+				float y = LJ_mathGetRandRangeFloat( -yRange, +yRange );
+				float z = LJ_mathGetRandRangeFloat( -zRange, +zRange );
+				float size = LJ_mathGetRandRangeFloat( 0.2f, 2.0f );
 
 				instanceData.x = x;
 				instanceData.y = y;
@@ -176,7 +163,7 @@ void renderInstances( void )
 	const int numInstances = s_numInstances;
 	const InstanceData* instanceDataPtr = s_instances;
 	int inst;
-	srand( 0 );
+	LJ_mathSeedRand( 23423 );
 	for ( inst = 0; inst < numInstances; inst++ )
 	{
 		const float x = instanceDataPtr->x;
@@ -184,7 +171,7 @@ void renderInstances( void )
 		const float z = instanceDataPtr->z;
 		const float size = instanceDataPtr->size;
 
-		const int colour = rand();
+		const unsigned int colour = LJ_mathGetRand32();
 		debugDrawSphere( x, y, z, size, colour );
 		instanceDataPtr++;
 	}
@@ -202,7 +189,7 @@ void renderBatches( void )
 		// Render all in this type
 		int numBatchesInType = 0;
 		int numInstancesInType = 0;
-		srand( type );
+		LJ_mathSeedRand( type * 3543 + 2573 );
 		do
 		{
 			// So have a batch to render
@@ -220,7 +207,7 @@ void renderBatches( void )
 				const float z = instanceDataPtr->z;
 				const float size = instanceDataPtr->size;
 
-				const int colour = rand();
+				const unsigned int colour = LJ_mathGetRand32();
 				debugDrawSphere( x, y, z, size, colour );
 				instanceDataPtr++;
 			}
@@ -244,9 +231,9 @@ void renderBatches( void )
 			s_numBatchItems++;
 		}
 		numTotalInstances += numInstancesInType;
-		//printf( "Type[%d] numBatches[%d] numInstances[%d]\n", type, numBatchesInType, numInstancesInType );
+		//LJ_outputPrintGold( ( "Type[%d] numBatches[%d] numInstances[%d]\n", type, numBatchesInType, numInstancesInType ) );
 	}
-	//printf( "%d vs %d\n", numBatches, s_numBatchItems );
+	//LJ_outputPrintGold( ( "%d vs %d\n", numBatches, s_numBatchItems ) );
 }
 
 void renderSortInit( void )
@@ -284,6 +271,7 @@ void renderSortTest( void )
 		s_batchHeads[type].instanceDataEnd = 0;
 	}
 
+	LJ_mathSeedRand( 763 );
 	numInstances = createInstances();
 
 	s_numInstances = numInstances;
