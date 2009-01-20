@@ -121,6 +121,10 @@ void LJ_inputTick( void )
 				}
 				break;
 			}
+			default:
+			{
+				break;
+			}
 		}
 	} 
 }

@@ -33,9 +33,6 @@ extern LJ_float s_cameraZ;
 extern LJ_int s_quit;
 extern LJ_int s_minimized;
 
-extern void game3DRender( void );
-extern void game2DRender( void );
-
 void renderBitmapString( LJ_float x, LJ_float y, LJ_float z, void *font, const LJ_char* const string );
 // TODO: this is very hacky
 void LJ_engineInputUpdate( void );
@@ -320,11 +317,3 @@ void LJ_engineInputUpdate( void )
 */
 }
 
-void WindowActive( void )
-{
-}
-
-void WindowInactive( void )
-{
-}
- 

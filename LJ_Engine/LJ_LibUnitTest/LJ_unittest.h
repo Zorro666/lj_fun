@@ -44,6 +44,7 @@ void LJ_unittestRegisterExternalTests( void );
 /////////////////////////////////////////////////////////////////////////////////////////////
 
 #define LJ_UNITTEST_FUNCTION_START( group, test ) \
+	LJ_bool LJ_unittestTestsFunc_##group##test( void ); \
 	LJ_unittestTest s_LJ_unittestTests_##group##test; \
 	LJ_bool LJ_unittestTestsFunc_##group##test( void ) \
 	{ \

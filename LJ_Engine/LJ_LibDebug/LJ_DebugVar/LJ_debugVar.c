@@ -38,11 +38,12 @@ LJ_float g_floatVariableAlterAmount = 0.1f;
 
 const LJ_int g_menuMaxY = 8;
 LJ_float g_menuSelectedPlace = 0.0f;
+	
 //
 // Private functions
 //
 
-void LJ_debugVarGetValue( const LJ_debugVarDef* const var, LJ_debugVarValue* const value )
+static void LJ_debugVarGetValue( const LJ_debugVarDef* const var, LJ_debugVarValue* const value )
 {
 	if ( var->flags & LJ_DEBUG_VAR_BOOL )
 	{
@@ -58,7 +59,7 @@ void LJ_debugVarGetValue( const LJ_debugVarDef* const var, LJ_debugVarValue* con
 	}
 }
 
-void LJ_debugVarSetValue( const LJ_debugVarValue* const value, LJ_debugVarDef* const var )
+static void LJ_debugVarSetValue( const LJ_debugVarValue* const value, LJ_debugVarDef* const var )
 {
 	if ( var->flags & LJ_DEBUG_VAR_BOOL )
 	{
@@ -74,7 +75,7 @@ void LJ_debugVarSetValue( const LJ_debugVarValue* const value, LJ_debugVarDef* c
 	}
 }
 
-void LJ_debugVarPrintValue( const LJ_int flags, const LJ_debugVarValue* const value, LJ_char* const output )
+static void LJ_debugVarPrintValue( const LJ_int flags, const LJ_debugVarValue* const value, LJ_char* const output )
 {
 	if ( flags & LJ_DEBUG_VAR_BOOL )
 	{
@@ -90,7 +91,7 @@ void LJ_debugVarPrintValue( const LJ_int flags, const LJ_debugVarValue* const va
 	}
 }
 
-void LJ_debugVarAlterIncValue( const LJ_int increment )
+static void LJ_debugVarAlterIncValue( const LJ_int increment )
 {
 	if ( g_selectedItem->flags & LJ_DEBUG_VAR_INT )
 	{
@@ -152,7 +153,7 @@ void LJ_debugVarAlterIncValue( const LJ_int increment )
 	}
 }
 
-void LJ_debugVarStartEditMode()
+static void LJ_debugVarStartEditMode( void )
 {
 	LJ_char output[LJ_DEBUG_VAR_MAX_NAME_LENGTH];
 	g_editingMode = 1;
@@ -161,7 +162,7 @@ void LJ_debugVarStartEditMode()
 	LJ_outputPrintRelease( ( "StartEditMode old Value %s\n", output ) );
 }
 
-void LJ_debugVarEndEditMode( const LJ_int cancel )
+static void LJ_debugVarEndEditMode( const LJ_int cancel )
 {
 	LJ_char output[LJ_DEBUG_VAR_MAX_NAME_LENGTH];
 	LJ_debugVarValue tempValue;
@@ -177,7 +178,7 @@ void LJ_debugVarEndEditMode( const LJ_int cancel )
 }
 
 // increment can be +1, -1, +10, -10 e.g. normal, fast
-void LJ_debugVarAlterValue( const LJ_int increment, LJ_debugVarDef* const var )
+static void LJ_debugVarAlterValue( const LJ_int increment, LJ_debugVarDef* const var )
 {
 	LJ_debugVarValue variableValue;
 	LJ_debugVarGetValue( var, &variableValue );
@@ -198,7 +199,7 @@ void LJ_debugVarAlterValue( const LJ_int increment, LJ_debugVarDef* const var )
 }
 
 // number of : in the name
-LJ_int LJ_debugVarCountDepth( const LJ_char* const name )
+static LJ_int LJ_debugVarCountDepth( const LJ_char* const name )
 {
 	const LJ_char* delimPtr = name;
 	LJ_int count = 0;
@@ -215,7 +216,7 @@ LJ_int LJ_debugVarCountDepth( const LJ_char* const name )
 	return count;
 }
 
-LJ_int LJ_debugVarGetScope( const LJ_char* const name, const LJ_int depth, LJ_char* const scope, const LJ_int scopeMaxLength, const LJ_int fullScope )
+static LJ_int LJ_debugVarGetScope( const LJ_char* const name, const LJ_int depth, LJ_char* const scope, const LJ_int scopeMaxLength, const LJ_int fullScope )
 {
     LJ_int scopeStart = 0;
     const LJ_char* scopeString = name + scopeStart;
@@ -230,10 +231,10 @@ LJ_int LJ_debugVarGetScope( const LJ_char* const name, const LJ_int depth, LJ_ch
     // Try to find the n'th delimeter in this string
     while ( delimCount < depth )
     {
-		const int index = LJ_strFindChar( scopeString, LJ_DEBUG_VAR_DELIMETER_CHAR );
-        if ( index != -1 )
+		const int idx = LJ_strFindChar( scopeString, LJ_DEBUG_VAR_DELIMETER_CHAR );
+        if ( idx != -1 )
         {
-            scopeString = scopeString + index + 1;
+            scopeString = scopeString + idx + 1;
 			delimCount++;
         }
         else
@@ -285,7 +286,7 @@ LJ_int LJ_debugVarGetScope( const LJ_char* const name, const LJ_int depth, LJ_ch
 
 #define DEBUGVAR_SORT_DEBUG 0
 // Sort the debug var array by name
-void LJ_debugVarSort( void )
+static void LJ_debugVarSort( void )
 {
     // Very basic bubble sort
 	LJ_int i;
@@ -400,9 +401,9 @@ void LJ_debugVarSort( void )
 #endif // #if DEBUGVAR_SORT_DEBUG
 }
 
-LJ_debugVarDef* LJ_debugVarFindVar( const LJ_debugVarDef* const currentVar, 
-							  const LJ_char* const parentScope, const LJ_char* const currentScope, 
-							  const LJ_int depth, const LJ_int direction )
+static LJ_debugVarDef* LJ_debugVarFindVar( const LJ_debugVarDef* const currentVar, 
+							  			   const LJ_char* const parentScope, const LJ_char* const currentScope, 
+							  			   const LJ_int depth, const LJ_int direction )
 {
 	const LJ_int startIndex = currentVar - g_debugVarArray;
 	const LJ_int numVars = g_debugVarNum;
@@ -455,7 +456,7 @@ LJ_debugVarDef* LJ_debugVarFindVar( const LJ_debugVarDef* const currentVar,
 	return lastVar;
 }
 
-LJ_debugVarDef* LJ_debugVarFindVarAtScope( const LJ_debugVarDef* const currentVar, const LJ_int depth, const LJ_int direction )
+static LJ_debugVarDef* LJ_debugVarFindVarAtScope( const LJ_debugVarDef* const currentVar, const LJ_int depth, const LJ_int direction )
 {
     LJ_char parentScopeString[LJ_DEBUG_VAR_MAX_NAME_LENGTH];
     LJ_char currentScopeString[LJ_DEBUG_VAR_MAX_NAME_LENGTH];
@@ -732,9 +733,9 @@ void LJ_debugVarRender( void )
 			}
 			if ( p == 0 )
 			{
-				const LJ_float x1 = x0 + maxX - 0.4f;
-				const LJ_float y1 = y + 1;
-				LJ_debugVarDrawBackground( x0, y0, x1, y1, bgColour );
+				const LJ_float x2 = x0 + maxX - 0.4f;
+				const LJ_float y2 = y + 1;
+				LJ_debugVarDrawBackground( x0, y0, x2, y2, bgColour );
 			}
 		}
 #if DEBUGVAR_DEBUG_MENU_POS

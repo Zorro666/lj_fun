@@ -16,15 +16,6 @@ LJ_int s_sleepTime = 100;
 LJ_int s_quit = 0;
 LJ_int s_minimized = 0;
 
-// pause the application until focus in regained
-void WaitMessage( void )
-{
-}
-
-void gameTick( void )
-{
-}
-
 void game3DRender( void )
 {
 	LJ_debugDrawSphere( 0.0f, 0.0f, -10.0f, 3.0f, 0xFF0000FF );
@@ -47,7 +38,16 @@ void game2DRender( void )
 	LJ_debugDrawCircle( x, y, 0.0f, radius, 0x00FF00FF );
 }
 
-void gameSingleLoop()
+// pause the application until focus in regained
+static void WaitMessage( void )
+{
+}
+
+static void gameTick( void )
+{
+}
+
+static void gameSingleLoop( void )
 {
 	if ( s_minimized ) 
 	{
@@ -64,7 +64,7 @@ void gameSingleLoop()
 	}
 }
 
-void gameInit( void )
+static void gameInit( void )
 {
 	// Game init
     LJ_debugVarRegister( "Camera:x", LJ_DEBUG_VAR_FLOAT, &s_cameraX, 0 );
@@ -74,11 +74,7 @@ void gameInit( void )
     LJ_debugVarRegister( "Main:sleepTime", LJ_DEBUG_VAR_INT, &s_sleepTime, 0 );
 }
 
-void gameReset( void )
-{
-}
-
-void gameShutdown( void )
+static void gameShutdown( void )
 {
 }
 

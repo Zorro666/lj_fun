@@ -547,6 +547,10 @@ LJ_int LJ_strVSPrint( LJ_char* const to, const LJ_uint maxLen, const LJ_char* co
 					continue;
 					break;
 				}
+				default:
+				{
+					break;
+				}
 			}
 			mode = FCM_FORMAT;
 		}

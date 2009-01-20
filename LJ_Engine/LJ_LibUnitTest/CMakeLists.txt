@@ -7,5 +7,5 @@ SET( CMAKE_VERBOSE_MAKEFILE OFF )
 # list all source files here
 SET( EXTERNAL_TESTS LJ_unittest_str.c LJ_unittest_mem.c LJ_unittest_math.c )
 
-ADD_LIBRARY( LJ_LibUnitTest STATIC LJ_unittest.c LJ_unittest_tests.c ${EXTERNAL_TESTS} )
+ADD_LIBRARY( LJ_LibUnitTest STATIC LJ_unittest.c LJ_unittest_tests.c LJ_unittest_register.c ${EXTERNAL_TESTS} )
 

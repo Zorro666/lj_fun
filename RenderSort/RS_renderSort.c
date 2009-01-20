@@ -1,7 +1,9 @@
 #include "LJ.h"
-#include "LJ_LibCommon/LJ_LibCommon.h"
 
 #include "RS_renderSort.h"
+
+#include "LJ_LibCommon/LJ_LibCommon.h"
+#include "LJ_LibEngine/LJ_LibEngine.h"
 #include "LJ_LibDebug/LJ_LibDebug.h"
 
 typedef struct BatchItem_s
@@ -48,14 +50,14 @@ float s_instanceXRange = 5.0f;
 float s_instanceYRange = 5.0f;
 float s_instanceZRange = 5.0f;
 
-void addInstance( const InstanceData* const instanceData )
+static void addInstance( const InstanceData* const instanceData )
 {
 	s_currentInstanceData[0] = instanceData[0];
 	//LJ_outputPrintDebug( ( "%d x %f y %f z %f size %f\n", s_numInstances, instanceData->x, instanceData->y, instanceData->z, instanceData->size ) );
 	s_currentInstanceData++;
 }
 
-void addBatch( const int type, const int instStartIndex, const int numInstInBatch )
+static void addBatch( const int type, const int instStartIndex, const int numInstInBatch )
 {
 	BatchItem* const tail = s_batchTails[type];
 	int tailEndInstance;
@@ -102,7 +104,7 @@ void addBatch( const int type, const int instStartIndex, const int numInstInBatc
 	s_numBatchItems++;
 }
 
-int createInstances( void )
+static int createInstances( void )
 {
 	int tile;
 	int numTiles;
@@ -156,9 +158,8 @@ int createInstances( void )
 	return totalNumInstances;
 }
 
-extern void debugDrawSphere( float x, float y, float z, float size, int colour );
-
-void renderInstances( void )
+#if 0
+static void renderInstances( void )
 {
 	const int numInstances = s_numInstances;
 	const InstanceData* instanceDataPtr = s_instances;
@@ -172,12 +173,13 @@ void renderInstances( void )
 		const float size = instanceDataPtr->size;
 
 		const unsigned int colour = LJ_mathGetRand32();
-		debugDrawSphere( x, y, z, size, colour );
+		LJ_debugDrawSphere( x, y, z, size, colour );
 		instanceDataPtr++;
 	}
 }
+#endif // #if 0
 
-void renderBatches( void )
+static void renderBatches( void )
 {
 	int numBatches = 0;
 	int numTotalInstances = 0;
@@ -208,7 +210,7 @@ void renderBatches( void )
 				const float size = instanceDataPtr->size;
 
 				const unsigned int colour = LJ_mathGetRand32();
-				debugDrawSphere( x, y, z, size, colour );
+				LJ_debugDrawSphere( x, y, z, size, colour );
 				instanceDataPtr++;
 			}
 			if ( numInstancesInBatch > 0 )

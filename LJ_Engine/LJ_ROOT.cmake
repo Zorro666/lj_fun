@@ -39,7 +39,7 @@ IF ( MSVC )
 
 ELSE ( MSVC )
 
-    SET( GLOBAL_CFLAGS -Wextra -Wall -Werror -Wdeclaration-after-statement -fstrict-aliasing -DLJ_PLATFORM_LINUX )
+    SET( GLOBAL_CFLAGS -Wextra -Wall -Werror -Wdeclaration-after-statement -Wshadow -Wswitch-enum -Wswitch-default -Winit-self -Wstrict-prototypes -Wpointer-arith -Wfatal-errors -Wmissing-prototypes -Wmissing-declarations -Wredundant-decls -fstrict-aliasing -DLJ_PLATFORM_LINUX )
 
 ENDIF ( MSVC )
 
@@ -62,7 +62,7 @@ IF ( CMAKE_BUILD_TYPE STREQUAL "RELEASE" )
     IF ( MSVC )
 	SET( CONFIG_CFLAGS ${CONFIG_CFLAGS} -O2 )
     ELSE ( MSVC )
-	SET( CONFIG_CFLAGS ${CONFIG_CFLAGS} -O4 -ffast-math )
+	SET( CONFIG_CFLAGS ${CONFIG_CFLAGS} -O4 -ffast-math -Wuninitialized )
     ENDIF ( MSVC )
 
 ENDIF ( CMAKE_BUILD_TYPE STREQUAL "RELEASE" )
@@ -74,7 +74,7 @@ IF ( CMAKE_BUILD_TYPE STREQUAL "RELWITHDEBINFO" )
     IF ( MSVC )
 	SET( CONFIG_CFLAGS ${CONFIG_CFLAGS} -O2 -Zi )
     ELSE ( MSVC )
-	SET( CONFIG_CFLAGS ${CONFIG_CFLAGS} -g -O2 )
+	SET( CONFIG_CFLAGS ${CONFIG_CFLAGS} -g -O2 -Wuninitialized )
     ENDIF ( MSVC )
 
 ENDIF ( CMAKE_BUILD_TYPE STREQUAL "RELWITHDEBINFO" )

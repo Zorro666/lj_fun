@@ -21,7 +21,7 @@ LJ_int s_quit = 0;
 void* strokeFont = GLUT_STROKE_MONO_ROMAN;
 int drawStrokeFont = 0;
 
-void renderStrokeFontString( float x, float y, float z, void *font, char *string )
+static void renderStrokeFontString( float x, float y, float z, void *font, char *string )
 {  
     char *c;
     float scale = 0.0002f;
@@ -37,7 +37,8 @@ void renderStrokeFontString( float x, float y, float z, void *font, char *string
 
 #define MAX_NUM_OUTPUT 8
 
-void sortFunc( float* const testData, const int numData, float* const sortedData )
+#if 0
+static void sortFunc( float* const testData, const int numData, float* const sortedData )
 {
 	int i;
 	int numOutput = 0;
@@ -122,11 +123,7 @@ void sortFunc( float* const testData, const int numData, float* const sortedData
 		}
 	}
 }
-
-void gameTick( void )
-{
-    renderSortTest();
-}
+#endif // #if 0
 
 void game3DRender( void )
 {
@@ -147,7 +144,12 @@ void game2DRender( void )
     }
 }
 
-void gameSingleLoop()
+static void gameTick( void )
+{
+    renderSortTest();
+}
+
+static void gameSingleLoop( void )
 {
 	LJ_engineTick();
 	gameTick();
@@ -156,7 +158,7 @@ void gameSingleLoop()
 	LJ_engineFinishRendering();
 }
 
-void gameInit( void )
+static void gameInit( void )
 {
     LJ_debugVarRegister( "Camera:x", LJ_DEBUG_VAR_FLOAT, &s_cameraX, 0 );
     LJ_debugVarRegister( "Camera:y", LJ_DEBUG_VAR_FLOAT, &s_cameraY, 0 );
@@ -167,17 +169,8 @@ void gameInit( void )
     renderSortInit();
 }
 
-void gameReset( void )
+static void gameShutdown( void )
 {
-}
-
-void gameShutdown( void )
-{
-}
-
-void debugDrawSphere( float x, float y, float z, float size, int colour )
-{
-    LJ_debugDrawSphere( x, y, z, size, colour );
 }
 
 int main(int argc, char* argv[])

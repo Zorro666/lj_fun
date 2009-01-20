@@ -15,10 +15,6 @@ LJ_int s_sleepTime = 100;
 
 LJ_int s_quit = 0;
 
-void gameTick( void )
-{
-}
-
 void game3DRender( void )
 {
 }
@@ -27,25 +23,25 @@ void game2DRender( void )
 {
 }
 
-void gameSingleLoop()
+static void gameInit( void )
+{
+}
+
+static void gameShutdown( void )
+{
+}
+
+static void gameTick( void )
+{
+}
+
+static void gameSingleLoop( void )
 {
 	LJ_engineTick();
 	gameTick();
 	LJ_engineStartRendering();
 	LJ_engineRender();
 	LJ_engineFinishRendering();
-}
-
-void gameInit( void )
-{
-}
-
-void gameReset( void )
-{
-}
-
-void gameShutdown( void )
-{
 }
 
 LJ_int main(LJ_int argc, LJ_char* argv[])
