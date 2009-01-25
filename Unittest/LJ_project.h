@@ -10,7 +10,10 @@
 ////////////////////////////////////////////////////////////////
 
 #define LJ_USE_ASSERT 				1
+#define LJ_USE_MEM_TRACKING			1
+
 #define LJ_USE_UNITTEST 			1
+
 // Unittests become quite slow especially the random number generator ones when this is enabled
 #define LJ_UNITTEST_FULLTEST			1
 

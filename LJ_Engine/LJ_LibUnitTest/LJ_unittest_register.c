@@ -18,6 +18,7 @@ void LJ_unittestRegisterExternalTests( void )
 	LJ_UNITTEST_REGISTER( mem, LJ_memSet );
 	LJ_UNITTEST_REGISTER( mem, LJ_memZero );
 	LJ_UNITTEST_REGISTER( mem, LJ_memCopy );
+	LJ_UNITTEST_REGISTER( mem, alloc_free );
 
 	// LJ_LibCommon/LJ_Base/LJ_str.h API tests
 	LJ_UNITTEST_REGISTER( str, fundamental );

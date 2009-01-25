@@ -16,7 +16,7 @@ PROJECT_CONFIGS := $(foreach config, $(CONFIGS), $(PROJECT)_$(config) )
 .PHONY: cleanall buildall rebuildall runall testall
 .PHONY: allcleanall allbuildall allrebuildall allrunall alltestall
 .PHONY: fulltest
-.PHONY: backup
+.PHONY: backup tags
 .PHONY: $(PROJECTS)
 .PHONY: $(PROJECTS_CONFIGS)
 .PHONY: $(PROJECT_CONFIGS)
@@ -86,8 +86,13 @@ testall: $(PROJECT_CONFIGS)
 alltestall: $(PROJECTS_CONFIGS)
 	@echo $(PROJECTS_CONFIGS)
 
+backup: BASE_DIR:=$(shell pwd )
 backup:
-	$(MAKE) --no-print-directory -C $(PROJECT) backup
+	@$(MAKE) -f makefile.project --no-print-directory BASE_DIR=$(BASE_DIR) backup
+
+tags: BASE_DIR:=$(shell pwd )
+tags:
+	@$(MAKE) -f makefile.project --no-print-directory BASE_DIR=$(BASE_DIR) tags
 
 $(PROJECTS):
 	@echo "-----Making $@ Config:$(CONFIG)-----"

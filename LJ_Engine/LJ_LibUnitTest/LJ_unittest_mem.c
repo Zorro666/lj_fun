@@ -74,5 +74,23 @@ LJ_UNITTEST_FUNCTION_START( mem, LJ_memCopy )
 }
 LJ_UNITTEST_FUNCTION_END( mem, LJ_memCopy )
 
+LJ_UNITTEST_FUNCTION_START( mem, alloc_free )
+{
+	void* memTest[4];
+	// Not sure how to unittest the memory stuff - do some alloc/deallocs to cause a leak if this have gone wrong
+	memTest[0] = LJ_MEM_ALLOC( LJ_memGetSystemAllocHandle(), LJ_int, 25 );
+	memTest[1] = LJ_MEM_ALLOC( LJ_memGetSystemAllocHandle(), LJ_float, 10 );
+	memTest[2] = LJ_MEM_ALLOC( LJ_memGetSystemAllocHandle(), LJ_uint, 1 );
+
+	LJ_UNITTEST_TRUE( LJ_MEM_FREE( memTest[2] ) );
+	LJ_UNITTEST_TRUE( LJ_MEM_FREE( memTest[1] ) );
+
+	memTest[3] = LJ_MEM_ALLOC( LJ_memGetSystemAllocHandle(), LJ_floatIntUnion, 2 );
+
+	LJ_UNITTEST_TRUE( LJ_MEM_FREE( memTest[3] ) );
+	LJ_UNITTEST_TRUE( LJ_MEM_FREE( memTest[0] ) );
+}
+LJ_UNITTEST_FUNCTION_END( mem, alloc_free )
+
 #endif // #if LJ_USE_UNITTEST
 

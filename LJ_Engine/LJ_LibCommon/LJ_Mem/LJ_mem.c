@@ -1,6 +1,22 @@
 #include "LJ.h"
 
-#include "LJ_Base/LJ_mem.h"
+#include "LJ_Mem/LJ_mem.h"
+#include "LJ_Mem/LJ_memAlloc.h"
+
+void LJ_memInit( void )
+{
+	LJ_memAllocInit();
+}
+
+void LJ_memReset( void )
+{
+	LJ_memAllocReset();
+}
+
+void LJ_memShutdown( void )
+{
+	LJ_memAllocShutdown();
+}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
 //

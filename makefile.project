@@ -8,7 +8,6 @@
 .PHONY: buildall cleanall rebuildall
 .PHONY: runall fulltest
 
-BASE_DIR:=$(shell cd .. ; pwd )
 ROOT_DIR:=$(shell cd $(BASE_DIR)/.. ; pwd )
 ifdef WINDIR
 	BASE_DIR:=$(shell cygpath -m $(BASE_DIR) )
@@ -104,11 +103,11 @@ run: debug rundebug
 
 tags:
 	@echo ----- tags -----
-	@$(MAKE) -C $(BASE_DIR) -f makefile.tags --no-print-directory
+	@$(MAKE) --no-print-directory -C $(BASE_DIR) -f makefile.tags --no-print-directory
 
 cleantags:
 	@echo ----- clean tags -----
-	@$(MAKE) -C $(BASE_DIR) -f makefile.tags --no-print-directory clean
+	@$(MAKE) --no-print-directory -C $(BASE_DIR) -f makefile.tags --no-print-directory clean
 
 rebuildtags: cleantags tags
 
@@ -146,18 +145,15 @@ test:
 	@echo "ROOT_DIR=$(ROOT_DIR)"
 
 rundebug: 
-	$(EXE_NAME)_debug
+	./$(EXE_NAME)_debug
 
 runrelease: 
-	$(EXE_NAME)_release
+	./$(EXE_NAME)_release
 
 rungold: 
-	$(EXE_NAME)_gold
+	./$(EXE_NAME)_gold
 
-runall: buildall
-	$(EXE_NAME)_debug
-	$(EXE_NAME)_release
-	$(EXE_NAME)_gold
+runall: buildall rundebug runrelease rungold
 
 fulltest: rebuildall runall
 

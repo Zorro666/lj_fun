@@ -65,6 +65,7 @@ void LJ_engineEarlyInit( LJ_int argc, LJ_char* argv[] )
 	gluQuadricTexture( s_quadratic, GL_TRUE );
 
 	LJ_typesInit();
+	LJ_memInit();
 	LJ_mathSeedRand( 345 );
 	LJ_unittestInit();
 	LJ_debugVarInit( LJ_DEBUGVAR_MAX_NUM );
@@ -90,6 +91,7 @@ void LJ_engineShutdown( void )
 {
 	LJ_inputShutdown();
 	LJ_debugVarShutdown();
+	LJ_memShutdown();
 	SDL_Quit();
 }
 

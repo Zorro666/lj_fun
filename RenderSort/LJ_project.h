@@ -11,7 +11,11 @@
 
 #define LJ_USE_ASSERT 				1
 
+#if !LJ_GOLD
+#define LJ_USE_MEM_TRACKING			1
+#endif // #if !LJ_GOLD
+
 #define LJ_DEBUGVAR_MAX_NUM 		64
-#define LJ_USE_UNITTEST			1
+#define LJ_USE_UNITTEST				1
 
 #endif // #ifndef LJ_PROJECT_HH
