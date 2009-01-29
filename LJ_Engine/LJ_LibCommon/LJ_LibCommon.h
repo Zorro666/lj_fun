@@ -14,5 +14,7 @@
 #include "LJ_Mem/LJ_mem.h"
 #include "LJ_Mem/LJ_memAlloc.h"
 
+#include "LJ_File/LJ_filesystem.h"
+
 #endif // #ifndef LJ_LIBCOMMON_H
 

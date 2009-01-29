@@ -33,6 +33,9 @@ void LJ_unittestRegisterExternalTests( void )
 	// LJ_LibCommon/LJ_Math/LJ_math.h API tests
 	LJ_UNITTEST_REGISTER( math, basic )
 	LJ_UNITTEST_REGISTER( math, random )
+
+	// LJ_LibCommon/LJ_File/LJ_filesystem.h API tests
+	LJ_UNITTEST_REGISTER( filesystem, basic )
 }
 
 #endif // #if LJ_USE_UNITTEST

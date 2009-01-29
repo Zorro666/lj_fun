@@ -17,7 +17,7 @@ void LJ_memAllocInit( void );
 void LJ_memAllocReset( void );
 void LJ_memAllocShutdown( void );
 
-#define LJ_MEM_SYSTEM_ALLOC		(-2U)
+#define LJ_MEM_SYSTEM_ALLOC		(0xFFFFFFFEU)
 
 void* LJ_memAllocInternal( LJ_memHeapHandle heapHandle, const LJ_uint elementSize, const LJ_uint numElements, LJ_uint* const allocSize );
 LJ_bool LJ_memFreeInternal( void* const address );

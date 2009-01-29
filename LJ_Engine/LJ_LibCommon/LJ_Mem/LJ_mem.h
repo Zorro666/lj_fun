@@ -26,7 +26,7 @@ void LJ_memZero( void* const to, const LJ_uint numBytes );
 /////////////////////////////////////////////////////////////////////////////////////////////////
 
 typedef LJ_uint LJ_memHeapHandle;
-#define LJ_MEM_HEAP_INVALID		(-1U)
+#define LJ_MEM_HEAP_INVALID		(0xFFFFFFFFU)
 
 #ifndef LJ_MEM_ALLOC_MAX_NUM_ACTIVE_POINTERS
 #define LJ_MEM_ALLOC_MAX_NUM_ACTIVE_POINTERS (20*1024)

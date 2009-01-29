@@ -30,6 +30,7 @@ static LJ_uint s_memAllocNumActivePointers = 0;
 
 typedef struct LJ_memHeap
 {
+    LJ_uint maxSize;
 } LJ_memHeap;
 //static LJ_memHeap s_memHeapArray[LJ_MEM_MAX_NUM_HEAPS];
 
