@@ -31,19 +31,19 @@ $(PROJECTS_CONFIGS):
 	@$(MAKE) --no-print-directory -C $(GET_PROJECT) $(ACTION)$(GET_CONFIG)
 
 clean:
-	$(MAKE) --no-print-directory -C $(PROJECT) clean$(CONFIG)
+	@$(MAKE) --no-print-directory -C $(PROJECT) clean$(CONFIG)
 
 build:
-	$(MAKE) --no-print-directory -C $(PROJECT) $(CONFIG)
+	@$(MAKE) --no-print-directory -C $(PROJECT) $(CONFIG)
 
 all: ACTION:=
 all: $(PROJECT_CONFIGS)
 
 rebuild: clean 
-	$(MAKE) --no-print-directory build
+	@$(MAKE) --no-print-directory build
 
 run:
-	$(MAKE) --no-print-directory -C $(PROJECT) run
+	@$(MAKE) --no-print-directory -C $(PROJECT) run
 
 cleanall: ACTION:=clean
 cleanall: $(PROJECT_CONFIGS)
@@ -58,8 +58,8 @@ runall: ACTION:=run
 runall: $(PROJECT_CONFIGS)
 
 fulltest: 
-	$(MAKE) --no-print-directory rebuildall
-	$(MAKE) --no-print-directory runall
+	@$(MAKE) --no-print-directory rebuildall
+	@$(MAKE) --no-print-directory runall
 
 allcleanall: ACTION:=clean
 allcleanall: $(PROJECTS_CONFIGS)
@@ -74,8 +74,8 @@ allrunall: ACTION:=run
 allrunall: $(PROJECTS_CONFIGS)
 
 allfulltest: 
-	$(MAKE) --no-print-directory allrebuildall
-	$(MAKE) --no-print-directory allrunall
+	@$(MAKE) --no-print-directory allrebuildall
+	@$(MAKE) --no-print-directory allrunall
 
 test: $(PROJECT)
 	@echo $(PROJECT)
