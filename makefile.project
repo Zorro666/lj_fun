@@ -6,7 +6,7 @@
 .PHONY: rebuilddebug rebuildrelease rebuildgold
 .PHONY: tags cleantags rebuildtags
 .PHONY: buildall cleanall rebuildall
-.PHONY: runall fulltest
+.PHONY: runall fulltest prerun
 
 ROOT_DIR:=$(shell cd $(BASE_DIR)/.. ; pwd )
 ifdef WINDIR
@@ -99,6 +99,9 @@ build: debug
 
 rebuild: rebuilddebug
 
+prerun:
+	@mkdir -p $(BASE_DIR)/test
+
 run: debug rundebug
 
 tags:
@@ -144,7 +147,7 @@ test:
 	@echo "RPOJECT_DIR=$(PROJECT_DIR)"
 	@echo "ROOT_DIR=$(ROOT_DIR)"
 
-rundebug: 
+rundebug: prerun
 	./$(EXE_NAME)_debug
 
 runrelease: 
