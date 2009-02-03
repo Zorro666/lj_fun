@@ -26,7 +26,8 @@ typedef struct LJ_memAllocActivePointer
 } LJ_memAllocActivePointer;
 
 static LJ_memAllocActivePointer s_memAllocActivePointers[LJ_MEM_ALLOC_MAX_NUM_ACTIVE_POINTERS];
-static LJ_uint s_memAllocNumActivePointers = 0;
+static LJ_uint s_memAllocMaxActivePointer = 0;
+static LJ_uint s_memAllocFirstFreePointer = 0;
 
 typedef struct LJ_memHeap
 {
@@ -44,13 +45,15 @@ void LJ_memAllocInit( void )
 		s_memAllocActivePointers[i].address = LJ_NULL;
 		s_memAllocActivePointers[i].heapHandle = LJ_MEM_HEAP_INVALID;
 	}
-	s_memAllocNumActivePointers = 0;
+	s_memAllocFirstFreePointer = 0;
+	s_memAllocMaxActivePointer = 0;
 
 #if LJ_USE_MEM_TRACKING
 	LJ_memDebugInit();
 #endif // #if LJ_USE_MEM_TRACKING
 
 }
+
 void LJ_memAllocReset( void )
 {
 #if LJ_USE_MEM_TRACKING
@@ -66,20 +69,21 @@ void LJ_memAllocShutdown( void )
 }
 
 // Add a pointer to the active pointer list
-static LJ_bool  LJ_memAllocAddPointer( const void* address, const LJ_memHeapHandle heapHandle )
+static LJ_bool LJ_memAllocAddPointer( const void* address, const LJ_memHeapHandle heapHandle )
 {
 	LJ_uint i;
-	for ( i = 0; i < LJ_MEM_ALLOC_MAX_NUM_ACTIVE_POINTERS; i++ )
+	for ( i = s_memAllocFirstFreePointer; i < LJ_MEM_ALLOC_MAX_NUM_ACTIVE_POINTERS; i++ )
 	{
 		LJ_memAllocActivePointer* const memAllocActivePointer = s_memAllocActivePointers + i;
 		if ( memAllocActivePointer->address == LJ_NULL )
 		{
 		 	memAllocActivePointer->address = address;
 		 	memAllocActivePointer->heapHandle = heapHandle;
+			s_memAllocFirstFreePointer++;
 
-			if ( i == s_memAllocNumActivePointers )
+			if ( i > s_memAllocMaxActivePointer )
 			{
-				s_memAllocNumActivePointers++;
+				s_memAllocMaxActivePointer = i;
 			}
 			return LJ_TRUE;
 		}
@@ -91,7 +95,7 @@ static LJ_bool  LJ_memAllocAddPointer( const void* address, const LJ_memHeapHand
 static LJ_memHeapHandle LJ_memAllocFreePointer( const void* address )
 {
 	LJ_uint i;
-	for ( i = 0; i < s_memAllocNumActivePointers; i++ )
+	for ( i = 0; i <= s_memAllocMaxActivePointer; i++ )
 	{
 		LJ_memAllocActivePointer* const memAllocActivePointer = s_memAllocActivePointers + i;
 		if ( memAllocActivePointer->address == address )
@@ -100,9 +104,17 @@ static LJ_memHeapHandle LJ_memAllocFreePointer( const void* address )
 			memAllocActivePointer->address = LJ_NULL;
 			memAllocActivePointer->heapHandle = LJ_MEM_HEAP_INVALID;
 
-			if ( i == ( s_memAllocNumActivePointers - 1 ) )
+			if ( i < s_memAllocFirstFreePointer )
 			{
-				s_memAllocNumActivePointers = i;
+				s_memAllocFirstFreePointer = i;
+			}
+			if ( i == s_memAllocMaxActivePointer )
+			{
+				// This might not be the true maximum - could do a backwards search to find the first non-free alloc
+				if (s_memAllocMaxActivePointer > 0 )
+				{
+					s_memAllocMaxActivePointer--;
+				}
 			}
 
 			return heapHandle;

@@ -18,6 +18,7 @@ void LJ_memCopy( void* const to, const void* const from, const LJ_uint numBytes 
 
 void LJ_memSet( void* const to, const LJ_uint8 value, const LJ_uint numBytes );
 void LJ_memZero( void* const to, const LJ_uint numBytes );
+LJ_bool LJ_memIsSame( const void* const mem, const void* const compare, const LJ_uint numBytes );
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
 //

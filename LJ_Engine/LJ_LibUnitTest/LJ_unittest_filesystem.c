@@ -1,6 +1,7 @@
 #include "LJ.h"
-#include "LJ_unittest.h"
 #include "LJ_LibCommon/LJ_LibCommon.h"
+
+#include "LJ_unittest.h"
 
 #if LJ_USE_UNITTEST
 

@@ -32,7 +32,7 @@ LJ_bool LJ_memFreeDebugInternal( void* const address,
 			   				     const LJ_char* const file, const LJ_uint line, const LJ_char* const func );
 
 #define LJ_MEM_ALLOC( heapHandle, type, numElements ) \
-    LJ_memAllocDebugInternal( ( heapHandle ), sizeof( type ), numElements, LJ_SOURCE_FILE, LJ_SOURCE_LINE, LJ_SOURCE_FUNCTION, #type )
+    (type*)LJ_memAllocDebugInternal( ( heapHandle ), sizeof( type ), numElements, LJ_SOURCE_FILE, LJ_SOURCE_LINE, LJ_SOURCE_FUNCTION, #type )
 
 #define LJ_MEM_FREE( address ) \
     LJ_memFreeDebugInternal( ( address ), LJ_SOURCE_FILE, LJ_SOURCE_LINE, LJ_SOURCE_FUNCTION )
@@ -40,7 +40,7 @@ LJ_bool LJ_memFreeDebugInternal( void* const address,
 #else // #if LJ_USE_MEM_TRACKING
 
 #define LJ_MEM_ALLOC( heapHandle, type, numElements ) \
-    LJ_memAllocInternal( ( heapHandle ), sizeof( type ), numElements, LJ_NULL )
+    (type*)LJ_memAllocInternal( ( heapHandle ), sizeof( type ), numElements, LJ_NULL )
 
 #define LJ_MEM_FREE( address ) \
     LJ_memFreeInternal( ( address ) )

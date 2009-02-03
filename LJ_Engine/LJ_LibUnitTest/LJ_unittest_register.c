@@ -36,6 +36,9 @@ void LJ_unittestRegisterExternalTests( void )
 
 	// LJ_LibCommon/LJ_File/LJ_filesystem.h API tests
 	LJ_UNITTEST_REGISTER( filesystem, basic )
+
+	// LJ_LibGraphics/LJ_Texture/LJ_texture.h API tests
+	LJ_UNITTEST_REGISTER( texture, tga )
 }
 
 #endif // #if LJ_USE_UNITTEST

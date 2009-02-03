@@ -5,14 +5,17 @@
 
 void LJ_filesystemInit( void )
 {
+	LJ_fileInit();
 }
 
 void LJ_filesystemReset( void )
 {
+	LJ_fileReset();
 }
 
 void LJ_filesystemShutdown( void )
 {
+	LJ_fileShutdown();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

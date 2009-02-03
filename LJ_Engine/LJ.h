@@ -11,5 +11,14 @@
 ////////////////////////////////////////////////////////////////
 
 #include "LJ_project.h"
+//
+// Default memory tracking to be on in all builds except gold
+#ifndef LJ_USE_MEM_TRACKING
+
+#if !LJ_GOLD
+#define LJ_USE_MEM_TRACKING			1
+#endif // #if !LJ_GOLD
+
+#endif // #ifndef LJ_USE_MEM_TRACKING
 
 #endif // #ifndef LJ_HH

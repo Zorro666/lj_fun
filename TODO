@@ -2,16 +2,22 @@ To be done:
 
 * Tasks
 
+** memory leaks at shutdown not working anymore
+** get TGA texture drawing via debug function
+
+** TGA loader needs to support RLE compression
+
+*** need unittests for file layer
+*** need unittest for LJ_memIsSame function
+
 ** LJ_assert needs to become modal dialoge with ignore, break, continue options
 ** hmmmm - do we need LJ_commonInit(); -> memory, maths
 
-** need a base file layer
-*** need unittests for file layer
-
-** need a TGA texture loader
-*** need unittests for file layer
-
 ** implement a base LJ_LibGraphics (2D graphics, texture handling - user texture creation in real-time)
+
+** need a platform independent sleep function: take out #if PLATFORM in LJ_engine.c
+
+** sort out the filesystem and file layers - have a stdc file device, cluster file device, cluster filesystem device?
 
 ** might need some base util structs: 
 *** linked-list + unittest

@@ -6,6 +6,7 @@
 #include "LJ_LibDebug/LJ_LibDebug.h"
 #include "LJ_LibInput/LJ_LibInput.h"
 #include "LJ_LibUnitTest/LJ_LibUnittest.h"
+#include "LJ_LibGraphics/LJ_LibGraphics.h"
 
 #include <SDL.h>
 #include <SDL_opengl.h>
@@ -15,6 +16,7 @@
 
 #include <time.h>
 
+// TODO: make use of SDL lib be on a #define and hide it away even more so the code can be ported to other platforms e.g. iphone/wii
 LJ_int winWidth = 768;
 LJ_int winHeight = 512;
 
@@ -64,12 +66,17 @@ void LJ_engineEarlyInit( LJ_int argc, LJ_char* argv[] )
 	gluQuadricNormals( s_quadratic, GLU_SMOOTH );
 	gluQuadricTexture( s_quadratic, GL_TRUE );
 
+	// TODO: this should be LJ_commonInit();
 	LJ_typesInit();
 	LJ_memInit();
+	LJ_filesystemInit();
+	// TODO: this needs to seeded in a better way!
 	LJ_mathSeedRand( 345 );
+
 	LJ_unittestInit();
 	LJ_debugVarInit( LJ_DEBUGVAR_MAX_NUM );
 	LJ_inputInit();
+	LJ_graphicsInit();
 }
 
 void LJ_engineLateInit( void )
@@ -82,21 +89,30 @@ void LJ_engineLateInit( void )
 
 void LJ_engineReset( void )
 {
-	LJ_unittestReset();
-	LJ_debugVarReset();
+	LJ_graphicsReset();
 	LJ_inputReset();
+	LJ_debugVarReset();
+	LJ_unittestReset();
+	// TODO: LJ_commonReset();
+	LJ_filesystemReset();
 }
 
 void LJ_engineShutdown( void )
 {
+	LJ_graphicsShutdown();
 	LJ_inputShutdown();
 	LJ_debugVarShutdown();
+
+	// TODO: LJ_commonShutdown();
+	LJ_filesystemShutdown();
 	LJ_memShutdown();
+
 	SDL_Quit();
 }
 
 void LJ_engineTick( void )
 {
+	// TODO: remove the #if PLATFORM code need a sleep function
 #if PLATFORM_WIN
 	Sleep( s_sleepTime );
 #endif // #if PLATFORM_WIN
@@ -242,6 +258,7 @@ void LJ_debugDrawSphere( const LJ_float x, const LJ_float y, const LJ_float z, c
 	const LJ_float green = (LJ_float)(( colour >> 16 ) & 0xFF) / 255.0f;
 	const LJ_float blue = (LJ_float)(( colour >> 8 ) & 0xFF) / 255.0f;
 
+	glDisable( GL_TEXTURE_2D );
     glMatrixMode(GL_MODELVIEW);
     glPushMatrix();
 	glColor4f( red, green, blue, 0.5f );
@@ -255,12 +272,53 @@ void LJ_debugDrawCircle( const LJ_float x, const LJ_float y, const LJ_float z, c
 	const LJ_float red = (LJ_float)(( colour >> 24 ) & 0xFF) / 255.0f;
 	const LJ_float green = (LJ_float)(( colour >> 16 ) & 0xFF) / 255.0f;
 	const LJ_float blue = (LJ_float)(( colour >> 8 ) & 0xFF) / 255.0f;
+	const LJ_float alpha = (LJ_float)(( colour >> 0 ) & 0xFF) / 255.0f;
+
+	glDisable( GL_TEXTURE_2D );
+    glMatrixMode(GL_MODELVIEW);
+    glPushMatrix();
+	glColor4f( red, green, blue, alpha );
+	glTranslatef( x, y, z );
+	gluDisk( s_quadratic, radius-0.01f, radius, 32, 32 );
+    glPopMatrix();
+}
+
+void LJ_debugDrawQuadTexture( const LJ_float x, const LJ_float y, const LJ_float z, 
+						      const LJ_float width, const LJ_float height, const LJ_textureHandle th, const LJ_uint colour )
+{
+	const LJ_float red = (LJ_float)(( colour >> 24 ) & 0xFF) / 255.0f;
+	const LJ_float green = (LJ_float)(( colour >> 16 ) & 0xFF) / 255.0f;
+	const LJ_float blue = (LJ_float)(( colour >> 8 ) & 0xFF) / 255.0f;
+	const LJ_float alpha = (LJ_float)(( colour >> 0 ) & 0xFF) / 255.0f;
+
+	glEnable( GL_TEXTURE_2D );
+	glBindTexture( GL_TEXTURE_2D, th );
+	glTexEnvf( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE );
+	glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT );
+	glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT );
 
     glMatrixMode(GL_MODELVIEW);
     glPushMatrix();
-	glColor4f( red, green, blue, 0.5f );
-	glTranslatef( x, y, z );
-	gluDisk( s_quadratic, radius-0.01f, radius, 32, 32 );
+	glColor4f( red, green, blue, alpha );
+	glTranslatef( x-width/2, y-height/2, z );
+	// 0--->1
+	// |    |
+	// |    |
+	// 2--->3
+	glBegin( GL_TRIANGLE_STRIP );
+	glTexCoord2f( 0.0f, 0.0f );
+	glVertex3f( 0.0f, 0.0f, 0.0f );
+
+	glTexCoord2f( 1.0f, 0.0f );
+	glVertex3f( width, 0.0f, 0.0f );
+
+	glTexCoord2f( 0.0f, 1.0f );
+	glVertex3f( 0.0f, height, 0.0f );
+
+	glTexCoord2f( 1.0f, 1.0f );
+	glVertex3f( width, height, 0.0f );
+
+	glEnd();
     glPopMatrix();
 }
 

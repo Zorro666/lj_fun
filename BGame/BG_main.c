@@ -16,6 +16,8 @@ LJ_int s_sleepTime = 100;
 LJ_int s_quit = 0;
 LJ_int s_minimized = 0;
 
+LJ_textureHandle bgTex = LJ_TEXTURE_HANDLE_INVALID;
+
 void game3DRender( void )
 {
 	LJ_debugDrawSphere( 0.0f, 0.0f, -10.0f, 3.0f, 0xFF0000FF );
@@ -36,6 +38,8 @@ void game2DRender( void )
 	y = 1.0f - (LJ_float)mouseY / WIN_HEIGHT;
 
 	LJ_debugDrawCircle( x, y, 0.0f, radius, 0x00FF00FF );
+
+	LJ_debugDrawQuadTexture( x, y, 0.0f, 1.0f, -0.5f, bgTex, 0xFFFFFFFF );
 }
 
 // pause the application until focus in regained
@@ -66,12 +70,17 @@ static void gameSingleLoop( void )
 
 static void gameInit( void )
 {
+	const char* const bgFilename = "bg.tga";
+
 	// Game init
     LJ_debugVarRegister( "Camera:x", LJ_DEBUG_VAR_FLOAT, &s_cameraX, 0 );
     LJ_debugVarRegister( "Camera:y", LJ_DEBUG_VAR_FLOAT, &s_cameraY, 0 );
     LJ_debugVarRegister( "Camera:z", LJ_DEBUG_VAR_FLOAT, &s_cameraZ, 0 );
     LJ_debugVarRegister( "Camera:fov", LJ_DEBUG_VAR_FLOAT, &s_cameraFoV, 0 );
     LJ_debugVarRegister( "Main:sleepTime", LJ_DEBUG_VAR_INT, &s_sleepTime, 0 );
+
+	bgTex = LJ_textureLoadTGA( bgFilename, LJ_NULL );
+	LJ_assert( bgTex != LJ_TEXTURE_HANDLE_INVALID, ( "Can't load TGA '%s'\n", bgFilename ) );
 }
 
 static void gameShutdown( void )

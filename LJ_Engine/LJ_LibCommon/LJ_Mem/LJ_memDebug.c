@@ -19,7 +19,8 @@ typedef struct LJ_memDebugInfo
 } LJ_memDebugInfo;
 
 static LJ_memDebugInfo s_memDebugInfos[LJ_MEM_ALLOC_MAX_NUM_ACTIVE_POINTERS];
-static LJ_uint s_memDebugNumInfos = 0;
+static LJ_uint s_memDebugMaxActivePointer = 0;
+static LJ_uint s_memDebugFirstFreePointer = 0;
 
 void LJ_memDebugInit( void )
 {
@@ -28,7 +29,8 @@ void LJ_memDebugInit( void )
 	{
 		LJ_memDebugResetAllocation( s_memDebugInfos+i );
 	}
-	s_memDebugNumInfos = 0;
+	s_memDebugMaxActivePointer = 0;
+	s_memDebugFirstFreePointer = 0;
 }
 
 // Need to consider what this should do!
@@ -44,7 +46,7 @@ void LJ_memDebugShutdown( void )
 	// Count the number of leaks first
 	LJ_uint numLeaks = 0;
 	LJ_uint totalBytesLeaked = 0;
-	for ( i = 0; i < s_memDebugNumInfos; i++ )
+	for ( i = 0; i <= s_memDebugMaxActivePointer; i++ )
 	{
 		LJ_memDebugInfo* const memDebugInfo = s_memDebugInfos + i;
 		if ( memDebugInfo->address != LJ_NULL )
@@ -69,7 +71,7 @@ void LJ_memDebugShutdown( void )
 
 		LJ_outputPrintGold( ( "Memory Leak details:\n" ) );
 		LJ_outputPrintGold( ( "\n" ) );
-		for ( i = 0; i < s_memDebugNumInfos; i++ )
+		for ( i = 0; i <= s_memDebugMaxActivePointer; i++ )
 		{
 			LJ_memDebugInfo* const memDebugInfo = s_memDebugInfos + i;
 			if ( memDebugInfo->address != LJ_NULL )
@@ -96,7 +98,7 @@ LJ_bool LJ_memDebugAddAllocation( const void* address, const LJ_memHeapHandle he
 {
 	// Very slow linear array - perhaps one day make it a binary chop or linear sorted array
 	LJ_uint i;
-	for ( i = 0; i < LJ_MEM_ALLOC_MAX_NUM_ACTIVE_POINTERS; i++ )
+	for ( i = s_memDebugFirstFreePointer; i < LJ_MEM_ALLOC_MAX_NUM_ACTIVE_POINTERS; i++ )
 	{
 		LJ_memDebugInfo* const memDebugInfo = s_memDebugInfos + i;
 		if ( memDebugInfo->address == LJ_NULL )
@@ -111,9 +113,11 @@ LJ_bool LJ_memDebugAddAllocation( const void* address, const LJ_memHeapHandle he
 			memDebugInfo->func = func;
 			memDebugInfo->type = type;
 
-			if ( i == s_memDebugNumInfos )
+			s_memDebugFirstFreePointer++;
+
+			if ( i > s_memDebugMaxActivePointer )
 			{
-				s_memDebugNumInfos++;
+				s_memDebugMaxActivePointer = i;
 			}
 			return LJ_TRUE;
 		}
@@ -126,16 +130,24 @@ LJ_bool LJ_memDebugRemoveAllocation( const void* const address )
 {
 	// Very slow linear array - perhaps one day make it a binary chop or linear sorted array
 	LJ_uint i;
-	for ( i = 0; i < s_memDebugNumInfos; i++ )
+	for ( i = 0; i <= s_memDebugMaxActivePointer; i++ )
 	{
 		LJ_memDebugInfo* const memDebugInfo = s_memDebugInfos + i;
 		if ( memDebugInfo->address == address )
 		{
 			LJ_memDebugResetAllocation( memDebugInfo );
 
-			if ( i == ( s_memDebugNumInfos - 1 ) )
+			if ( i < s_memDebugFirstFreePointer )
 			{
-				s_memDebugNumInfos = i;
+				s_memDebugFirstFreePointer = i;
+			}
+			if ( i == s_memDebugMaxActivePointer )
+			{
+				// This might not be the true maximum - could do a backwards search to find the first non-free alloc
+				if ( s_memDebugMaxActivePointer > 0 )
+				{
+					s_memDebugMaxActivePointer--;
+				}
 			}
 			return LJ_TRUE;
 		}

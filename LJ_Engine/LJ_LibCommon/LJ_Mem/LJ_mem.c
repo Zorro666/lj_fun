@@ -51,3 +51,30 @@ void LJ_memZero( void* const to, const LJ_uint numBytes )
 	LJ_memSet( to, 0, numBytes );
 }
 
+LJ_bool LJ_memIsSame( const void* const mem, const void* const compare, const LJ_uint numBytes )
+{
+	const LJ_char* readMemory = mem;
+	const LJ_char* readCompare = compare;
+	LJ_uint length = 0;
+
+	if ( numBytes == 0 )
+	{
+		return LJ_TRUE;
+	}
+
+	while ( 1 )
+	{
+		if ( length == numBytes )
+		{
+			return LJ_TRUE;
+		}
+		else if ( *readMemory != *readCompare )
+		{
+			return LJ_FALSE;
+		}
+		readMemory++;
+		readCompare++;
+		length++;
+	}
+}
+

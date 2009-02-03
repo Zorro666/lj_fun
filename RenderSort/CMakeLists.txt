@@ -11,6 +11,6 @@ LINK_DIRECTORIES( ${GLOBAL_LINK_DIRECTORIES} )
 ADD_EXECUTABLE( rendersort RS_main.c RS_renderSort.c )
 
 # need to link to some other libraries ? just add them here
-SET( ENGINE_LIBS LJ_LibEngine LJ_LibUnitTest LJ_LibDebug LJ_LibInput LJ_LibCommon )
+SET( ENGINE_LIBS LJ_LibEngine LJ_LibUnitTest LJ_LibGraphics LJ_LibDebug LJ_LibInput LJ_LibCommon )
 TARGET_LINK_LIBRARIES( rendersort ${ENGINE_LIBS} ${OPENGL_LIBRARY} ${GLUT_glut_LIBRARY} ${SDL_LIBRARY} )
 

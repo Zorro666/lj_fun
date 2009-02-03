@@ -76,21 +76,29 @@ LJ_UNITTEST_FUNCTION_END( mem, LJ_memCopy )
 
 LJ_UNITTEST_FUNCTION_START( mem, alloc_free )
 {
-	void* memTest[4];
 	// Not sure how to unittest the memory stuff - do some alloc/deallocs to cause a leak if this have gone wrong
-	memTest[0] = LJ_MEM_ALLOC( LJ_memGetSystemAllocHandle(), LJ_int, 25 );
-	memTest[1] = LJ_MEM_ALLOC( LJ_memGetSystemAllocHandle(), LJ_float, 10 );
-	memTest[2] = LJ_MEM_ALLOC( LJ_memGetSystemAllocHandle(), LJ_uint, 1 );
+	LJ_int* const memTest0 = LJ_MEM_ALLOC( LJ_memGetSystemAllocHandle(), LJ_int, 25 );
+	LJ_float* const memTest1 = LJ_MEM_ALLOC( LJ_memGetSystemAllocHandle(), LJ_float, 10 );
+	LJ_uint* const memTest2 = LJ_MEM_ALLOC( LJ_memGetSystemAllocHandle(), LJ_uint, 1 );
+	LJ_floatIntUnion* memTest3 = LJ_NULL;
 
-	LJ_UNITTEST_TRUE( LJ_MEM_FREE( memTest[2] ) );
-	LJ_UNITTEST_TRUE( LJ_MEM_FREE( memTest[1] ) );
+	LJ_UNITTEST_TRUE( LJ_MEM_FREE( memTest2 ) );
+	LJ_UNITTEST_TRUE( LJ_MEM_FREE( memTest1 ) );
 
-	memTest[3] = LJ_MEM_ALLOC( LJ_memGetSystemAllocHandle(), LJ_floatIntUnion, 2 );
+	memTest3 = LJ_MEM_ALLOC( LJ_memGetSystemAllocHandle(), LJ_floatIntUnion, 2 );
 
-	LJ_UNITTEST_TRUE( LJ_MEM_FREE( memTest[3] ) );
-	LJ_UNITTEST_TRUE( LJ_MEM_FREE( memTest[0] ) );
+	LJ_UNITTEST_TRUE( LJ_MEM_FREE( memTest3 ) );
+	LJ_UNITTEST_TRUE( LJ_MEM_FREE( memTest0 ) );
 }
 LJ_UNITTEST_FUNCTION_END( mem, alloc_free )
+
+#if 0
+LJ_UNITTEST_FUNCTION_START( mem, LJ_memIsSame )
+{
+	// LJ_bool LJ_memIsSame( const void* const mem, const void* const compare, const LJ_uint numBytes )
+}
+LJ_UNITTEST_FUNCTION_END( mem, LJ_memIsSame )
+#endif // #if 0
 
 #endif // #if LJ_USE_UNITTEST
 
