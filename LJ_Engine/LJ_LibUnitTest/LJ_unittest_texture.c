@@ -20,7 +20,9 @@ LJ_UNITTEST_FUNCTION_START( texture, tga )
 	LJ_uint y;
 	LJ_textureHandle th = LJ_TEXTURE_HANDLE_INVALID;
 	LJ_uint8* imageDataPtr = LJ_NULL;
+	LJ_uint* tgaDataPtr = LJ_NULL;
 	LJ_uint testImage[LJ_TEST_TGA_HEIGHT][LJ_TEST_TGA_WIDTH];
+	LJ_uint i;
 
 	fh = LJ_filesystemOpen( LJ_TEST_TGA_NAME, LJ_FILE_MODE_WRITE );
 	LJ_UNITTEST_TRUE( ( fh != LJ_FILE_HANDLE_INVALID ) );
@@ -104,9 +106,38 @@ LJ_UNITTEST_FUNCTION_START( texture, tga )
 	// TGA's are upside down with bottom of image at first bytes in the file
 	for ( y = 0; y < LJ_TEST_TGA_HEIGHT; y++ )
 	{
-		LJ_uint* const rowDataPtr = testImage[LJ_TEST_TGA_HEIGHT - y - 1];
-		retVal = LJ_filesystemWrite( fh, rowDataPtr, LJ_TEST_TGA_WIDTH * 4 );
-		LJ_UNITTEST_TRUE( retVal );
+		LJ_uint x;
+		LJ_uint8* const rowDataPtr = (LJ_uint8* const)( testImage[LJ_TEST_TGA_HEIGHT - y - 1] );
+		
+		// Write the data out pixel at a time and byte at a time
+		i = 0;
+		for ( x = 0; x < LJ_TEST_TGA_WIDTH; x++ )
+		{
+			// TGA pixel format is: ARGB which in the file is B G R A
+			// Blue
+			temp8 = rowDataPtr[i];
+			i++;
+			retVal = LJ_filesystemWrite( fh, &temp8, 1 );
+			LJ_UNITTEST_TRUE( retVal );
+
+			// Green
+			temp8 = rowDataPtr[i];
+			i++;
+			retVal = LJ_filesystemWrite( fh, &temp8, 1 );
+			LJ_UNITTEST_TRUE( retVal );
+
+			// Red
+			temp8 = rowDataPtr[i];
+			i++;
+			retVal = LJ_filesystemWrite( fh, &temp8, 1 );
+			LJ_UNITTEST_TRUE( retVal );
+
+			// Alpha
+			temp8 = rowDataPtr[i];
+			i++;
+			retVal = LJ_filesystemWrite( fh, &temp8, 1 );
+			LJ_UNITTEST_TRUE( retVal );
+		}
 	}
 
 	retVal = LJ_filesystemClose( fh );
@@ -115,7 +146,27 @@ LJ_UNITTEST_FUNCTION_START( texture, tga )
 	th = LJ_textureLoadTGA( LJ_TEST_TGA_NAME, &imageDataPtr );
 
 	// Now compare the pixels
-	LJ_UNITTEST_TRUE( LJ_memIsSame( imageDataPtr, testImage, LJ_TEST_TGA_HEIGHT * LJ_TEST_TGA_WIDTH * 4 ) );
+	tgaDataPtr = (LJ_uint*)( imageDataPtr );
+	i = 0;
+	for ( y = 0; y < LJ_TEST_TGA_HEIGHT; y++ )
+	{
+		LJ_uint x;
+		
+		// Write the data out pixel at a time and byte at a time
+		for ( x = 0; x < LJ_TEST_TGA_WIDTH; x++ )
+		{
+			const LJ_uint tgaPixel = tgaDataPtr[i];
+			const LJ_uint myPixel = testImage[y][x];
+			// Convert tga pixel (BGRA) into ARGB pixel
+			LJ_uint rgbaPixel = ( ( ( tgaPixel >> 24 ) & 0xFF ) << 24 ) | 
+								( ( ( tgaPixel >> 0 ) & 0xFF ) << 16 ) |
+								( ( ( tgaPixel >> 8 ) & 0xFF ) << 8 ) |
+								( ( ( tgaPixel >> 16 ) & 0xFF ) << 0 );
+			LJ_UNITTEST_EQUALS( myPixel, rgbaPixel );
+			//LJ_outputPrintGold( ( "tgaPixel 0x%X rgbaPixel 0x%X myPixel 0x%X\n", tgaPixel, rgbaPixel, myPixel ) ); 
+			i++;
+		}
+	}
 
 	LJ_UNITTEST_TRUE( LJ_FALSE );
 

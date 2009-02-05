@@ -71,6 +71,7 @@ static void gameSingleLoop( void )
 static void gameInit( void )
 {
 	const char* const bgFilename = "../../Data/BGame/bg.tga";
+	//const char* const bgFilename = "../test/test.tga";
 
 	// Game init
     LJ_debugVarRegister( "Camera:x", LJ_DEBUG_VAR_FLOAT, &s_cameraX, 0 );

@@ -315,7 +315,16 @@ LJ_textureHandle LJ_textureLoadTGA( const char* const filename, LJ_uint8** image
 		j = 0;
 		for ( x = 0; x < header.width; x++ )
 		{
-			// TGA pixel format is: ARGB
+			// TGA pixel format is: BGRA : byte by byte in the file is B G R A
+			// Output pixel format is: RGBA : byte by byte is R G B A
+
+			// TGA Blue data
+			rowStart[i+2] = rowData[j++];
+			// TGA Green data
+			rowStart[i+1] = rowData[j++];
+			// TGA Red data
+			rowStart[i+0] = rowData[j++];
+
 			// Only support 24-bit or 32-bit input images
 			if ( readAlpha )
 			{
@@ -327,17 +336,6 @@ LJ_textureHandle LJ_textureLoadTGA( const char* const filename, LJ_uint8** image
 				// 24-bit image fix alpha to be 0xFF
 				rowStart[i+3] = 0xFF;
 			}
-			// Red
-			rowStart[i+0] = rowData[j++];
-			// Green
-			rowStart[i+1] = rowData[j++];
-			// Blue
-			rowStart[i+2] = rowData[j++];
-
-			//rowStart[i+0] = 0xFF;
-			//rowStart[i+1] = 0x00;
-			//rowStart[i+2] = 0x00;
-			//rowStart[i+3] = 0xFF;
 			i += 4;
 		}
 	}

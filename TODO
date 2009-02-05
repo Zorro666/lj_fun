@@ -2,15 +2,12 @@ To be done:
 
 * Tasks
 
-** memory leaks at shutdown not working anymore
-** get TGA texture drawing via debug function
-
 ** TGA loader needs to support RLE compression
+** need unittest for LJ_memIsSame function
+** LJ_assert needs to become modal dialoge with ignore, break, continue options
 
 *** need unittests for file layer
-*** need unittest for LJ_memIsSame function
 
-** LJ_assert needs to become modal dialoge with ignore, break, continue options
 ** hmmmm - do we need LJ_commonInit(); -> memory, maths
 
 ** implement a base LJ_LibGraphics (2D graphics, texture handling - user texture creation in real-time)
