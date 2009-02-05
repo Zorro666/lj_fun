@@ -5,10 +5,12 @@ SET( LJ_ENGINE_DIR ${LJ_ROOT_DIR}/LJ_Engine )
 
 SET( GLUT_ROOT_PATH $ENV{GLUT_ROOT_PATH} )
 SET( SDL_BUILDING_LIBRARY TRUE)
-
+SET( FLTK_DIR /usr/include )
+	
 Find_Package( OpenGL REQUIRED )
 Find_Package( SDL REQUIRED )
 Find_Package( GLUT REQUIRED )
+Find_Package( FLTK REQUIRED )
 
 IF ( NOT SDL_FOUND )
     MESSAGE( FATAL_ERROR "SDL not found" )
@@ -22,11 +24,17 @@ IF ( NOT OPENGL_FOUND )
     MESSAGE( FATAL_ERROR "OPENGL not found" )
 ENDIF ( NOT OPENGL_FOUND )
 
+IF ( NOT FLTK_FOUND )
+    MESSAGE( FATAL_ERROR "FLTK not found" )
+ENDIF ( NOT FLTK_FOUND )
+
 MESSAGE( "CMAKE_BUILD_TYPE = ${CMAKE_BUILD_TYPE}" )
 MESSAGE( "SDL_LIBRARY = ${SDL_LIBRARY}" )
 MESSAGE( "GLUT_LIBRARY = ${GLUT_LIBRARY}" )
 MESSAGE( "OPENGL_LIBRARY = ${OPENGL_LIBRARY}" )
 MESSAGE( "GL_LIBRARY = ${GL_LIBRARY}" )
+MESSAGE( "FLTK_LIBRARY = ${FLTK_LIBRARY}" )
+MESSAGE( "FLTK_INCLUDE_DIR = ${FLTK_INCLUDE_DIR}" )
 
 SET( GLOBAL_DEFINITIONS "" )
 SET( GLOBAL_INCLUDE_DIRECTORIES "" )
@@ -39,7 +47,8 @@ IF ( MSVC )
 
 ELSE ( MSVC )
 
-    SET( GLOBAL_CFLAGS -Wextra -Wall -Werror -Wdeclaration-after-statement -Wshadow -Wswitch-enum -Wswitch-default -Winit-self -Wstrict-prototypes -Wpointer-arith -Wfatal-errors -Wmissing-prototypes -Wmissing-declarations -Wredundant-decls -fstrict-aliasing -DLJ_PLATFORM_LINUX )
+#    SET( GLOBAL_CFLAGS -Wextra -Wall -Werror -Wdeclaration-after-statement -Wshadow -Wswitch-enum -Wswitch-default -Winit-self -Wstrict-prototypes -Wpointer-arith -Wfatal-errors -Wmissing-prototypes -Wmissing-declarations -Wredundant-decls -fstrict-aliasing -DLJ_PLATFORM_LINUX )
+    SET( GLOBAL_CFLAGS -Wextra -Wall -Werror -Wshadow -Wswitch-enum -Wswitch-default -Winit-self -Wpointer-arith -Wfatal-errors -Wmissing-declarations -Wredundant-decls -fstrict-aliasing -DLJ_PLATFORM_LINUX )
 
 ENDIF ( MSVC )
 
@@ -82,6 +91,7 @@ ENDIF ( CMAKE_BUILD_TYPE STREQUAL "RELWITHDEBINFO" )
 SET( GLOBAL_INCLUDE_DIRECTORIES ${GLOBAL_INCLUDE_DIRECTORIES} ${LJ_ENGINE_DIR} )
 SET( GLOBAL_INCLUDE_DIRECTORIES ${GLOBAL_INCLUDE_DIRECTORIES} ${SDL_INCLUDE_DIR} )
 SET( GLOBAL_INCLUDE_DIRECTORIES ${GLOBAL_INCLUDE_DIRECTORIES} ${GLUT_INCLUDE_DIR} )
+SET( GLOBAL_INCLUDE_DIRECTORIES ${GLOBAL_INCLUDE_DIRECTORIES} ${FLTK_INCLUDE_DIR} )
 
 SET( GLOBAL_DEFINITIONS ${GLOBAL_CFLAGS} ${CONFIG_CFLAGS} )
 

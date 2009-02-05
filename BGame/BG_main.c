@@ -18,6 +18,15 @@ LJ_int s_minimized = 0;
 
 LJ_textureHandle bgTex = LJ_TEXTURE_HANDLE_INVALID;
 
+extern void LJ_guiinit( int argc, char** argv );
+extern void LJ_guitick( void );
+
+extern LJ_float g_width;
+extern LJ_float g_height;
+
+LJ_float g_width = 1.0f;
+LJ_float g_height = 1.0f;
+
 void game3DRender( void )
 {
 	LJ_debugDrawSphere( 0.0f, 0.0f, -10.0f, 3.0f, 0xFF0000FF );
@@ -39,7 +48,7 @@ void game2DRender( void )
 
 	LJ_debugDrawCircle( x, y, 0.0f, radius, 0x00FF00FF );
 
-	LJ_debugDrawQuadTexture( x, y, 0.0f, 1.0f, -0.5f, bgTex, 0xFFFFFFFF );
+	LJ_debugDrawQuadTexture( x, y, 0.0f, g_width, -g_height, bgTex, 0xFFFFFFFF );
 }
 
 // pause the application until focus in regained
@@ -94,9 +103,11 @@ LJ_int main(LJ_int argc, LJ_char* argv[])
 	gameInit();
 	LJ_engineLateInit();
 
+	LJ_guiinit( argc, argv );
 	while ( !s_quit )
 	{
 		gameSingleLoop();
+		LJ_guitick();
 	}
 
 	gameShutdown();
