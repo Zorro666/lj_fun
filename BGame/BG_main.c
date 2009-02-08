@@ -97,6 +97,12 @@ static void gameShutdown( void )
 {
 }
 
+void gameExitFunction( void )
+{
+	gameShutdown();
+	LJ_engineShutdown();
+}
+
 LJ_int main(LJ_int argc, LJ_char* argv[])
 {
     LJ_engineEarlyInit( argc, argv );
@@ -109,9 +115,6 @@ LJ_int main(LJ_int argc, LJ_char* argv[])
 		gameSingleLoop();
 		LJ_guitick();
 	}
-
-	gameShutdown();
-	LJ_engineShutdown();
 
     return 0;
 }

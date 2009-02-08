@@ -168,8 +168,6 @@ LJ_UNITTEST_FUNCTION_START( texture, tga )
 		}
 	}
 
-	LJ_UNITTEST_TRUE( LJ_FALSE );
-
 	LJ_MEM_FREE( imageDataPtr );
 }
 LJ_UNITTEST_FUNCTION_END( texture, tga )

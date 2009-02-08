@@ -173,6 +173,12 @@ static void gameShutdown( void )
 {
 }
 
+void gameExitFunction( void )
+{
+	gameShutdown();
+	LJ_engineShutdown();
+}
+
 int main(int argc, char* argv[])
 {
     LJ_engineEarlyInit( argc, argv );
@@ -183,9 +189,6 @@ int main(int argc, char* argv[])
 	{
 	    gameSingleLoop();
 	}
-
-	gameShutdown();
-	LJ_engineShutdown();
 
     return 0;
 }

@@ -16,6 +16,9 @@
 
 #include <time.h>
 
+// For atexit
+#include <stdlib.h>
+
 // TODO: make use of SDL lib be on a #define and hide it away even more so the code can be ported to other platforms e.g. iphone/wii
 LJ_int winWidth = 768;
 LJ_int winHeight = 512;
@@ -41,6 +44,8 @@ void LJ_engineInputUpdate( void );
 
 void LJ_engineEarlyInit( LJ_int argc, LJ_char* argv[] )
 {
+	atexit( gameExitFunction );
+
 	// Initialize SDL
 	SDL_Init( SDL_INIT_EVERYTHING );
  

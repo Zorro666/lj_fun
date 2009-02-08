@@ -147,13 +147,13 @@ test:
 	@echo "RPOJECT_DIR=$(PROJECT_DIR)"
 	@echo "ROOT_DIR=$(ROOT_DIR)"
 
-rundebug: prerun
+rundebug: prerun debug
 	./$(EXE_NAME)_debug
 
-runrelease: 
+runrelease: prerun release 
 	./$(EXE_NAME)_release
 
-rungold: 
+rungold: prerun gold
 	./$(EXE_NAME)_gold
 
 runall: buildall rundebug runrelease rungold

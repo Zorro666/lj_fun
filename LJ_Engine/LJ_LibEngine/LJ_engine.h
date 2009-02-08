@@ -21,6 +21,7 @@ void LJ_debugDrawQuadTexture( const LJ_float x, const LJ_float y, const LJ_float
 
 extern void game3DRender( void );
 extern void game2DRender( void );
+extern void gameExitFunction( void );
 
 #endif // #ifndef LJ_ENGINE_H
 
