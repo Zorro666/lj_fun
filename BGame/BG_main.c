@@ -6,6 +6,7 @@
 #include "LJ_LibEngine/LJ_LibEngine.h"
 #include "LJ_LibDebug/LJ_LibDebug.h"
 #include "LJ_LibInput/LJ_LibInput.h"
+#include "LJ_LibGUI/LJ_LibGUI.h"
 
 LJ_float s_cameraFoV = 60.0f;
 LJ_float s_cameraX = 0.0f;
@@ -17,9 +18,6 @@ LJ_int s_quit = 0;
 LJ_int s_minimized = 0;
 
 LJ_textureHandle bgTex = LJ_TEXTURE_HANDLE_INVALID;
-
-extern void LJ_guiinit( int argc, char** argv );
-extern void LJ_guitick( void );
 
 extern LJ_float g_width;
 extern LJ_float g_height;
@@ -110,11 +108,11 @@ LJ_int main(LJ_int argc, LJ_char* argv[])
 	gameInit();
 	LJ_engineLateInit();
 
-	LJ_guiinit( argc, argv );
+	LJ_guiInit( argc, argv );
 	while ( !s_quit )
 	{
 		gameSingleLoop();
-		LJ_guitick();
+		LJ_guiTick();
 	}
 
     return 0;
