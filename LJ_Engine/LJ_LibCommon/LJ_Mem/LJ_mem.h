@@ -4,6 +4,11 @@
 // internal dependencies
 #include "LJ_LibCommon/LJ_Base/LJ_types.h"
 
+#ifdef __cplusplus
+extern "C" 
+{
+#endif // #ifdef __cplusplus
+
 void LJ_memInit( void );
 void LJ_memReset( void );
 void LJ_memShutdown( void );
@@ -34,6 +39,10 @@ typedef LJ_uint LJ_memHeapHandle;
 #endif // #ifndef LJ_MEM_ALLOC_MAX_NUM_ACTIVE_POINTERS
 
 LJ_EXTERN_INLINE LJ_memHeapHandle LJ_memGetSystemAllocHandle( void );
+
+#ifdef __cplusplus
+}
+#endif // #ifdef __cplusplus
 
 LJ_EXTERN_INLINE LJ_memHeapHandle LJ_memGetSystemAllocHandle( void )
 {

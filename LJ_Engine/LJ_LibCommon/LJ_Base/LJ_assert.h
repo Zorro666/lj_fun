@@ -11,7 +11,11 @@
 
 #if LJ_USE_ASSERT
 
-#define LJ_debugBreak() (void)(0)
+#ifndef LJ_DEBUGBREAK
+
+#define LJ_DEBUGBREAK()		{ *((LJ_int*)LJ_NULL) = 0; }
+
+#endif // #ifndef LJ_DEBUGBREAK
 
 LJ_int LJ_internalAssertPrepare( LJ_int* const ignoreThisPtr,
 						  	     const LJ_char* exprStr, 
@@ -33,7 +37,7 @@ LJ_int LJ_internalAssertDisplay( const LJ_char* const format, ... );
 				{ \
 					if ( LJ_internalAssertDisplay format ) \
 					{ \
-						LJ_debugBreak(); \
+						LJ_DEBUGBREAK(); \
 					} \
 				} \
 			} \

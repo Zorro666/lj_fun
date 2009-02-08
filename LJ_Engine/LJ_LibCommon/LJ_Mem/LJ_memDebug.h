@@ -8,6 +8,11 @@
 #include "LJ_LibCommon/LJ_Base/LJ_types.h"
 #include "LJ_LibCommon/LJ_Mem/LJ_mem.h"
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif // #ifdef __cplusplus
+
 void LJ_memDebugInit( void );
 void LJ_memDebugReset( void );
 void LJ_memDebugShutdown( void );
@@ -24,6 +29,10 @@ struct LJ_memDebugInfo* LJ_memDebugFindAllocation( const void* const address );
 
 // Free the specified memory allocation
 void LJ_memDebugResetAllocation( struct LJ_memDebugInfo* const memDebugInfo );
+
+#ifdef __cplusplus
+}
+#endif // #ifdef __cplusplus
 
 #endif // #if LJ_USE_MEM_TRACKING
 

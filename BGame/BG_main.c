@@ -62,6 +62,7 @@ static void gameTick( void )
 
 static void gameSingleLoop( void )
 {
+	LJ_assert( LJ_FALSE, ( "Test assert box which can be ignored" ) );
 	if ( s_minimized ) 
 	{
 		// Release some system resources if the application is minimized.

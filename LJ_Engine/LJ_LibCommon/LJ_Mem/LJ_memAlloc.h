@@ -13,6 +13,11 @@
 //
 /////////////////////////////////////////////////////////////////////////////////////////////////
 
+#ifdef __cplusplus
+extern "C" 
+{
+#endif // #ifdef __cplusplus
+
 void LJ_memAllocInit( void );
 void LJ_memAllocReset( void );
 void LJ_memAllocShutdown( void );
@@ -46,6 +51,10 @@ LJ_bool LJ_memFreeDebugInternal( void* const address,
     LJ_memFreeInternal( ( address ) )
 
 #endif // #if LJ_USE_MEM_TRACKING
+
+#ifdef __cplusplus
+}
+#endif // #ifdef __cplusplus
 
 #endif // #ifndef LJ_MEMALLOC_H
 
