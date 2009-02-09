@@ -204,6 +204,7 @@ LJ_float LJ_debugVarRenderText( const LJ_int render, const LJ_float x, const LJ_
 		const LJ_int green = ( colour >> 16 ) & 0xFF;
 		const LJ_int blue = ( colour >> 8 ) & 0xFF;
 		glDisable( GL_DEPTH_TEST );
+		glDisable( GL_TEXTURE_2D );
 		glColor3f( red/255.0f, green/255.0f, blue/255.0f );
 		renderBitmapString( new_x, new_y, -0.5f, bitmapFont, outputString );
 	}
