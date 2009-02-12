@@ -25,6 +25,8 @@ void LJ_spriteRender( const LJ_sprite* const sprite )
 	glDepthMask( GL_FALSE );
 	glDisable( GL_DEPTH_TEST );
 	glEnable( GL_TEXTURE_2D );
+	glEnable( GL_BLEND );
+	glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
 	glBindTexture( GL_TEXTURE_2D, th );
 	glTexEnvf( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE );
 	glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT );
