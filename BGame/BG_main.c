@@ -20,6 +20,9 @@ LJ_int s_minimized = 0;
 LJ_textureHandle bgTex = LJ_TEXTURE_HANDLE_INVALID;
 LJ_sprite bgSprite;
 
+LJ_textureHandle fgTex = LJ_TEXTURE_HANDLE_INVALID;
+LJ_sprite fgSprite;
+
 extern LJ_float g_width;
 extern LJ_float g_height;
 
@@ -67,6 +70,9 @@ void game2DRender( void )
 	player.sprite->y = player.y;
 	LJ_spriteRender( player.sprite );
 
+	// Draw the fg image
+	LJ_spriteRender( &fgSprite );
+
 	LJ_debugDrawCircle( -ourWidth/2.0f, -ourHeight/2.0f, 0.0f, radius, 0xFF0000FF );
 	LJ_debugDrawCircle( 0.0f, 0.0f, 0.0f, radius, 0x00FF00FF );
 	LJ_debugDrawCircle( ourWidth/2.0f, ourHeight/2.0f, 0.0f, radius, 0x0000FFFF );
@@ -100,7 +106,7 @@ static void gameTick( void )
 	const LJ_int mouseScrollMax = WIN_WIDTH - mouseScrollLimit;
 	const LJ_float cameraMinX = -500.0f;
 	const LJ_float cameraMaxX = +500.0f;
-	const LJ_float playerSpeedX = 0.1f;
+	const LJ_float playerSpeedX = 0.3f;
 
 	// Move the player
 	if ( LJ_inputKeyPressed( LJ_KEY_RIGHT ) == LJ_TRUE )
@@ -155,6 +161,7 @@ static void gameSingleLoop( void )
 static void gameInit( void )
 {
 	const char* const bgFilename = "../../Data/BGame/bg.tga";
+	const char* const fgFilename = "../../Data/BGame/fg.tga";
 	const char* const playerFilename = "../../Data/BGame/player.tga";
 	//const char* const playerFilename = "../test/test.tga";
 
@@ -179,6 +186,21 @@ static void gameInit( void )
 	bgSprite.v0 = 0.0f;
 	bgSprite.u1 = 1.0f;
 	bgSprite.v1 = 1.0f;
+
+	fgTex = LJ_textureLoadTGA( fgFilename, LJ_NULL );
+	LJ_assert( fgTex != LJ_TEXTURE_HANDLE_INVALID, ( "Can't load TGA '%s'\n", fgFilename ) );
+	fgSprite.texHandle = fgTex;
+	fgSprite.x = -500.0f;
+	fgSprite.y = 0.0f;
+	fgSprite.width = 1000.0f;
+	fgSprite.height = 300.0f;
+	fgSprite.layer = LJ_SPRITE_FG;
+	fgSprite.priority = 0;
+	fgSprite.rgba = 0xFFFFFFFF;
+	fgSprite.u0 = 0.0f;
+	fgSprite.v0 = 0.0f;
+	fgSprite.u1 = 1.0f;
+	fgSprite.v1 = 1.0f;
 
 	player.x = 0.0f;
 	player.y = 0.0f;
