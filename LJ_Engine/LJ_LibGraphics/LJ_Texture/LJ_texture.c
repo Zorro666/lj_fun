@@ -136,6 +136,8 @@ LJ_textureHandle LJ_textureLoadTGA( const char* const filename, LJ_uint8** image
 	LJ_textureInfo* texInfo;
 	const LJ_uint lodLevel = 0;
 	const LJ_uint borderSize = 0;
+	LJ_bool vFlip = LJ_FALSE;
+	LJ_bool hFlip = LJ_FALSE;
 
 	if ( fileSize < 0 )
 	{
@@ -240,7 +242,7 @@ LJ_textureHandle LJ_textureLoadTGA( const char* const filename, LJ_uint8** image
 		LJ_filesystemClose( fh );
 		return LJ_TEXTURE_HANDLE_INVALID;
 	}
-    // LJ_uint8  		descriptor;         	// image descriptor bits (vh flip bits)
+    // LJ_uint8  		descriptor;         	// image descriptor bits (xxvhxxx flip bits) - bit-4 h-flip, bit-5 v-flip
 	retVal = LJ_filesystemRead( fh, &header.descriptor, sizeof( header.descriptor ) );
 	if ( retVal == LJ_FALSE )
 	{
@@ -248,6 +250,9 @@ LJ_textureHandle LJ_textureLoadTGA( const char* const filename, LJ_uint8** image
 		LJ_filesystemClose( fh );
 		return LJ_TEXTURE_HANDLE_INVALID;
 	}
+	vFlip = ( header.descriptor & ( 1 << 5 ) );
+	hFlip = ( header.descriptor & ( 1 << 4 ) );
+	LJ_assert( ( hFlip == LJ_FALSE ), ( "horizontal flip not supported in TGA '%s'\n", filename ) );
 
     // colourmaptype = type of colour map 0=none, 1=has palette
 	// Only support colourmaptype = 0 (no palette)
@@ -301,7 +306,7 @@ LJ_textureHandle LJ_textureLoadTGA( const char* const filename, LJ_uint8** image
 		LJ_uint x;
 		LJ_uint i;
 		LJ_uint j;
-		const LJ_uint row = header.height - y - 1;
+		const LJ_uint row = ( vFlip ) ? header.height - y - 1 : y;
 		LJ_uint8* const rowStart = imageData + row * ( header.width * 4 );
 		const LJ_bool readAlpha = ( header.bits == 32 ) ? LJ_TRUE : LJ_FALSE;
 

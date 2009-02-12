@@ -1,4 +1,5 @@
 #include "LJ.h"
+#include "LJ_LibCommon/LJ_LibCommon.h"
 
 #include "LJ_fltk.h"
 
@@ -12,8 +13,27 @@
 Fl_Slider* width_slider;
 Fl_Slider* height_slider;
 
+// Add our own global handler to catch ESC and stop the default quit window behaviour 
+static LJ_int LJ_fltkGlobalHandler( LJ_int event )
+{
+	//LJ_outputPrintGold( ( "Event %d FL_KEYDOWN %d FL_KEYUP %d FL_SHORTCUT %d\n", event, FL_KEYDOWN, FL_KEYUP, FL_SHORTCUT ) );
+	// A keyboard event
+	if ( ( event == FL_KEYDOWN ) || ( event == FL_KEYUP ) || ( event == FL_SHORTCUT ) )
+	{
+		const LJ_int key = Fl::event_key();
+		//LJ_outputPrintGold( ( "Key %d FL_Escape %d\n", key, FL_Escape ) );
+		if ( key == FL_Escape )
+		{
+			return 1;
+		}
+	}
+
+	return 0;
+}
+
 void LJ_fltkInit( LJ_int argc, LJ_char** argv )
 {
+	Fl::add_handler( LJ_fltkGlobalHandler );
 	Fl_Window* const window = new Fl_Window(300,250);
 	Fl_Box* const box = new Fl_Box( FL_UP_BOX, 20, 40, 260, 50, "Hello, World!" );
 	box->labelfont( FL_BOLD + FL_ITALIC );

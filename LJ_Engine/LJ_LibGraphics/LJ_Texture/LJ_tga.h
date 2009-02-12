@@ -19,7 +19,7 @@ typedef struct LJ_TGA_Header
     LJ_uint16		width;              	// image width in pixels
     LJ_uint16		height;             	// image height in pixels
     LJ_uint8  		bits;               	// image bits per pixel 8,16,24,32
-    LJ_uint8  		descriptor;         	// image descriptor bits (vh flip bits)
+    LJ_uint8  		descriptor;         	// image descriptor bits (xxvhxxx flip bits) - bit-4 h-flip, bit-5 v-flip
     
     // pixel data follows header
 	// TGA pixel format is: ARGB

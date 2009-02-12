@@ -51,21 +51,21 @@ void LJ_engineEarlyInit( LJ_int argc, LJ_char* argv[] )
  
 	SDL_GL_SetAttribute( SDL_GL_DOUBLEBUFFER, 1 );
     // Initialize the GLUT environment - needed for font rendering
-    glutInit(&argc, argv);
+    glutInit( &argc, argv );
 
 	s_sdlScreen = SDL_SetVideoMode( winWidth, winHeight, 32, SDL_OPENGL );
 
-    glMatrixMode(GL_PROJECTION);
+    glMatrixMode( GL_PROJECTION );
     glLoadIdentity();
 
     // Set the viewport to be the entire window
-    glViewport(0, 0, winWidth, winHeight);
+    glViewport( 0, 0, winWidth, winHeight );
 
-    glOrtho(0.0,1.0,0.0,1.0,-1.0,1.0);   // Many ways to do this
-    glMatrixMode(GL_MODELVIEW);
+    glOrtho( 0.0f, 1.0f, 0.0f, 1.0f, -1.0f, 1.0f );   // Many ways to do this
+    glMatrixMode( GL_MODELVIEW );
     glLoadIdentity();
-    glLineWidth(1.0);
-    glEnable(GL_DEPTH_TEST);
+    glLineWidth( 1.0f );
+    glEnable( GL_DEPTH_TEST );
 
 	s_quadratic = gluNewQuadric();			
 	gluQuadricNormals( s_quadratic, GLU_SMOOTH );
@@ -140,8 +140,8 @@ void LJ_engineTick( void )
 void LJ_engineStartRendering( void )
 {
     // Clear the screen
-    glClearColor(0.0, 0.0, 0.8, 0.0);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glClearColor( 1.0f, 0.5f, 0.8f, 0.0f );
+    glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 }
 
 void LJ_engineFinishRendering( void )
@@ -153,36 +153,39 @@ void LJ_engineFinishRendering( void )
 void LJ_engineRender( void )
 {
     // Set the drawing color (RGB: WHITE)
-    glColor3f(1.0,1.0,1.0);
+    glColor3f( 1.0f, 1.0f, 1.0f );
 
-    glMatrixMode(GL_PROJECTION);
+    glMatrixMode( GL_PROJECTION );
     glLoadIdentity();
 
 	// Calculate The Aspect Ratio Of The Window
 	gluPerspective( s_cameraFoV, (GLfloat)winWidth/ (GLfloat)winHeight, 0.1f, 100.0f );
 
-    glMatrixMode(GL_MODELVIEW);
+    glMatrixMode( GL_MODELVIEW );
     glLoadIdentity();
     glTranslatef( s_cameraX, s_cameraY, s_cameraZ );
 
 	game3DRender();
 
-    glMatrixMode(GL_PROJECTION);
+    glMatrixMode( GL_PROJECTION );
     glLoadIdentity();
 
     // Set the viewport to be the entire window
-    glViewport(0, 0, winWidth, winHeight);
+    glViewport( 0, 0, winWidth, winHeight );
 
-    glOrtho(0.0,1.0,0.0,1.0,-1.0,1.0);
-    glMatrixMode(GL_MODELVIEW);
+	// Want the coords to be 0,0 in top-left, 1,1 in bottom-right of the window
+	// Set the correct clipping range and orthographic projection
+	LJ_cameraSetOrthographic( 0.5f, 0.5f, 1.0f, 1.0f );
+
+    glMatrixMode( GL_MODELVIEW );
     glLoadIdentity();
 
 	game2DRender();
 
-    glMatrixMode(GL_PROJECTION);
+    glMatrixMode( GL_PROJECTION );
     glLoadIdentity();
-    gluOrtho2D(0, 120, 0, 20);
-    glMatrixMode(GL_MODELVIEW);
+    gluOrtho2D( 0, 120, 0, 20 );
+    glMatrixMode( GL_MODELVIEW );
 
 	if ( s_debugVarEnabled )
 	{
@@ -194,7 +197,7 @@ void LJ_engineRender( void )
 LJ_float LJ_debugVarRenderText( const LJ_int render, const LJ_float x, const LJ_float y, const LJ_uint colour, const LJ_char* const outputString )
 {
 	const LJ_float multiplier = 2.8f * ( 512.0f / (LJ_float)winWidth );
-	const LJ_int len = strlen( outputString );
+	const LJ_int len = LJ_strGetLength( outputString );
 	if ( render == 1 )
 	{
 		LJ_float new_x = x;
@@ -220,18 +223,18 @@ void LJ_debugVarDrawBackground( const LJ_float x0, const LJ_float y0, const LJ_f
 	glDisable( GL_DEPTH_TEST );
     glPushMatrix();
 	glBegin( GL_QUADS );
-    glVertex3f(x0, 20 - y0, 0.0f );
-    glVertex3f(x1, 20 - y0, 0.0f );
-    glVertex3f(x1, 20 - y1, 0.0f );
-    glVertex3f(x0, 20 - y1, 0.0f );
+    glVertex3f( x0, 20 - y0, 0.0f );
+    glVertex3f( x1, 20 - y0, 0.0f );
+    glVertex3f( x1, 20 - y1, 0.0f );
+    glVertex3f( x0, 20 - y1, 0.0f );
 	glEnd();
 	glColor3f( 1.0f, 1.0f, 1.0f );
 	glBegin( GL_LINE_STRIP ); 
-    glVertex3f(x0, 20 - y0, 0.0f );
-    glVertex3f(x1, 20 - y0, 0.0f );
-    glVertex3f(x1, 20 - y1, 0.0f );
-    glVertex3f(x0, 20 - y1, 0.0f );
-    glVertex3f(x0, 20 - y0, 0.0f );
+    glVertex3f( x0, 20 - y0, 0.0f );
+    glVertex3f( x1, 20 - y0, 0.0f );
+    glVertex3f( x1, 20 - y1, 0.0f );
+    glVertex3f( x0, 20 - y1, 0.0f );
+    glVertex3f( x0, 20 - y0, 0.0f );
 	glEnd();
 	glPopMatrix();
 }
@@ -246,14 +249,14 @@ void LJ_debugVarMemFree( void* memoryPtr )
 	free( memoryPtr );
 }
 
-void renderBitmapString( LJ_float x, LJ_float y, LJ_float z, void *font, const LJ_char* const string) 
+void renderBitmapString( LJ_float x, LJ_float y, LJ_float z, void *font, const LJ_char* const string ) 
 {  
     const LJ_char* c;
     glPushMatrix();
-    glRasterPos3f(x, y, z );
-    for ( c=string; *c != '\0'; c++) 
+    glRasterPos3f( x, y, z );
+    for ( c = string; *c != '\0'; c++ ) 
     {
-        glutBitmapCharacter(font, *c);
+        glutBitmapCharacter( font, *c );
     }
     glPopMatrix();
 }
@@ -265,7 +268,7 @@ void LJ_debugDrawSphere( const LJ_float x, const LJ_float y, const LJ_float z, c
 	const LJ_float blue = (LJ_float)(( colour >> 8 ) & 0xFF) / 255.0f;
 
 	glDisable( GL_TEXTURE_2D );
-    glMatrixMode(GL_MODELVIEW);
+    glMatrixMode( GL_MODELVIEW );
     glPushMatrix();
 	glColor4f( red, green, blue, 0.5f );
 	glTranslatef( x, y, z );
@@ -281,11 +284,11 @@ void LJ_debugDrawCircle( const LJ_float x, const LJ_float y, const LJ_float z, c
 	const LJ_float alpha = (LJ_float)(( colour >> 0 ) & 0xFF) / 255.0f;
 
 	glDisable( GL_TEXTURE_2D );
-    glMatrixMode(GL_MODELVIEW);
+    glMatrixMode( GL_MODELVIEW );
     glPushMatrix();
 	glColor4f( red, green, blue, alpha );
 	glTranslatef( x, y, z );
-	gluDisk( s_quadratic, radius-0.01f, radius, 32, 32 );
+	gluDisk( s_quadratic, radius-1.01f, radius, 64, 64 );
     glPopMatrix();
 }
 
@@ -303,7 +306,7 @@ void LJ_debugDrawQuadTexture( const LJ_float x, const LJ_float y, const LJ_float
 	glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT );
 	glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT );
 
-    glMatrixMode(GL_MODELVIEW);
+    glMatrixMode( GL_MODELVIEW );
     glPushMatrix();
 	glColor4f( red, green, blue, alpha );
 	glTranslatef( x-width/2, y-height/2, z );
@@ -382,4 +385,4 @@ void LJ_engineInputUpdate( void )
     }
 */
 }
-
+ 
