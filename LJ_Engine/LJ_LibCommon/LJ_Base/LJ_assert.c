@@ -50,13 +50,15 @@ LJ_int LJ_internalAssertDisplay( const LJ_char* const format, ... )
 	LJ_int debugBreak = 0;
 
 	LJ_VA_START( args, format );
+	LJ_strVSPrint( messageBuffer2, 512, format, &args );
+
 	LJ_outputPrint( "******************************************************************************\n" );
 	LJ_outputPrint( "\n" );
 	LJ_outputPrint( "            ASSERT: assert(%s)\n", s_params.exprStr );
 	LJ_outputPrint( "\n" );
 	LJ_outputPrint( "%s:%d - %s\n", s_params.file, s_params.line, s_params.function );
 	LJ_outputPrint( "\n" );
-	LJ_outputVPrint( format, &args );
+	LJ_outputPrint( "%s", messageBuffer2 );
 	LJ_outputPrint( "\n" );
 	LJ_outputPrint( "******************************************************************************\n" );
 
@@ -64,7 +66,6 @@ LJ_int LJ_internalAssertDisplay( const LJ_char* const format, ... )
 	LJ_strSPrint( messageBuffer, 1024, "%sASSERT: assert(%s)\n", messageBuffer, s_params.exprStr );
 	LJ_strSPrint( messageBuffer, 1024, "%s\n", messageBuffer );
 	LJ_strSPrint( messageBuffer, 1024, "%s%s:%d - %s\n", messageBuffer, s_params.file, s_params.line, s_params.function );
-	LJ_strVSPrint( messageBuffer2, 512, format, &args );
 	LJ_strSPrint( messageBuffer, 1024, "%s\n%s", messageBuffer, messageBuffer2 );
 
 	whichButton = LJ_guiMessageBox( 3, buttonTexts, "Assert", messageBuffer );
