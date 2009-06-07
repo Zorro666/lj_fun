@@ -1,3 +1,5 @@
-4a64704 Auto Update
+4b82c74 Auto Update
+A	GitP4Test/dels.txt
+A	GitP4Test/edits.txt
 M	GitP4Test/log.txt
 M	GitP4Test/my_update
