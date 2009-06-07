@@ -9,3 +9,6 @@ cat log.txt
 awk '{if ( $1 == 'A' ) print $0; }' log.txt >adds.txt
 awk '{if ( $1 == 'M' ) print $0; }' log.txt >edits.txt
 awk '{if ( $1 == 'D' ) print $0; }' log.txt >dels.txt
+cat adds.txt
+cat edits.txt
+cat dels.txt
