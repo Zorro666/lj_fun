@@ -1,3 +1,3 @@
-b9523a2 Auto Update
-A	GitP4Test/log.txt
+28c2043 Auto Update
+M	GitP4Test/log.txt
 M	GitP4Test/my_update
