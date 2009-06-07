@@ -3,8 +3,8 @@
 git add .
 git commit -a -m "Auto Update" --author="Perforce <perforce@import.com>"
 git log Perforce_Sync...HEAD --name-status -B --no-renames --oneline >log.txt
-git tag -d Perforce_Sync
-git tag Perforce_Sync
+#git tag -d Perforce_Sync
+#git tag Perforce_Sync
 cat log.txt
 awk '{if ( $1 == 'A' ) print $0; }' log.txt >adds.txt
 awk '{if ( $1 == 'M' ) print $0; }' log.txt >edits.txt
