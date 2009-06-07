@@ -1,4 +1,3 @@
-Jake sdjskdjsk
 #ifndef LJ_KEY_H
 #define LJ_KEY_H
 
