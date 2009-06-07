@@ -6,4 +6,4 @@ git log Perforce_Sync...HEAD --name-status -B --no-renames --oneline >log.txt
 git tag -d Perforce_Sync
 git tag Perforce_Sync
 cat log.txt
-awk '{if $1 == 'A' then { print $0 } }' log.txt >adds.txt
+awk '{if $1 == 'A' then print $0 endfi }' log.txt >adds.txt
