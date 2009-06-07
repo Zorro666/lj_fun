@@ -2,6 +2,7 @@
 
 git add .
 git commit -a -m "Auto Update" --author="Perforce <perforce@import.com>"
-git log Perforce_Sync...HEAD --name-status -B --no-renames --oneline
+git log Perforce_Sync...HEAD --name-status -B --no-renames --oneline >log.txt
 git tag -d Perforce_Sync
 git tag Perforce_Sync
+less log.txt
