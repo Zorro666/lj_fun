@@ -1,1 +1,0 @@
-Run 'git log Perforce_Sync...HEAD --name-status -B --no-renames --oneline' [*y*/n/a] ? 

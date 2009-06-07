@@ -1,2 +1,0 @@
-GitP4Test/log.txt
-GitP4Test/my_update
