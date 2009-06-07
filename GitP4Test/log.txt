@@ -1,3 +1,4 @@
-28c2043 Auto Update
+ca30046 Auto Update
+A	GitP4Test/adds.txt
 M	GitP4Test/log.txt
 M	GitP4Test/my_update
