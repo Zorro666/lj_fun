@@ -31,6 +31,7 @@ $(PROJECTS_CONFIGS):
 	@$(MAKE) --no-print-directory -C $(GET_PROJECT) $(ACTION)$(GET_CONFIG)
 
 clean:
+	@rm -rvf Build
 	@$(MAKE) --no-print-directory -C $(PROJECT) clean$(CONFIG)
 
 build:
